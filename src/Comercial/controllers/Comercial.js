@@ -78,10 +78,10 @@ class CormercialControllers {
        
           
             try {
-                // const apiUrl = `${url}/api/comercial/empresa.xsjs?idmarca=${idMarca}`;
-                const response = await getEmpresas(idMarca, idEmpresa, ufProd, page, pageSize)
-
-                return res.json(response); // Retorna
+                const apiUrl = `${url}/api/comercial/empresa.xsjs?idmarca=${idMarca}`;
+                const response = await axios.get(apiUrl)
+                // const response = await getEmpresas(idMarca, idEmpresa, ufProd, page, pageSize)
+                return res.json(response.data); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
