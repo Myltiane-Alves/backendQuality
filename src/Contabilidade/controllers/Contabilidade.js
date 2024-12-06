@@ -37,11 +37,11 @@ class ContabilidadeControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      // const apiUrl = `${url}/api/contabilidade/venda-detalhe.xsjs?idVenda=${idVenda}`
-      // const response = await axios.get(apiUrl)
-      const response = await getVendasDetalhe(idVenda, idVendaDetalhe,  page, pageSize)
+      const apiUrl = `${url}/api/contabilidade/venda-detalhe.xsjs?idVenda=${idVenda}`
+      const response = await axios.get(apiUrl)
+      // const response = await getVendasDetalhe(idVenda, idVendaDetalhe,  page, pageSize)
 
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -56,11 +56,11 @@ class ContabilidadeControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      // const apiUrl = `${url}/api/contabilidade/venda-pagamento.xsjs?idVenda=${idVenda}`
-      // const response = await axios.get(apiUrl)
-      const response = await getVendasPagamento(idVenda,  page, pageSize)
+      const apiUrl = `${url}/api/contabilidade/venda-pagamento.xsjs?idVenda=${idVenda}`
+      const response = await axios.get(apiUrl)
+      // const response = await getVendasPagamento(idVenda,  page, pageSize)
 
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
