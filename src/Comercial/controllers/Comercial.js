@@ -217,15 +217,14 @@ class CormercialControllers {
     }
 
     async getListaVendasMarcaPorPeriodoComercial(req, res) {
-        let { idMarcaPesqVenda, pageNumber, dataPesqInicio, dataPesqFim } = req.query;
+        let { idMarcaPesqVenda, page, pageSize, dataPesqInicio, dataPesqFim } = req.query;
     
-        if (!isNaN(idMarcaPesqVenda)) {
-          idMarcaPesqVenda = Number(idMarcaPesqVenda);
-          const pageSize = 100;
-          const offset = (pageNumber - 1) * pageSize;
-          dataPesqInicio = dataFormatada(dataPesqInicio)
-          dataPesqFim = dataFormatada(dataPesqFim)
-    
+            idMarcaPesqVenda = idMarcaPesqVenda ? idMarcaPesqVenda : '';
+            dataPesqInicio = dataFormatada(dataPesqInicio) ? dataFormatada(dataPesqInicio) : ''
+            dataPesqFim = dataFormatada(dataPesqFim) ? dataFormatada(dataPesqFim) : ''
+            pageSize = pageSize ? pageSize : '';
+            pageSize = pageSize ? pageSize : '';
+
           try {
             const apiUrl = `${url}/api/comercial/venda-marca-periodo.xsjs?pageSize=${pageSize}&idMarca=${idMarcaPesqVenda}&dataInicio=${dataPesqInicio}&dataFim=${dataPesqFim}`
             const response = await axios.get(apiUrl)
@@ -235,7 +234,7 @@ class CormercialControllers {
             console.error("Unable to connect to the database:", error);
             throw error;
           }
-        }
+        
     }
 
     async getListaVendasEstoqueGrupoSubGrupoComercial(req, res) {
