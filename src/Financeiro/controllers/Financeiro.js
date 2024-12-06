@@ -33,7 +33,7 @@ import { getExtratoLojaPeriodo } from "../Extrato/repositories/extratoLojaPeriod
 // import { getPedidosCompras } from "../Financeiro/Pedidos/repositories/pedidosCompra.js";
 // import { getMotivoDevolucao, putMotivoDevolucao } from "../Financeiro/Devolucao/repositories/motivoDevolucao.js";
 // import { getVendas } from "../repositories/repositoriesVendaTotal.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class FinanceiroControllers {
 
@@ -720,11 +720,11 @@ class FinanceiroControllers {
       pageSize = pageSize ? pageSize : '';
 
       try {
-        // const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado-loja.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&lojas=${idLoja}&empresasList=${listaEmpresas}`
-        // const response = await axios.get(apiUrl)
-        const response = await getFaturaPixConsolidadoLoja(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresaLista, page, pageSize)
+        const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado-loja.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&lojas=${idLoja}&empresasList=${listaEmpresas}`
+        const response = await axios.get(apiUrl)
+        // const response = await getFaturaPixConsolidadoLoja(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresaLista, page, pageSize)
 
-        return res.json(response);
+        return res.json(response.data);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;

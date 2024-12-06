@@ -21,7 +21,7 @@ import { getParceriaCredSystem } from "../credSystem/parceria.js";
 import { createCaixa, getCaixa, updateCaixa } from "../caixas/caixa.js";
 import { createConfiguracao, getConfiguracoes, updateConfiguracao } from "../configuracao/repositories/configuracao.js";
 import { updateFuncionarioDesconto } from "../Funcionarios/repositories/funcionarioDesconto.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class InformaticaControllers {
 

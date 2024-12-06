@@ -5,7 +5,7 @@ import { getCaixaStatus } from "../repositories/listaCaixaStatus.js";
 import { getCaixaZerados } from "../repositories/listaCaixaZerados.js";
 import { putFecharCaixaZerados } from "../repositories/fechaCaixaZerados.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class CaixasControllers {
@@ -21,7 +21,7 @@ class CaixasControllers {
         pageSize = pageSize ? pageSize : '';
         try {
           
-          const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/financeiro/lista-caixas-movimento.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLoja=${idLoja}&idLojaPesquisa=${idLojaPesquisa}&page=${page}&pageSize=${pageSize}`
+          const apiUrl = `${url}/api/financeiro/lista-caixas-movimento.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLoja=${idLoja}&idLojaPesquisa=${idLojaPesquisa}&page=${page}&pageSize=${pageSize}`
           const response = await axios.get(apiUrl)
           // const response = await getListaPCJById(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja)
           

@@ -6,7 +6,7 @@ import { getVendaFaturaPixPeriodo, getVendaFaturaPixPeriodoCompensada, putVendaP
 import { getDetalheFatura } from "../repositories/detalheFatura.js";
 import { putAtualizarFatura, putAtualizarRecompra } from "../repositories/FaturaLoja/faturaLoja.js";
 import { getFaturaPixPeriodoConsolidado } from "../repositories/faturaPixPeriodoConsolidado.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class FaturasControllers {
@@ -21,10 +21,11 @@ class FaturasControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
+      const apiUrl = `${url}/api/financeiro/fatura-pix-periodo.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLojaPesquisa=${idLojaPesquisa}&empresaLista=${empresaLista}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl);
+      // const response = await getFaturaPixPeriodo(idMarca, dataPesquisaInicio, dataPesquisaFim, idLojaPesquisa, empresaLista, page, pageSize)
 
-      const response = await getFaturaPixPeriodo(idMarca, dataPesquisaInicio, dataPesquisaFim, idLojaPesquisa, empresaLista, page, pageSize)
-
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -42,7 +43,9 @@ class FaturasControllers {
 
     try {
 
-      const response = await getFaturaPixPeriodoConsolidado(idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+      const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl);
+      // const response = await getFaturaPixPeriodoConsolidado(idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
       return res.json(response);
     } catch (error) {

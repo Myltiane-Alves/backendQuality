@@ -38,10 +38,12 @@ class QuebraCaixaControllers {
         pageSize = pageSize ? pageSize : '';
         
         try {
+            // http://164.152.245.77:8000/quality/concentrador/api/dashboard/quebra-caixa/lista-quebra-caixa.xsjs?pageSize=1000&page=2&idEmpresa=0&dataPesquisaInic=2024-12-06&dataPesquisaFim=2024-12-06&idMarca=0&cpfquebraop=
+            const apiUrl = `${url}/api/dashboard/quebra-caixa/lista-quebra-caixa.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&cpfquebraop=${cpfOperadorQuebra}&stQuebraPositivaNegativa=${stQuebraPositivaNegativa}`;
+            const response = await axios.get(apiUrl);
+            // const response = await getQuebraCaixa(idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
             
-            const response = await getQuebraCaixa(idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
-            
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

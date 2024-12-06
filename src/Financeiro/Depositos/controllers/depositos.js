@@ -44,11 +44,11 @@ class DepositosControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/deposito-loja.xsjs?page=1&pagesize=1000&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-          // const response = await axios.get(apiUrl)
-          const response = await getDepositoLoja(idDeposito, idConta, idEmpresa, dataCompInicio, dataCompFim, dataMovInicio, dataMovFim, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+          const apiUrl = `${url}/api/financeiro/deposito-loja.xsjs?page=1&pagesize=1000&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+          const response = await axios.get(apiUrl)
+          // const response = await getDepositoLoja(idDeposito, idConta, idEmpresa, dataCompInicio, dataCompFim, dataMovInicio, dataMovFim, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;

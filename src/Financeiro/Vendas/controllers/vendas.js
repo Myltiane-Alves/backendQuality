@@ -15,7 +15,7 @@ import { getVendaTotalRecebidoEleteronico } from "../repositories/vendaTotalRece
 import { getVendaTotalRecebidoPeriodo } from "../repositories/vendaTotalRecebidoPeriodo.js";
 import { getVendaMarcaPeriodo } from "../repositories/vendaMarcaPeriodo.js";
 import { getVendaDigitalMarca } from "../repositories/vendaDigitalMarca.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 
@@ -64,8 +64,11 @@ class FinanceiroVendasControllers {
           dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
           page = page ? page : '';
           pageSize = pageSize ? pageSize : '';
-          const response = await getVendaDigital(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
-          
+
+          // const response = await getVendaDigital(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
+
+          const apiUrl = await `${url}/api/financeiro/venda-digital.xsjs?pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}`
+          const response = await axios.get(apiUrl)
           return res.json(response);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
@@ -182,9 +185,11 @@ class FinanceiroVendasControllers {
           pageSize = pageSize ? pageSize : '';
           page = page ? page : '';
         
-          const response = await getVendaPixConsolidado(idMarca, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
+          const apiUrl = `${url}/api/financeiro/venda-pix-consolidado.xsjs?pageSize=${pageSize}&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}`
+          const response = await axios.get(apiUrl)
+          // const response = await getVendaPixConsolidado(idMarca, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -204,9 +209,10 @@ class FinanceiroVendasControllers {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
     
-            const response = await getVendaPixConsolidadoLoja(idMarca, idLoja, empresaLista, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-    
-            return res.json(response);
+            const apiUrl = `${url}/api/financeiro/venda-pix-consolidado-loja.xsjs?pageSize=${pageSize}&idMarca=${idMarca}&idLoja=${idLoja}&empresasList=${empresaLista}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}`
+            const response = await axios.get(apiUrl)
+            // const response = await getVendaPixConsolidadoLoja(idMarca, idLoja, empresaLista, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            return res.json(response.data);
           } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -271,10 +277,11 @@ class FinanceiroVendasControllers {
         pageSize = pageSize ? pageSize : '';
     
         try {
-          // const apiUrl = `${url}/api/financeiro/venda-recebido-eletronico.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-          const response = await getVendaTotalRecebidoEleteronico(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+          const apiUrl = `${url}/api/financeiro/venda-recebido-eletronico.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+          const response = await axios.get(apiUrl)
+          // const response = await getVendaTotalRecebidoEleteronico(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
           
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -292,11 +299,11 @@ class FinanceiroVendasControllers {
       pageSize = pageSize ? pageSize : '';
   
       try {
-        // const apiUrl = `${url}/api/financeiro/venda-total-recebido-periodo.xsjs?pageSize=500&page=1&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-        // const response = await axios.get(apiUrl)
-        const response = await getVendaTotalRecebidoPeriodo(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+        const apiUrl = `${url}/api/financeiro/venda-total-recebido-periodo.xsjs?pageSize=500&page=1&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+        const response = await axios.get(apiUrl)
+        // const response = await getVendaTotalRecebidoPeriodo(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
   
-        return res.json(response);
+        return res.json(response.data);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;
