@@ -29,10 +29,12 @@ class SaldosControllers {
       let { idGrupoEmpresarial, dataPesquisa, pageSize, page } = req.query;
       idGrupoEmpresarial = idGrupoEmpresarial ? idGrupoEmpresarial : '';
       try {
+        const apiUrl = `${url}/api/financeiro/saldo-loja-por-grupo.xsjs?idGrupoEmpresarial=${idGrupoEmpresarial}&dataPesquisa=${dataPesquisa}&pageSize=${pageSize}&page=${page}`
+        const response = await axios.get(apiUrl)
 
-        const response = await getLojaSaldoPorGrupo(idGrupoEmpresarial, dataPesquisa, pageSize, page)
+        // const response = await getLojaSaldoPorGrupo(idGrupoEmpresarial, dataPesquisa, pageSize, page)
   
-        return res.json(response);
+        return res.json(response.data);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;

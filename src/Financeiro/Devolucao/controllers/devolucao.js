@@ -16,10 +16,10 @@ class DevolucaoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-
-      const response = await getMotivoDevolucao(idMotivo, descricaoMotivo, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-
-      return res.json(response);
+      const apiUrl = `${url}/api/financeiro/motivo-devolucao.xsjs?idMotivo=${idMotivo}&descMotivo=${descricaoMotivo}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl);
+      // const response = await getMotivoDevolucao(idMotivo, descricaoMotivo, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
