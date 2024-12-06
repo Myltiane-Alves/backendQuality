@@ -122,9 +122,11 @@ class FinanceiroVendasControllers {
           page = page ? page : '';
           pageSize = pageSize ? pageSize : '';
         try {
-          const response = await getVendaTotal(dataPesquisa, page, pageSize);
-    
-          return res.json(response); 
+          // const response = await getVendaTotal(dataPesquisa, page, pageSize);
+          
+          const apiUrl = await `${url}/api/financeiro/venda-total.xsjs?dataPesquisa=${dataPesquisa}`
+          const response = await axios.get(apiUrl)
+          return res.json(response.data); 
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -157,10 +159,11 @@ class FinanceiroVendasControllers {
     async getListaVendasPagamentos(req, res) {
         try {
           let { idEmpresa, dataPesquisa, page, pageSize } = req.query;
-    
-          const response = await getVendasPagamentos(idEmpresa, dataPesquisa, page, pageSize);
+          const apiUrl = await `${url}/api/financeiro/venda-pagamentos.xsjs?pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}`	
+          const response = await axios.get(apiUrl)
+          // const response = await getVendasPagamentos(idEmpresa, dataPesquisa, page, pageSize);
       
-          return res.json(response);
+          return res.json(response.data);
         } catch (err) {
           console.error('Controller Erro ao buscar Vendas Loja Por Periodo:', err);
           return res.status(500).json({ message: 'Erro ao buscar Vendas Loja Por Periodo.' });
@@ -246,9 +249,12 @@ class FinanceiroVendasControllers {
           dataPesquisa = dataPesquisa ? dataPesquisa : '';
           page = page ? page : '';
           pageSize = pageSize ? pageSize : '';
-          const response = await getVendasTotalEmpresa(idEmpresa, dataPesquisa, page, pageSize);
+
+          const apiUrl = `${url}/api/financeiro/venda-total-empresa.xsjs?pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}`
+          const response = await axios.get(apiUrl)
+          // const response = await getVendasTotalEmpresa(idEmpresa, dataPesquisa, page, pageSize);
          
-          return res.json(response); 
+          return res.json(response.data); 
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
