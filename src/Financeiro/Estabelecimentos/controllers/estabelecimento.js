@@ -10,15 +10,16 @@ class EstabelecimentoControllers {
         let { idGrupo, idEstabelecimento, idEmpresa,  page, pageSize } = req.query;
     
     
-        // pageSize = pageSize ? pageSize : ''
-        // page = page ? page : '';
-        // idEmpresa = idEmpresa ? idEmpresa : '';
-        // idGrupo = idGrupo ? idGrupo : '';
+        pageSize = pageSize ? pageSize : ''
+        page = page ? page : '';
+        idEmpresa = idEmpresa ? idEmpresa : '';
+        idGrupo = idGrupo ? idGrupo : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/estabelecimentos.xsjs?page=${page}&pageSize=${pageSize}&idGrupoEmpresa=${idGrupo}&idLojaEmpresa=${idEmpresa}`
-          const response = await getEstabelecimentos(idGrupo, idEstabelecimento, idEmpresa,  page, pageSize)
+          const apiUrl = `${url}/api/financeiro/estabelecimentos.xsjs?page=${page}&pageSize=${pageSize}&idGrupoEmpresa=${idGrupo}&idLojaEmpresa=${idEmpresa}`
+          const response = await axios.get(apiUrl);
+          // const response = await getEstabelecimentos(idGrupo, idEstabelecimento, idEmpresa,  page, pageSize)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;

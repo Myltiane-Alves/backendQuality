@@ -321,11 +321,11 @@ class FinanceiroVendasControllers {
       pageSize = pageSize ? pageSize : '';
       
       try {
-        // const apiUrl = `${url}/api/financeiro/venda-marca-periodo.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-        // const response = await axios.get(apiUrl)
-        const response = await getVendaMarcaPeriodo(idMarca, dataPesquisaInicio, dataPesquisaFim, idEmpresa, page, pageSize)
+        const apiUrl = `${url}/api/financeiro/venda-marca-periodo.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+        const response = await axios.get(apiUrl)
+        // const response = await getVendaMarcaPeriodo(idMarca, dataPesquisaInicio, dataPesquisaFim, idEmpresa, page, pageSize)
   
-        return res.json(response);
+        return res.json(response.data);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;

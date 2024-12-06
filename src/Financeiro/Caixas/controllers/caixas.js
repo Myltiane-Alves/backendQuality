@@ -43,12 +43,12 @@ class CaixasControllers {
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/lista-caixas-status.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
-          // const response = await axios.get(apiUrl)
-          const response = await getCaixaStatus(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+          const apiUrl = `${url}/api/financeiro/lista-caixas-status.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+          const response = await axios.get(apiUrl)
+          // const response = await getCaixaStatus(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
           
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -66,8 +66,9 @@ class CaixasControllers {
         pageSize = pageSize ? pageSize : ''
       try {
           
-        // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/lista-caixas-zerados.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
-        const response = await getCaixaZerados(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+        const apiUrl = `${url}/api/financeiro/lista-caixas-zerados.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+        const response = await axios.get(apiUrl)
+        // const response = await getCaixaZerados(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
   
         return res.json(response);
       } catch (error) {

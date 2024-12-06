@@ -10,10 +10,13 @@ let url = `http://164.152.245.77:8000/quality/concentrador`;
 class SaldosControllers {
     async getListaExtratoBonificacaoById(req, res) {
         let { idFuncionario, page, pageSize } = req.query;
-        // idFuncionario = idFuncionario ? idFuncionario : '';
+        idFuncionario = idFuncionario ? idFuncionario : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/movimento-saldo-bonificacao.xsjs?pageSize=500&idFuncionario=${idFuncionario}`
-          const response = await getMovimentoSaldoBonificacaoById(idFuncionario,  page, pageSize)
+          const apiUrl = `${url}/api/financeiro/movimento-saldo-bonificacao.xsjs?pageSize=500&idFuncionario=${idFuncionario}`
+          const response = await axios.get(apiUrl)
+          // const response = await getMovimentoSaldoBonificacaoById(idFuncionario,  page, pageSize)
     
           return res.json(response.data);
         } catch (error) {

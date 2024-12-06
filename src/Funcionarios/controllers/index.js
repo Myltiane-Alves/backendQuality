@@ -50,9 +50,12 @@ class FuncionariosControllers {
             senha = senha ? senha : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const response = await getTodosFuncionarios(byId, idEmpresa, cpf, matricula, senha, page, pageSize);
 
-            return res.json(response); 
+            const apiUrl = `${url}/api/funcionario/todos.xsjs?byId=${byId}&page=${page}&pageSize=${pageSize}`
+            const response = await axios.get(apiUrl);
+            // const response = await getTodosFuncionarios(byId, idEmpresa, cpf, matricula, senha, page, pageSize);
+
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; // Lança o erro para tratamento posterior, se necessário

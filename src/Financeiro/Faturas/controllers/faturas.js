@@ -117,9 +117,12 @@ class FaturasControllers {
     pageSize = pageSize ? pageSize : '';
     
     try {
-
-      const response = await getVendaFaturaPixPeriodoCompensada(idMarca, idEmpresa, dataCompInicio, dataCompFim, page, pageSize)
-      return res.json(response); 
+      // http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/venda-total-fatura-pix-empresa-compensada.xsjs?pageSize=1000&dataPesquisaInicio=2024-12-06&dataPesquisaFim=2024-12-06&idMarca=0&idEmpresa=&page=1
+      const apiUrl = `${url}/api/financeiro/venda-total-fatura-pix-empresa-compensada.xsjs?idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataCompInicio}&dataPesquisaFim=${dataCompFim}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl);
+      
+      // const response = await getVendaFaturaPixPeriodoCompensada(idMarca, idEmpresa, dataCompInicio, dataCompFim, page, pageSize)
+      return res.json(response.data); 
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;

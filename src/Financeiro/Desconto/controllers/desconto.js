@@ -3,7 +3,7 @@ import axios from "axios";
 import { getDescontoMotivoVendas } from "../repositories/descontoMotivoVendas.js";
 import { getDescontoVendas } from "../repositories/descontoVendas.js";
 import { getDescontoVendaSimplificado } from "../repositories/descontoVendasSimplificado.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class DescontoControllers {
@@ -18,11 +18,11 @@ class DescontoControllers {
         dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
         dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/desconto-vendas.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
-          // const response = await axios.get(apiUrl)
-          const response = await getDescontoVendas(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+          const apiUrl = `${url}/api/financeiro/desconto-vendas.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+          const response = await axios.get(apiUrl)
+          // const response = await getDescontoVendas(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;

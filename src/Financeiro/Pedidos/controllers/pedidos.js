@@ -10,16 +10,18 @@ class PedidosControllers {
         let { id, idContaPagar, idPedido, idMarca, idFornecedor, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
-        // dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        // dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
-        // idFornecedor = idFornecedor ? idFornecedor : '';
-        // idMarca = idMarca ? idMarca : '';
+        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        idFornecedor = idFornecedor ? idFornecedor : '';
+        idMarca = idMarca ? idMarca : '';
+        idPedido = idPedido ? idPedido : '';
         // numeroPedido = numeroPedido ? numeroPedido : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/pedidos_compra.xsjs?pageSize=500&page=1&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFornPesquisa=${idFornecedor}&idMarcaPesquisa=${idMarca}&idpedido=${numeroPedido}`
-          const response = await getPedidosCompras(id, idContaPagar, idPedido, idMarca, idFornecedor, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+          const apiUrl = `${url}/api/financeiro/pedidos_compra.xsjs?pageSize=500&page=1&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFornPesquisa=${idFornecedor}&idMarcaPesquisa=${idMarca}&idpedido=${idPedido}`
+          const response = await axios.get(apiUrl);
+          // const response = await getPedidosCompras(id, idContaPagar, idPedido, idMarca, idFornecedor, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
