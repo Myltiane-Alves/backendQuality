@@ -162,14 +162,14 @@ class FinanceiroVendasControllers {
     async getListaVendasPagamentos(req, res) {
         try {
           let { idEmpresa, dataPesquisa, page, pageSize } = req.query;
-          const apiUrl = await `${url}/api/financeiro/venda-pagamentos.xsjs?pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}`	
+          const apiUrl = await `${url}/api/financeiro/venda-pagamentos.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`	
           const response = await axios.get(apiUrl)
           // const response = await getVendasPagamentos(idEmpresa, dataPesquisa, page, pageSize);
       
           return res.json(response.data);
         } catch (err) {
           console.error('Controller Erro ao buscar Vendas Loja Por Periodo:', err);
-          return res.status(500).json({ message: 'Erro ao buscar Vendas Loja Por Periodo.' });
+          throw err;
         }
     }
 
