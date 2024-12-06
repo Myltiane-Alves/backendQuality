@@ -1,0 +1,40 @@
+export default function getEmpresa(param) {
+    const empresa = {
+        IDEMPRESA: 1,
+        STGRUPOEMPRESARIAL: 1,
+        IDGRUPOEMPRESARIAL: 1,
+        IDSUBGRUPOEMPRESARIAL: 1,
+        NORAZAOSOCIAL: "Gto Comercio Atacadista De Confec E Calçados Ltda",
+        NOFANTASIA: "0001 - TO - Recanto 1 Matriz",
+        NUCNPJ: "36769602000155",
+        NUINSCESTADUAL: "0733785500180",
+        NUINSCMUNICIPAL: "",
+        CNAE: "4781400",
+        EENDERECO: "Qd 103, Comercial Local S/N, Lt 01",
+        ECOMPLEMENTO: "",
+        EBAIRRO: "Recanto Das Emas",
+        ECIDADE: "Brasília",
+        SGUF: "DF",
+        NUUF: 53,
+        NUCEP: "72600329",
+        NUIBGE: "5300108",
+        EEMAILPRINCIPAL: "to001@tesouradeouro.com.br",
+        EEMAILCOMERCIAL: "",
+        EEMAILFINANCEIRO: "",
+        EEMAILCONTABILIDADE: "",
+        NUTELPUBLICO: "",
+        NUTELCOMERCIAL: "",
+        NUTELFINANCEIRO: "",
+        NUTELGERENCIA: "",
+        EURL: "",
+        PATHIMG: "",
+        NUCNAE: "4781400",
+        STECOMMERCE: "False",
+        DTULTATUALIZACAO: "2021-08-31 00:00:00",
+        STATIVO: "True",
+        ALIQPIS: "1.65",
+        ALIQCOFINS: "7.60"
+    }
+
+    return empresa;        
+}
