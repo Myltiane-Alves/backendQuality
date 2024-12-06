@@ -137,12 +137,12 @@ class VendasControllers {
         pageSize = pageSize ? pageSize : '';
         try {
      
-            // const apiUrl = `${url}/api/venda/venda-xml.xsjs?id=${idVenda}`
+            const apiUrl = `${url}/api/venda/venda-xml.xsjs?id=${idVenda}&idGrupoEmpresarial=${idMarca}&idEmpresa=${idEmpresa}&${statusVenda}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
 
-            // const response = await axios.get(apiUrl)
-            const response = await getVendaXML(idVenda, idMarca,idEmpresa, stCancelado, stContigencia, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            const response = await axios.get(apiUrl)
+            // const response = await getVendaXML(idVenda, idMarca,idEmpresa, stCancelado, stContigencia, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
-            return res.json(response); // Retorna
+            return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
