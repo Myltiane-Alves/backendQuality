@@ -10,14 +10,16 @@ class VoucherControllers {
     async getListaResumoVoucherFinanceiro(req, res) {
         let { idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page } = req.query;
     
-        // idEmpresa = idEmpresa ? idEmpresa : '';
-        // dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        // dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        idEmpresa = idEmpresa ? idEmpresa : '';
+        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/resumo-voucher.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-          const response = await getResumoVoucher(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+          const apiUrl = `${url}/api/financeiro/resumo-voucher.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+          
+          const response = await axios.get(apiUrl);
+          // const response = await getResumoVoucher(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;

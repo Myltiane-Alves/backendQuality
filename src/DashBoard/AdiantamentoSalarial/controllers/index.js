@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAdiantamentosLojas, putAdiantamentosLojas } from "../repositories/adiantamento-lojas.js";
 import { getAdiantamentosFuncionarios } from "../repositories/funcionarios.js";
 import { createAdiantamentoSalarial, getAdiantamentoSalarialDashBoard, updateAdiantamentoSalarial } from "../repositories/adiantamentoSalarial.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class DashBoardAdiantamentoSalarialControllers {
@@ -19,10 +19,12 @@ class DashBoardAdiantamentoSalarialControllers {
         page = page ? page : '';
 
         try {
-            
-            const response = await getAdiantamentosLojas(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/dashboard/adiantamento-salarial/adiantamentolojas.xsjs?idEmpresa=0&dataPesquisaIni=2024-12-06&dataPesquisaFim=2024-12-06&idMarca=undefined
+            const apiUrl = `${url}/api/dashboard/adiantamento-salarial/adiantamentolojas.xsjs?idEmpresa=${idEmpresa}&dataPesquisaIni=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&pageSize=${pageSize}&page=${page}`;
+           const response = await axios.get(apiUrl);
+            // const response = await getAdiantamentosLojas(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
 
-            return res.json(response); // Retorna
+            return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

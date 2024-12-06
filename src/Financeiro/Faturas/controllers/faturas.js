@@ -68,11 +68,12 @@ class FaturasControllers {
 
     
     try {
+                            // /api/financeiro/detalhe-fatura.xsjs?pageSize=500&page=1&idEmpresa=1&dataPesquisaInicio=2024-12-06&dataPesquisaFim=2024-12-06
+      const apiUrl = `${url}/api/financeiro/detalhe-fatura.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&codigoFatura=${codigoFatura}&idDetalheFatura=${idDetalheFatura}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl);
+      // const response = await getDetalheFatura(idEmpresa, dataPesquisaInicio, dataPesquisaFim, codigoFatura, idDetalheFatura, page, pageSize);
 
-      
-      const response = await getDetalheFatura(idEmpresa, dataPesquisaInicio, dataPesquisaFim, codigoFatura, idDetalheFatura, page, pageSize);
-
-      return res.json(response); 
+      return res.json(response.data); 
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
