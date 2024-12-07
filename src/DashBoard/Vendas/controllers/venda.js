@@ -61,10 +61,13 @@ class DashBoardVendasControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
+            // http://164.152.245.77:8000/quality/concentrador/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?pagesize=1000&status=False&idEmpresa=1&dataInicio=2024-12-07&dataFechamento=2024-12-07&idFuncPN=
             
-            const response = await getResumoVendaConvenioDesconto(statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?pagesize=${pageSize}&status=${statusCancelado}&idEmpresa=${idEmpresa}&dataInicio=${dataPesquisaInicio}&dataFechamento=${dataPesquisaFim}&idFuncPN=${idFuncionario}`
+            const response = await axios.get(apiUrl)
+            // const response = await getResumoVendaConvenioDesconto(statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
