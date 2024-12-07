@@ -10,7 +10,7 @@ import { getProdutosMaisVendidos } from "../repositories/produtosMaisVendidos.js
 import { getVendasPorEstrutura } from "../repositories/vendasPorEstrutura.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
 
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class ComercialProdutoControllers {
@@ -20,9 +20,11 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const response = await getGrupoProduto(nome, page, pageSize)
+      const apiUrl = `${url}/api/comercial/grupo-produto.xsjs?nome=${nome}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl)
+      // const response = await getGrupoProduto(nome, page, pageSize)
 
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
