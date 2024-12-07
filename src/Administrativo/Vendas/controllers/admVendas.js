@@ -139,9 +139,11 @@ class AdmVendasControllers {
         pageSize = pageSize ? pageSize : '';
                 
         try {
-            const response = await getListaVenda(nnf, serie, idEmpresa, idVenda, page, pageSize)
+            const apiUrl = `${url}/api/administrativo/lista-venda.xsjs?nnf=${nnf}&serie=${serie}&idEmpresa=${idEmpresa}&idVenda=${idVenda}&pageSize=${pageSize}&page=${page}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getListaVenda(nnf, serie, idEmpresa, idVenda, page, pageSize)
      
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

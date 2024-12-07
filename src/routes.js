@@ -165,6 +165,7 @@ routes.get('/ultimaPosicaoEstoque', EstoqueControllers.getListaEstoqueUltimaPosi
 routes.get('/inventariomovimento', EstoqueControllers. getListaEstoqueAtual)
 
 
+
 // routes.get('/recebimento', AdministrativoControllers.getRetornoListaPagamentoVenda)
 routes.get('/lista-venda-cliente', AdmVendasControllers.getListaVendaCliente);
 routes.get('/lista-venda/:id', AdmVendasControllers.getListaVendasById)
