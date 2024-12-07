@@ -9,7 +9,7 @@ import { getConsolidarBalanco, updateConsolidarBalanco } from "../repositories/c
 import { getPrestacaoContasBalanco } from "../repositories/prestacaoContaBalanco.js";
 import { getNovoPreviaBalanco } from "../repositories/novoPreviaBalanco.js";
 import { createDetalheBalancoAvulso, getDetalheBalancoAvulso, putDetalheBalancoAvulso } from "../repositories/detalheBalancoAvulso.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class AdmBalancoControllers {
     async getListaBalancoLoja(req, res) {
@@ -23,10 +23,12 @@ class AdmBalancoControllers {
         pageSize = pageSize ? Number(pageSize) : '';
         
         try {
-
-            const response = await getBalancoLoja(idEmpresa, dsDescricao, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
+            // http://164.152.245.77:/api/administrativo/balanco-loja.xsjs?page=1&idEmpresa=1&dataInicial=2024-12-07&dataFinal=2024-12-07&DSdesc=
+            const apiUrl = `${url}/api/administrativo/balanco-loja.xsjs?idEmpresa=${idEmpresa}&dsDescricao=${dsDescricao}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getBalancoLoja(idEmpresa, dsDescricao, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
