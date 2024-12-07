@@ -3,7 +3,7 @@ import { dataFormatada } from "../../../utils/dataFormatada.js";
 import { getFormaPagamento } from "../repositories/formaPagamento.js";
 import { getPagamentoTef } from "../repositories/pagamento-tef.js";
 import { getPagamentoPos } from "../repositories/pagamento-pos.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class AdmPagamentosControllers {
  
