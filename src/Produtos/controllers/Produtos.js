@@ -35,10 +35,10 @@ class ProdutoControllers  {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {   
-            // const apiUrl = `${url}/api/produto-sap/produto-quality.xsjs?codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresa}&IdListaLoja=${idListaLoja}`;
-            // const response = await axios.get(apiUrl)
-            const response = await getProdutoQuality(idEmpresa, codBarrasOuNome, page, pageSize);
-            return res.json(response); // Retorna
+            const apiUrl = `${url}/api/produto-sap/produto-quality.xsjs?codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresa}&IdListaLoja=${idListaLoja}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getProdutoQuality(idEmpresa, codBarrasOuNome, page, pageSize);
+            return res.json(response.data); // Retorna
         } catch(error) {
             console.error("Unable to connect to the database:", error);
             throw error;

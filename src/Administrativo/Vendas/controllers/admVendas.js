@@ -9,7 +9,7 @@ import { createAlterarVendaPagamento, getAlterarVendaPagamento, updateAlterarVen
 import { getListaVenda } from "../repositories/listaVenda.js";
 import { getVendaCliente, getVendaDetalhe } from "../repositories/listaVendaCliente.js";
 import { updateAlterarVendaRecebimento } from "../repositories/atualizaRecebimentoVenda.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 class AdmVendasControllers {
     async getRecebimentosFormaPagamento(req, res) {
         let { idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize } = req.query; 
@@ -167,7 +167,7 @@ class AdmVendasControllers {
         try {
             // const response = await getVendaCliente(nnf, serie, idEmpresa, idVenda, idSubGrupoEmpresarial, cpfOUidVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             // const response = await getVendaDetalhe(nnf, serie, idEmpresa, idVenda, idSubGrupoEmpresarial, cpfOUidVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/venda/lista-venda-cliente.xsjs?id=${idVenda}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&idSubgrupoEmpresarial=${idSubGrupoEmpresarial}&idEmpresa=${idEmpresa}&cpfouIdVenda=${cpfOUidVenda}&nnf=${nnf}&serie=${serie}&pageSize=${pageSize}&page=${page}`;
+            const apiUrl = `${url}/api/venda/lista-venda-cliente.xsjs?id=${idVenda}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&idSubgrupoEmpresarial=${idSubGrupoEmpresarial}&idEmpresa=${idEmpresa}&cpfouIdVenda=${cpfOUidVenda}&nnf=${nnf}&serie=${serie}&pageSize=${pageSize}&page=${page}`;
             const response = await axios.get(apiUrl)
             return res.json(response.data); 
         } catch (error) {
