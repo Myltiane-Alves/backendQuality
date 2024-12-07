@@ -71,10 +71,12 @@ class DespesasLojaControllers  {
         pageSize = Number(pageSize) ? Number(pageSize) : '';
     
         try {
-    
-          const response = await getDespesaLojaDashBoard(idDespesaLoja, idEmpresa, dataPesquisa, page, pageSize)
+            // http://164.152.245./api/dashboard/despesa-loja.xsjs?idEmpresa=1&dataPesquisa=2024-12-07
+            const apiUrl = `${url}/api/dashboard/despesa-loja.xsjs?idDespesaLoja=${idDespesaLoja}&idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getDespesaLojaDashBoard(idDespesaLoja, idEmpresa, dataPesquisa, page, pageSize)
           
-          return res.json(response);
+            return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
