@@ -3,6 +3,7 @@ import { getQuebraCaixaLoja } from "../repositories/quebraCaixaLoja.js";
 import { getQuebraCaixa, updateStatusQuebraCaixa } from "../repositories/listaQuebraCaixa.js";
 import { createQuebraCaixa, updateQuebraCaixa, } from "../repositories/todos.js";
 import { getQuebraCaixaID } from "../repositories/quebraCaixa.js";
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class QuebraCaixaControllers {
     async getListaQuebraCaixaResumoADM(req, res) {
@@ -15,9 +16,12 @@ class QuebraCaixaControllers {
         
         try {
             
-            const response = await getQuebraCaixaLoja(idEmpresa, dataPesquisa, page, pageSize)
+            //                   /api/administrativo/quebra-caixa-loja.xsjs?idEmpresa=1&dataPesquisa=2024-12-07
+            const apiUrl = `${url}/api/administrativo/quebra-caixa-loja.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl);
+            // const response = await getQuebraCaixaLoja(idEmpresa, dataPesquisa, page, pageSize)
            
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
