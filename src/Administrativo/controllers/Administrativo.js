@@ -575,13 +575,12 @@ class AdministrativoControllers {
     }
     
     async getResumoVenda(req, res) {
-        let { idEmpresa, pageNumber, dataPesquisa } = req.query;
+        let { idEmpresa, pageSize, dataPesquisa } = req.query;
   
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-           dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
+            pageSize = pageSize ? pageSize : '';
+            dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
 
             try {
                 const apiUrl = `${url}/api/administrativo/resumo-venda.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
@@ -595,13 +594,12 @@ class AdministrativoControllers {
         }
     }
     async getListaDespesasLojaADM(req, res) {
-        let { idEmpresa, pageNumber, dataPesquisa } = req.query;
+        let { idEmpresa, pageSize, dataPesquisa } = req.query;
   
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-           dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
+            pageSize = pageSize ? pageSize : '';
+            dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
 
             try {
                 const apiUrl = `${url}/api/administrativo/despesa-loja.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
