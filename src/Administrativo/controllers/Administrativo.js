@@ -454,13 +454,12 @@ class AdministrativoControllers {
 
     async getDetalheFatura(req, res) {
 
-        let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
+        let { idEmpresa, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
-            dataPesquisaFim = dataFormatada(dataPesquisaFim)
+            idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+            pageSize = pageSize ? pageSize : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
       
             // ajaxGet('api/administrativo/detalhe-fatura.xsjs?idEmpresa=' + idemp + '&dataPesquisaInic=' + datapesq + '&dataPesquisaFim=' + datapesq)
             try {
