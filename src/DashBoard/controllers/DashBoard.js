@@ -422,12 +422,11 @@ class DashBoardControllers {
     }
 
     async getListaExtratoDaLojaPeriodoADM(req, res) {
-        let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
+        let { idEmpresa, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
 
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
+            pageSize = pageSize ? pageSize : '';
             dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
             dataPesquisaFim = dataFormatada(dataPesquisaFim)
             // ajaxGet('api/dashboard/extrato-loja-periodo.xsjs?pageSize=500&page=1&idEmpresa=' + idemp + '&dataPesquisaInicio=' + datapesq + '&dataPesquisaFim=' + datapesq)
