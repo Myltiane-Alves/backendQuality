@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getFuncionariosDescontos } from "../repositories/funcionarioDesconto.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class DashBoardFuncionariosControllers {
@@ -13,8 +13,12 @@ class DashBoardFuncionariosControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            const response = await getFuncionariosDescontos(idEmpresa, page, pageSize)
-            return res.json(response); 
+            // http://164.152.245.77:8000/quality/concentrador/api/dashboard/funcionario.xsjs?idEmpresa=1
+
+            const apiUrl = `${url}/api/dashboard/funcionario.xsjs?idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl);
+            // const response = await getFuncionariosDescontos(idEmpresa, page, pageSize)
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; 
