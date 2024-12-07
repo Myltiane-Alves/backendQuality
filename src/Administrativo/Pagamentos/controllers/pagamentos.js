@@ -11,11 +11,11 @@ class AdmPagamentosControllers {
         let {} = req.query; 
         try {
 
-            // const apiUrl = `${url}/api/administrativo/formapagamento.xsjs`;
-            // const response = await axios.get(apiUrl)
-            const response = await getFormaPagamento()
+            const apiUrl = `${url}/api/administrativo/formapagamento.xsjs`;
+            const response = await axios.get(apiUrl)
+            // const response = await getFormaPagamento()
         
-            return res.json(response); // Retorna
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
