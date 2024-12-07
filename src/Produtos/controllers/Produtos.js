@@ -87,13 +87,7 @@ class ProdutoControllers  {
     }
     
     async getListaProdutosLojaSap(req, res) {
-        let { 
-        
-            descricaoProduto, 
-            idEmpresaLogin,
-            idListaLoja,
-            pageNumber 
-        } = req.query;
+        let { descricaoProduto, idEmpresaLogin, idListaLoja, pageNumber  } = req.query;
     
     
         descricaoProduto = descricaoProduto ? descricaoProduto : ''; 
