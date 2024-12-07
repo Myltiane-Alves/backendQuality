@@ -85,11 +85,11 @@ class FinanceiroVendasControllers {
       page = page ? page : '';
       pageSize = pageSize ? pageSize : '';
       try {
-        // const apiUrl = `${url}/api/financeiro/venda-digital-marca.xsjs?pageSize=500&page=1&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-        // const response = await axios.get(apiUrl)
-        const response = await getVendaDigitalMarca(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+        const apiUrl = `${url}/api/financeiro/venda-digital-marca.xsjs?pageSize=500&page=1&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+        const response = await axios.get(apiUrl)
+        // const response = await getVendaDigitalMarca(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
   
-        return res.json(response); // Retorna
+        return res.json(response.data);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;
