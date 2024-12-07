@@ -144,11 +144,13 @@ class DashBoardVendasControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            // const apiUrl = `${url}/api/dashboard/venda/recebimento.xsjs?id=${idVenda}`
-            // const response = await axios.get(apiUrl)
-            const response = await getCaixasMovimentos(byId, idEmpresa, dataFechamento, page, pageSize);
+                                ///api/dashboard/venda/lista-caixas-movimento.xsjs?idEmpresa=1&dataFechamento=2024-12-07
+            const apiUrl = `${url}/api/dashboard/venda/lista-caixas-movimento.xsjs?idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}&page=${page}&pageSize=${pageSize}`
+            const response = await axios.get(apiUrl)
+            
+            // const response = await getCaixasMovimentos(byId, idEmpresa, dataFechamento, page, pageSize);
 
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
