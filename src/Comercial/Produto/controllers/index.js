@@ -38,9 +38,11 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const response = await getSubGrupoProduto(idGrupo, page, pageSize)
+      const apiUrl = `${url}/api/comercial/sub-grupo-produto.xsjs?idGrupo=${idGrupo}&page=${page}&pageSize=${pageSize}`;
+      const response = await axios.get(apiUrl)
+      // const response = await getSubGrupoProduto(idGrupo, page, pageSize)
 
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
