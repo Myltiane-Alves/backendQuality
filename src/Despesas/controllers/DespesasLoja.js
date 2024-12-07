@@ -17,10 +17,10 @@ class DespesasLojaControllers  {
             page = page ? page : '';
       
         try {
-            // const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
-            // const response = await axios.get(apiUrl)
-            const response = await getDespesasEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page);
-            return res.json(response); // Retorna
+            const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getDespesasEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page);
+            return res.json(response.data); // Retorna
         } catch(error) {
             console.error("Unable to connect to the database:", error);
                 throw error;
