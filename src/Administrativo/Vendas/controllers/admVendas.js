@@ -22,7 +22,8 @@ class AdmVendasControllers {
         idGrupo = idGrupo ? idGrupo : '';
 
         try {
-            const apiUrl = `${url}/api/administrativo/venda-total-forma-pag.xsjs?pageSize=500&page=&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${formaPagamento}&dSParc=${parcela}&idEmpGrupo=${idMarca}`;
+            // http://164.152.245.77:8000/quality/concentrador/api/administrativo/venda-total-forma-pag.xsjs?pageSize=1000&page=1&idEmpresa=1&dataPesquisaInicio=2024-12-07&dataPesquisaFim=2024-12-07&idFunc=&dSFormaPag=&dSParc=&idEmpGrupo=1
+            const apiUrl = `${url}/api/administrativo/venda-total-forma-pag.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${dsFormaPagamento}&dSParc=${dsParcela}&idEmpGrupo=${idMarca}`;
             const response = await axios.get(apiUrl)
             // const response = await getVendaTotalFormaPagamento(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize);
         
