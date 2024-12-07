@@ -68,11 +68,10 @@ class AdministrativoControllers {
 
     async retornoListaCaixasFechados(req, res) {
 
-        let { idEmpresa, pageNumber, dataFechamento } = req.query;
+        let { idEmpresa, pageSize, dataFechamento } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
+            idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+            pageSize = pageSize ? pageSize : '';
             dataFechamento = dataFormatada(dataFechamento)
             // ajaxGet('api/administrativo/lista-caixas-fechados.xsjs?idEmpresa=' + idemp + '&dataFechamento=' + dataFechamento)
             try {
