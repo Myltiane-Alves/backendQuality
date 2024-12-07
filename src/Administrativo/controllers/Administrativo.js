@@ -498,12 +498,11 @@ class AdministrativoControllers {
 
     async getDetalheVoucher(req, res) {
 
-        let { idEmpresa, pageNumber, datapesq } = req.query;
+        let { idEmpresa, page, pageSize, datapesq } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            datapesq = dataFormatada(datapesq)
+            idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+           
+            datapesq = dataFormatada(datapesq) ? datapesq : '';
             // ajaxGet('api/administrativo/detalhe-voucher.xsjs?idEmpresa=' + idemp + '&dataPesquisa=' + datapesq)
             try {
                 const apiUrl = `${url}/api/administrativo/detalhe-voucher.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${datapesq}`
