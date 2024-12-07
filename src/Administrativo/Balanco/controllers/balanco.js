@@ -78,9 +78,10 @@ class AdmBalancoControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            
-            const response = await getPrepararPrimeiroBalancoLoja(idEmpresa, page, pageSize)
-            return res.json(response); 
+            const apiUrl = `${url}/api/administrativo/preparar-primeiro-balanco-loja.xsjs?idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`
+            const response = await axios.get(apiUrl)
+            // const response = await getPrepararPrimeiroBalancoLoja(idEmpresa, page, pageSize)
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
