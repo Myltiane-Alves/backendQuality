@@ -9,9 +9,8 @@ class DepositosLojaControllers  {
     async getListaDepositosLoja(req,res) {
         let {idEmpresa, dataPesquisaInicio, dataPesquisaFim    } = req.query;
         idEmpresa = idEmpresa ? idEmpresa : '';
-
-        dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
-        dataPesquisaFim = dataFormatada(dataPesquisaFim)
+        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
         try {
             // ajaxGet('api/compras/lista_pedidos.xsjs?pageSize=1000&page=' + numPage + '&dataPesquisaInicio=' + dataPesqInic + '&dataPesquisaFim=' + dataPesqFim + '&idFornPesquisa=' + idFornPesq + '&idMarcaPesquisa=' + idMarcaPesq + '&idpedido=' + NuPedidoPesq + '&idFabPesquisa=' + idFabPesq + '&idCompradorPesquisa=' + idCompradorPesq + '&stSituacaoSAP=' + STSituacoPedidoPesq)
             const apiUrl = `${url}/api/deposito-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
