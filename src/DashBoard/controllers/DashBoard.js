@@ -221,8 +221,9 @@ class DashBoardControllers {
         let { idEmpresa, dataFechamento, dataInicio } = req.query;
 
         try {
-            dataFormatada(dataFechamento)
-            dataFormatada(dataInicio)
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataFormatada(dataFechamento) = dataFormatada(dataFechamento) ? dataFormatada(dataFechamento) : '';
+            dataFormatada(dataInicio) = dataFormatada(dataInicio) ? dataFormatada(dataInicio) : '';
             const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?pagesize=1000&status=False&idEmpresa=${idEmpresa}&dataInicio=${dataInicio}&dataFechamento=${dataFechamento}`
             const response = await axios.get(apiUrl)
 
