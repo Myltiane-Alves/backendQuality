@@ -168,10 +168,10 @@ class AdmBalancoControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            // const apiUrl = `${url}/api/administrativo/detalhe-balanco-avulso.xsjs?idfilial=${idFilial}&coletor=${coletor}`;
-            // const response = await axios.get(apiUrl)
-            const response = await getDetalheBalancoAvulso(idFilial, coletor, page, pageSize)
-            return res.json(response); 
+            const apiUrl = `${url}/api/administrativo/detalhe-balanco-avulso.xsjs?idfilial=${idFilial}&coletor=${coletor}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getDetalheBalancoAvulso(idFilial, coletor, page, pageSize)
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
