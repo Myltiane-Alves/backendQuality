@@ -61,10 +61,12 @@ class DashBoardAdiantamentoSalarialControllers {
         page = page ? page : '';
 
         try {
-            
-            const response = await getAdiantamentoSalarialDashBoard(idEmpresa, dataPesquisa, pageSize, page)
+            const apiUrl =  `${url}/api/dashboard/adiantamento-salarial.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
+            const response = await axios.get(apiUrl);
 
-            return res.json(response)
+            // const response = await getAdiantamentoSalarialDashBoard(idEmpresa, dataPesquisa, pageSize, page)
+
+            return res.json(response.data)
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
