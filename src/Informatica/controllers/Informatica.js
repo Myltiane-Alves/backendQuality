@@ -310,10 +310,10 @@ class InformaticaControllers {
       
         try {
             // ajaxGet('api/informatica/lista-vendas-contingencia.xsjs?idEmpresa=' + IDEmpresaLoja + '&dataPesquisaInic=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim)
-            // const apiUrl = `${url}/api/informatica/lista-vendas-contingencia.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-            // const response = await axios.get(apiUrl)
-            const response = await getVendasContigencia(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            return res.json(response); 
+            const apiUrl = `${url}/api/informatica/lista-vendas-contingencia.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+            const response = await axios.get(apiUrl)
+            // const response = await getVendasContigencia(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            return res.json(response.data); 
   
         } catch (error) {
             console.error("Unable to connect to the database:", error);
