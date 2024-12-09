@@ -86,7 +86,7 @@ class DashBoardVendasControllers {
 
         try {
           
-            const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/dashboard/venda/venda-resumido.xsjs?idLoja=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/dashboard/venda/venda-resumido.xsjs?idLoja=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl);
             // const response = await getVendasResumida(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
             return res.json(response.data);
