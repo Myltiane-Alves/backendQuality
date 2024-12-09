@@ -174,11 +174,12 @@ class InformaticaControllers {
         try {
             idEmpresa = idEmpresa ? idEmpresa : '';
             page = page ? page : '';
-            pageSize = pageSize ? pageSize : '';
-
-            const response = await getAtualizaEmpresaDiario(idEmpresa)
+            pageSize = pageSize ? pageSize : '';    
+            const apiUrl = `${url}/api/informatica/atualiza-empresa-diario.xsjs?id=${idEmpresa}`
+            const response = await axios.get(apiUrl)
+            // const response = await getAtualizaEmpresaDiario(idEmpresa)
             
-            return res.json(response); 
+            return res.json(response.data); 
             
         } catch (error) {
             console.error("Unable to connect to the database:", error);
