@@ -198,11 +198,11 @@ class InformaticaControllers {
             dataPesquisaFim = dataPesquisaFim ? dataFormatada(dataPesquisaFim) : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            // const apiUrl = `${url}/api/informatica/vendas-lojas.xsjs?idEmpresa=${idEmpresa}&status=${status}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
-            // const response = await axios.get(apiUrl)
-            const response = await getVendasLoja(idEmpresa, status, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            const apiUrl = `${url}/api/informatica/vendas-lojas.xsjs?idEmpresa=${idEmpresa}&status=${status}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
+            const response = await axios.get(apiUrl)
+            // const response = await getVendasLoja(idEmpresa, status, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
    
-            return res.json(response); 
+            return res.json(response.data); 
          
         } catch (error) {
             console.error("Unable to connect to the database:", error);
