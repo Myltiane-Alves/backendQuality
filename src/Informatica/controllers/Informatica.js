@@ -514,8 +514,10 @@ class InformaticaControllers {
     async putRelatorioBI(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await updateRelatarioBI(dados);
-            return res.json(response);
+
+            const response = await axios.put(`${url}/api/informatica/relatoriobi.xsjs`, dados)
+            // const response = await updateRelatarioBI(dados);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
@@ -624,9 +626,11 @@ class InformaticaControllers {
     async postRelatorioBI(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await createRelatarioBI(dados)
+            const response = await axios.post(`${url}/api/informatica/relatoriobi.xsjs`, dados)
+
+            // const response = await createRelatarioBI(dados)
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
