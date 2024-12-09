@@ -401,11 +401,11 @@ class InformaticaControllers {
             status = status ? status : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            // const apiUrl = `${url}/api/informatica/relatoriobi.xsjs?`
-            // const response = await axios.get(apiUrl)
-            const response = await getRelatorioBI(idRelatorio, status, page, pageSize)
+            const apiUrl = `${url}/api/informatica/relatoriobi.xsjs?`
+            const response = await axios.get(apiUrl)
+            // const response = await getRelatorioBI(idRelatorio, status, page, pageSize)
           
-            return res.json(response); 
+            return res.json(response.data); 
          
         } catch (error) {
             console.error("Unable to connect to the database:", error);
