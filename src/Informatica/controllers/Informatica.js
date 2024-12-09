@@ -137,11 +137,11 @@ class InformaticaControllers {
                 page = page ? page : '';
                 pageSize = pageSize ? pageSize : '';
 
-                // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/informatica/caixa.xsjs?idEmpresa=${idEmpresa}`
-                // const response = await axios.get(apiUrl)
-                const response = await getCaixa(idEmpresa, idCaixaWeb, dataUltimaAtualizacao,   page, pageSize) 
+                const apiUrl = `${url}/api/informatica/caixa.xsjs?idEmpresa=${idEmpresa}`
+                const response = await axios.get(apiUrl)
+                // const response = await getCaixa(idEmpresa, idCaixaWeb, dataUltimaAtualizacao,   page, pageSize) 
                 
-                return res.json(response); 
+                return res.json(response.data); 
              
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
