@@ -17,11 +17,11 @@ class MarketingControllers {
             codeBarsOuNome = codeBarsOuNome ? codeBarsOuNome : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            // const apiUrl = `${url}/api/produto-promocao.xsjs?codeBarsOuNome=${descricaoProduto}`
-            // const response = await axios.get(apiUrl)
-            const response = await getProdutoPromocao(idProduto, codeBarsOuNome, page, pageSize)
+            const apiUrl = `${url}/api/produto-promocao.xsjs?codeBarsOuNome=${descricaoProduto}`
+            const response = await axios.get(apiUrl)
+            // const response = await getProdutoPromocao(idProduto, codeBarsOuNome, page, pageSize)
     
-            return res.json(response); // Retorna
+            return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -34,11 +34,11 @@ class MarketingControllers {
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            // const apiUrl = `${url}/api/promocao/listapromocao.xsjs`
-            // const response = await axios.get(apiUrl)
-            const response = await getPromocao(idResumoPromocao, page, pageSize)
+            const apiUrl = `${url}/api/promocao/listapromocao.xsjs?idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`  
+            const response = await axios.get(apiUrl)
+            // const response = await getPromocao(idResumoPromocao, page, pageSize)
     
-            return res.json(response); // Retorna
+            return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -51,11 +51,11 @@ class MarketingControllers {
             idCampanha = idCampanha ? idCampanha : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            // const apiUrl = `${url}/api/campanha/todos.xsjs`
-            // const response = await axios.get(apiUrl)
-            const response = await getCampanhaEmpresa(idCampanha, page, pageSize)
+            const apiUrl = `${url}/api/campanha/todos.xsjs`
+            const response = await axios.get(apiUrl)
+            // const response = await getCampanhaEmpresa(idCampanha, page, pageSize)
     
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -143,9 +143,11 @@ class MarketingControllers {
     async postProdutoPromocao(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await createProdutoPromocao(dados)
+            const response = await axios.post(`${url}/api/produto-promocao.xsjs`, dados)
+
+            // const response = await createProdutoPromocao(dados)
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
