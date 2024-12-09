@@ -496,8 +496,9 @@ class InformaticaControllers {
     async putInativarFuncionario(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await updateInativarFuncionario(dados);
-            return res.json(response);
+            const response = await axios.put(`${url}/api/informatica/funcionario-inativa.xsjs`, dados)
+            // const response = await updateInativarFuncionario(dados);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
