@@ -615,7 +615,7 @@ routes.get('/contaBanco', ContaBancoControllers.getListaContaBanco)
 routes.get('/despesas-loja-empresa', DespesasLojaControllers.getListaDespesasLojaEmpresa)
 routes.get('/despesa-Loja-todos', DespesasLojaControllers.getListaTodasDespesasLojas)
 routes.get('/despesa-lojas-dash', DespesasLojaControllers.getListaDespesasLojaDashBoard)
-// routes.get('/despesasEmpresas', DespesasLojaControllers.getListaDespesasEmpresaGerencia)
+routes.get('/despesasEmpresas', DespesasLojaControllers.getListaDespesasEmpresaGerencia)
 
 routes.post('/cadastrar-despesa-loja', DespesasLojaControllers.postCadastrarDespesasLoja)
 
