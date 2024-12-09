@@ -38,7 +38,7 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/comercial/sub-grupo-produto.xsjs?idGrupo=${idGrupo}&page=${page}&pageSize=${pageSize}`;
+      const apiUrl = `${url}/api/comercial/subgrupo-produto.xsjs`;
       const response = await axios.get(apiUrl)
       // const response = await getSubGrupoProduto(idGrupo, page, pageSize)
 
