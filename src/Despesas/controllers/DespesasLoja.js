@@ -28,7 +28,7 @@ class DespesasLojaControllers  {
         }
         
     }
-    
+
     async getListaDespesasEmpresaGerencia(req,res) {
         let {idEmpresa, dataPesquisa,  } = req.query;
         idEmpresa = idEmpresa ? idEmpresa : ''; 
@@ -101,8 +101,9 @@ class DespesasLojaControllers  {
     async postCadastrarDespesasLoja(req, res) {
         try {
             const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await  createDespesaTodos(despesas);
-            return res.json(response);
+            // const response = await  createDespesaTodos(despesas);
+            const response = await  await axios.post(`${url}/api/despesa-loja/todos.xsjs`, despesas)
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
