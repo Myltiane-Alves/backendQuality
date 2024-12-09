@@ -424,9 +424,13 @@ class InformaticaControllers {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
           
-            const response = await getCadastroClienteCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
+            // http://164.152.245.77:8000/quality/concentrador/api/informatica/cadastro-cliente-credsystem.xsjs?idEmpresa=&dtInicio=2024-12-09&dtFim=2024-12-09&page=1
+            const apiUrl = `${url}/api/informatica/cadastro-cliente-credsystem.xsjs?idEmpresa=${idEmpresa}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl)
+            
+            // const response = await getCadastroClienteCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
           
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
