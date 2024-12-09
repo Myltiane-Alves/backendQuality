@@ -86,10 +86,12 @@ class MarketingControllers {
 
     async putCampanhaCliente(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await  updateCampanhaCLiente(dados)
+            const dados = Array.isArray(req.body) ? req.body : [req.body];  
+
+            const response = await axios.put(`${url}/api/campanha/cliente.xsjs`, dados)
+            // const response = await  updateCampanhaCLiente(dados)
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
