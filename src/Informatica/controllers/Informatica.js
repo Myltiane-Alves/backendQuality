@@ -524,9 +524,9 @@ class InformaticaControllers {
     async putAtualizaEmpresaDiario(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updateAtualizaEmpresaDiario(dados)
-        
-            return res.json(response);
+            const response = await axios.put(`${url}/api/informatica/atualiza-empresa-diario.xsjs`, dados)
+            // const response = await updateAtualizaEmpresaDiario(dados)
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
