@@ -8,7 +8,7 @@ import { getVendasResumida } from "../repositories/vendaResumida.js";
 import { getVendaVendedor } from "../repositories/vendasVendedor.js";
 import { getRecebimento } from "../repositories/recebimentos.js";
 import { getCaixasMovimentos } from "../repositories/listaCaixaMovimentos.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 
 class DashBoardVendasControllers {
@@ -19,11 +19,11 @@ class DashBoardVendasControllers {
         idEmpresa = idEmpresa ? idEmpresa : '';
         idVenda = idVenda ? idVenda : '';
         try {
-            // const apiUrl = `${url}/api/dashboard/venda/detalhe-venda.xsjs?idEmpresa=${idEmpresa}&idVenda=${idVenda}`
-            // const response = await axios.get(apiUrl)
-            const response = await getDetalheVendas(idVenda, idEmpresa);
+            const apiUrl = `${url}/api/dashboard/venda/detalhe-venda.xsjs?idEmpresa=${idEmpresa}&idVenda=${idVenda}`
+            const response = await axios.get(apiUrl)
+            // const response = await getDetalheVendas(idVenda, idEmpresa);
 
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -127,11 +127,11 @@ class DashBoardVendasControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            // const apiUrl = `${url}/api/dashboard/venda/recebimento.xsjs?id=${idVenda}`
-            // const response = await axios.get(apiUrl)
-            const response = await getRecebimento(idVenda, page, pageSize);
+            const apiUrl = `${url}/api/dashboard/venda/recebimento.xsjs?id=${idVenda}`
+            const response = await axios.get(apiUrl)
+            // const response = await getRecebimento(idVenda, page, pageSize);
 
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
