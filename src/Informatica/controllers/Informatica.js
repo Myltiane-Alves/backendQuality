@@ -286,12 +286,12 @@ class InformaticaControllers {
         dataPesquisaFim = dataPesquisaFim ? dataFormatada(dataPesquisaFim) : '';
         try {
             // ajaxGet('api/informatica/lista-vendas-alloc.xsjs?idVenda=' + idVenda + '&idEmpresa=' + IDEmpresaLoja + '&dataPesquisaInic=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim + '&stvendasalloc=' + stvendasalloc)
-            // const apiUrl = `${url}/api/informatica/lista-vendas-alloc.xsjs?idVenda=${idVenda}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquiaFim}&stvendasalloc=${stVendasAlloc}`
-            // const response = await axios.get(apiUrl)
+            const apiUrl = `${url}/api/informatica/lista-vendas-alloc.xsjs?idVenda=${idVenda}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquiaFim}&stvendasalloc=${stVendasAlloc}`
+            const response = await axios.get(apiUrl)
 
-            const response = await getVendasAlloc(idEmpresa, status, idVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            // const response = await getVendasAlloc(idEmpresa, status, idVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             
-            return res.json(response); 
+            return res.json(response.data); 
             
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -556,9 +556,10 @@ class InformaticaControllers {
     async putFuncionarioLoja(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updateFuncionario(dados)
+            const response = await axios.put(`${url}/api/informatica/funcionario-loja.xsjs`, dados)
+            // const response = await updateFuncionario(dados)
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -579,9 +580,10 @@ class InformaticaControllers {
     async putFuncionarioDesconto(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updateFuncionarioDesconto(dados)
-        
-            return res.json(response);
+            const response = await axios.put(`${url}/api/informatica/funcionario-desconto.xsjs`, dados)
+            // const response = await updateFuncionarioDesconto(dados)
+
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
