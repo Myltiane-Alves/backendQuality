@@ -446,10 +446,13 @@ class InformaticaControllers {
             dataPesquisaFim = dataPesquisaFim ? dataFormatada(dataPesquisaFim) : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-          
-            const response = await getMeioPagamentoCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
+            
+            const apiUrl = `${url}/api/informatica/meio-pagamento-credsystem.xsjs?idEmpresa=${idEmpresa}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`
+            const response = await axios.get(apiUrl)
+            
+            // const response = await getMeioPagamentoCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
         
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
