@@ -536,9 +536,11 @@ class InformaticaControllers {
     async putAtualizarTodosCaixas(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updateAtualizarTodosCaixa(dados)
+            const response = await axios.put(`${url}/api/informatica/atualizar_todos_caixa.xsjs`, dados)
+
+            // const response = await updateAtualizarTodosCaixa(dados)
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

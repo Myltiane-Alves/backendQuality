@@ -28,8 +28,8 @@ class EmpresaControllers {
 
         try {
             idEmpresa = idEmpresa ? idEmpresa : '';
-            
-            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/empresa.xsjs?id=${idEmpresa}`)
+            const apiUrl = `${url}/api/empresa.xsjs?id=${idEmpresa}`;
+            const response = await axios.get(apiUrl)
 
             return res.json(response.data); // Retorna
         } catch (error) {
