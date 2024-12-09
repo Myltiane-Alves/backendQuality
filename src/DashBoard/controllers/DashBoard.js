@@ -42,7 +42,7 @@ class DashBoardControllers {
         try {
             // ajaxGet('api/dashboard/venda/venda-resumido.xsjs?pageSize=500&idLoja=' + IDEmpresaLogin + '&dataPesquisaInicio=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim)
 
-            const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/dashboard/venda/venda-resumido.xsjs?pageSize=500&idLoja=${idEmpresaLogin}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
+            const apiUrl = `${url}/api/dashboard/venda/venda-resumido.xsjs?pageSize=500&idLoja=${idEmpresaLogin}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
 
             const response = await axios.get(apiUrl);
             return res.json(response.data);

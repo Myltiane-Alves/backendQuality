@@ -263,9 +263,13 @@ class InformaticaControllers {
             noFuncionarioCPF = noFuncionarioCPF ? noFuncionarioCPF : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const response = await getFuncionariosLoja(byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize)
+            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/informatica/funcionario-loja.xsjs?pagesize=1000&idEmpresa=&dsNomeFunc=
+            const apiUrl = `${url}/api/informatica/funcionario-loja.xsjs?page=${page}&pagesize=${pageSize}&idEmpresa=${idEmpresa}&dsNomeFunc=${noFuncionarioCPF}`;
+            const response = await axios.get(apiUrl)
+
+            // const response = await getFuncionariosLoja(byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize)
            
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
