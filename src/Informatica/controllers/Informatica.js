@@ -380,11 +380,11 @@ class InformaticaControllers {
         pageSize = pageSize ? pageSize : '';
         try {
             // ajaxGet('api/informatica/linkrelatoriobi.xsjs?page=' + numPage + '&id=' + idrelatoriobi + '&idfilial=' + idloja)
-            // const apiUrl = `${url}/api/informatica/linkrelatoriobi.xsjs?id=${idRelatorio}&idfilial=${idLoja}`
-            // const response = await axios.get(apiUrl)
-            const response = await getLinkRelatorioBI(idRelatorio, idEmpresa, page, pageSize)
+            const apiUrl = `${url}/api/informatica/linkrelatoriobi.xsjs?id=${idRelatorio}&idfilial=${idLoja}&page=${page}&pageSize=${pageSize}`
+            const response = await axios.get(apiUrl)
+            // const response = await getLinkRelatorioBI(idRelatorio, idEmpresa, page, pageSize)
         
-            return res.json(response); 
+            return res.json(response.data); 
          
         } catch (error) {
             console.error("Unable to connect to the database:", error);
