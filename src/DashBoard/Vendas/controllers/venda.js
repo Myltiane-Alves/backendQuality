@@ -109,11 +109,11 @@ class DashBoardVendasControllers {
     
             try {
                 
-                // const apiUrl = `${url}/api/dashboard/venda/venda-vendedor.xsjs?idEmpresa=${idEmpresaLogin}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-                // const response = await axios.get(apiUrl)
-                const response = await getVendaVendedor(idEmpresa, byId, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+                const apiUrl = `${url}/api/dashboard/venda/venda-vendedor.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+                const response = await axios.get(apiUrl)
+                // const response = await getVendaVendedor(idEmpresa, byId, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-                return res.json(response); // Retorna
+                return res.json(response.data); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
