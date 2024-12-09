@@ -43,11 +43,12 @@ class ExpedicaoControllers {
         page = page ? page : '';
 
         try {
+            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/conferencia-cega/resumo-ordem-transferencia.xsjs?page=1&idtipofiltro=2&idEmpresaOrigem=1&idEmpresaDestino=101&datapesqinicio=2024-12-09&datapesqfim=2024-12-09
             
-            // const apiUrl = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=${idTipoFiltro}&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&pageSize=${pageSize}&page=${page}`)
-            // const response = await axios.get(apiUrl)
-            const response = await  getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
-            return res.json(response); 
+            const apiUrl = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=${idTipoFiltro}&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&pageSize=${pageSize}&page=${page}`)
+            const response = await axios.get(apiUrl)
+            // const response = await  getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; 
@@ -107,7 +108,8 @@ class ExpedicaoControllers {
 
         try {
             // ajaxGet('api/expedicao/resumo-ordem-transferencia.xsjs?page=' + numPage + '&idtipofiltro=' + 2 + '&idEmpresaOrigem=' + IDEmpresaLogin + '&idEmpresaDestino=' + idlojadestino + '&datapesqinicio=' + datapesqinicio + '&datapesqfim=' + datapesqfim)
-            const response = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=2&idEmpresaOrigem=${idEmpresaLogin}&idEmpresaDestino=${idLojaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}`)
+            const apiUrl = `${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=2&idEmpresaOrigem=${idEmpresaLogin}&idEmpresaDestino=${idLojaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}`
+            const response = await axios.get(apiUrl)
 
             return res.json(response.data); 
         } catch (error) {

@@ -2,7 +2,7 @@
 import { getQuebraCaixa } from "../QuebraCaixa/repositories/listaQuebraCaixa.js";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 // let url = `http://164.152.245.77:8000/quality/concentrador_react_node`;
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 import axios from 'axios';
 
 class DashBoardControllers {
