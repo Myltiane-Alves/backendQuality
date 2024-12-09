@@ -53,9 +53,9 @@ class DespesasLojaControllers  {
             pageSize = pageSize ? pageSize : '';
             page = page ? page : '';
 
-            // const apiUrl = `${url}/api/despesa-loja/todos.xsjs?id=${idEmpresa}`;
-            // const response = await axios.get(apiUrl)
-            const response = await getDespesasTodos(idDespesas, pageSize, page)
+            const apiUrl = `${url}/api/despesa-loja/todos.xsjs?id=${idEmpresa}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getDespesasTodos(idDespesas, pageSize, page)
             return res.json(response);
         } catch(error) {
             console.error("Unable to connect to the database:", error);
