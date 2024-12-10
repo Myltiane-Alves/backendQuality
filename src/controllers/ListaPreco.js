@@ -1,6 +1,6 @@
 import axios from "axios";
 import { dataFormatada } from "../utils/dataFormatada.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class ListaPrecoControllers {
 

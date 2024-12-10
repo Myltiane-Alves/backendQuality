@@ -672,7 +672,7 @@ routes.put('/status-divergencia/:id', ConferenciaCegaControllers.putStatusDiverg
 routes.post('/inserir-status-divergencia', ConferenciaCegaControllers.postStatusDivergencia)
 
 // Lista de Preço
-// routes.get('/listaPreco', ListaPrecoControllers.getListaPrecoPorMarca)
+routes.get('/listaPreco', ListaPrecoControllers.getListaPrecoPorMarca)
 
 // // Logs
 // routes.get('/log-web', LogsControllers.getListaLogsUsuario)
