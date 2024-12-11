@@ -600,6 +600,7 @@ routes.get('/listasDePrecosSAP', ProdutoControllers.ListaProdutosEtiqueta)
 routes.get('/responsaveisAlteracaoPrecos', ProdutoControllers.getListaResponsavelAlteracaoPreco)
 routes.get('/listaProdutosEtiquetaSAP', ProdutoControllers.ListaProdutosEtiquetagem)
 routes.get('/alteracoes-de-precos-resumo', ProdutoControllers.getListaAlteracaoPrecoResumo)
+routes.get('/alteracoes-de-precos-detalhes', ProdutoControllers.getListaAlteracaoPrecoDetalhe)
 
 //  Depositos Loja
 routes.get('/depositosLoja', DepositosLojaControllers.getListaDepositosLojaEmpresa)
