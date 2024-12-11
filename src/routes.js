@@ -599,6 +599,7 @@ routes.get('/listaGrade', ProdutoControllers.getListaGrade)
 routes.get('/listasDePrecosSAP', ProdutoControllers.ListaProdutosEtiqueta)
 routes.get('/responsaveisAlteracaoPrecos', ProdutoControllers.getListaResponsavelAlteracaoPreco)
 routes.get('/listaProdutosEtiquetaSAP', ProdutoControllers.ListaProdutosEtiquetagem)
+routes.get('/alteracoes-de-precos-resumo', ProdutoControllers.getListaAlteracaoPrecoResumo)
 
 //  Depositos Loja
 routes.get('/depositosLoja', DepositosLojaControllers.getListaDepositosLojaEmpresa)
