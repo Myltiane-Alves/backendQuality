@@ -188,7 +188,17 @@ class ProdutoControllers  {
     
     async getListaAlteracaoPrecoResumo(req, res) {
         let { dataPesquisaInicio, dataPesquisaFim, id, idLista, idLoja, idUsuario, idProduto, descProduto, codBarras, page, pageSize } = req.query;
-        
+        idResumoAlteracao = idResumoAlteracao ? idResumoAlteracao : '';
+        idLoja = idLoja ? idLoja : '';
+        idLista = idLista ? idLista : '';
+        idUsuario = idUsuario ? idUsuario : '';
+        idProduto = idProduto ? idProduto : '';
+        codBarras = codBarras ? codBarras : '';
+        descProduto = descProduto ? descProduto : '';
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
         try {
             // http://164.152.245.77:8000/quality/concentrador_homologacao/api/produtos/alteracoes-de-precos-resumo.xsjs?dtInicio=2024-12-11&dtFim=2024-12-11&id=&idLista=&idLoja=&idUser=&idProd=&descProd=&codeBars=&page=1
             const apiUrl = `${url}/api/produtos/alteracoes-de-precos-resumo.xsjs?dtIinicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&id=${id}&idLista=${idLista}&idLoja=${idLoja}&idUser=${idUsuario}&idProd=${idProduto}&descProd=${descProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
