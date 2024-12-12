@@ -214,6 +214,9 @@ class ProdutoControllers  {
     async getListaAlteracaoPrecoDetalhe(req, res) {
         let { idAlteracaoPreco, page, pageSize } = req.query;
         
+        idAlteracaoPreco = idAlteracaoPreco ? idAlteracaoPreco : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
         try {
             // http://164.152.245.77:8000/quality/concentrador_homologacao/api/produtos/alteracoes-de-precos-resumo.xsjs?dtInicio=2024-12-11&dtFim=2024-12-11&id=&idLista=&idLoja=&idUser=&idProd=&descProd=&codeBars=&page=1
             const apiUrl = `${url}/api/produtos/alteracoes-de-precos-detalhes.xsjs?idAlteracao=${idAlteracaoPreco}&page=${page}&pageSize=${pageSize}`;
