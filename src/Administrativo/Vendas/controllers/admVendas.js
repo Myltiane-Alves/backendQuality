@@ -9,7 +9,7 @@ import { createAlterarVendaPagamento, getAlterarVendaPagamento, updateAlterarVen
 import { getListaVenda } from "../repositories/listaVenda.js";
 import { getVendaCliente, getVendaDetalhe } from "../repositories/listaVendaCliente.js";
 import { updateAlterarVendaRecebimento } from "../repositories/atualizaRecebimentoVenda.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 class AdmVendasControllers {
     async getRecebimentosFormaPagamento(req, res) {
         let { idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize } = req.query; 
