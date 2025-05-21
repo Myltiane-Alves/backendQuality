@@ -59,11 +59,11 @@ class InformaticaControllers {
     async getListaMarcas(req, res) {
          let {  } = req.query;
         try {
-            const apiUrl = `${url}/api/grupo-empresarial.xsjs`
-            const response = await axios.get(apiUrl)
-            // const response = await getGrupoEmpresa()
+            // const apiUrl = `${url}/api/grupo-empresarial.xsjs`
+            // const response = await axios.get(apiUrl)
+            const response = await getGrupoEmpresa()
             
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
