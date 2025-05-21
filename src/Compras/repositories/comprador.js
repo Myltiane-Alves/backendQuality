@@ -24,12 +24,12 @@ export const getCompradores = async (idComprador, descComprador, page, pageSize)
         const params = [1];
 
         if (idComprador) {
-            query += ' And A.IDFUNCIONARIO IN = ? ';
-            params.push(idComprador);
+            query += ` And A.IDFUNCIONARIO IN = ${idComprador} `;
+            // params.push(idComprador);
         }
     
         if(descComprador) {
-            query += ' And A.NOFUNCIONARIO LIKE ? OR A.NOFUNCIONARIO  LIKE ? ';
+            query += ' And (A.NOFUNCIONARIO LIKE ? OR A.NOFUNCIONARIO  LIKE ? )';
             params.push(`%${descComprador}%`, `%${descComprador}%`);
         }
 

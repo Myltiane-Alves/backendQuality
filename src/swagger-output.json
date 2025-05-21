@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/"
+      "url": "http://localhost:3000/api"
     }
   ],
   "paths": {
@@ -51,6 +51,38 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/empresas/{idEmpresa}": {
+      "get": {
+        "summary": "Obter empresa por ID",
+        "description": "Retorna uma empresa específica pelo ID",
+        "parameters": [
+          {
+            "name": "idEmpresa",
+            "in": "path",
+            "required": true,
+            "description": "ID da empresa",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Empresa encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Empresas"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Empresa não encontrada"
           }
         }
       }
@@ -197,7 +229,7 @@
           "name": "Funcionario"
         }
       },
-      "Loja": {
+      "Empresas": {
         "type": "object",
         "properties": {
           "IDEMPRESA": {
@@ -374,7 +406,7 @@
           "ALIQCOFINS"
         ],
         "xml": {
-          "name": "Loja"
+          "name": "Empresas"
         }
       },
       "Marca": {

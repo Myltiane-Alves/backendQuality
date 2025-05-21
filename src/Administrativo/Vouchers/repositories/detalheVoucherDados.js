@@ -47,7 +47,7 @@ export const getListaDetalhe = async (idVoucher) => {
             	"STCANCELADO": det.STCANCELADO
             }
         }))
-
+        
         return data
         
         
@@ -59,7 +59,7 @@ export const getListaDetalhe = async (idVoucher) => {
 
 export const getListaDetalheResumoVenda = async (idResumoVendaDestino) => {
  try {
-    var query = `
+    let query = `
         SELECT
             tbvd.IDVENDADETALHE,
             tbvd.IDVENDA,
@@ -311,7 +311,7 @@ export const getDetalheVoucherDados = async (idSubGrupoEmpresa, idEmpresa, idVou
             params.push(stTipoTroca);
         }
         if(dataPesquisaInicio && dataPesquisaFim) {
-            query += ` AND tbrv.DTINVOUCHER BETWEEN ? AND ?`;
+            query += ` AND (tbrv.DTINVOUCHER BETWEEN ? AND ?)`;
             params.push(`${dataPesquisaInicio} 00:00:00`, `${dataPesquisaFim} 23:59:59`);
         }
 
@@ -322,7 +322,7 @@ export const getDetalheVoucherDados = async (idSubGrupoEmpresa, idEmpresa, idVou
 
 
         if (idEmpresa) {
-            query += ' AND (tbrv.IDEMPRESAORIGEM = ? OR tbrv.IDEMPRESADESTINO = ?)';
+            query += `AND CONTAINS((tbrv.IDEMPRESAORIGEM, tbrv.IDEMPRESADESTINO)  ${idEmpresa})`;
             params.push(idEmpresa, idEmpresa);
         }
 
@@ -333,61 +333,74 @@ export const getDetalheVoucherDados = async (idSubGrupoEmpresa, idEmpresa, idVou
         }
 
         
-        query += `ORDER BY tbrv.DTINVOUCHER`
+        query += ` ORDER BY tbrv.DTINVOUCHER`
+        query += ` LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`
 
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params)
         if(!Array.isArray(rows) || rows.length === 0) return [];
  
-        const data = await Promise.all(rows.map(async (registro) => ({
-            voucher: {
+        const data = await Promise.all(rows.map(async (registro) => {
+            try {
+                const detalhedestino = await getListaDetalheResumoVenda(registro.IDRESUMOVENDAWEBDESTINO)
+                const detalhevoucher = await getListaDetalhe(registro.IDVOUCHER)
+                const voucherorigem = await getListaVoucherDeOrigem(registro.IDVOUCHER)
+                return {
+    
+                    voucher: {
+                        
+                        "IDVOUCHER": registro.IDVOUCHER,
+                        "IDEMPRESAORIGEM": registro.IDEMPRESAORIGEM,
+                        "IDSUBGRUPOEMPRESARIAL": registro.SUBGRUPOEMPORIGEM,
+                        "IDRESUMOVENDAWEB": registro.IDRESUMOVENDAWEB,
+                        "NUCPFCNPJ": registro.NUCPFCNPJ,
+                        "DSNOMERAZAOSOCIAL": registro.DSNOMERAZAOSOCIAL,
+                        "DSAPELIDONOMEFANTASIA": registro.DSAPELIDONOMEFANTASIA,
+                        "IDRESUMOVENDAWEBDESTINO": registro.IDRESUMOVENDAWEBDESTINO,
+                        "DTINVOUCHER": registro.DTINVOUCHER,
+                        "DTINVOUCHERFORMATADO": registro.DTINVOUCHERFORMATADO,
+                        "DTOUTVOUCHER": registro.DTOUTVOUCHER,
+                        "DTOUTVOUCHERFORMATADO": registro.DTOUTVOUCHERFORMATADO,
+                        "DSCAIXAORIGEM": registro.DSCAIXAORIGEM,
+                        "DSCAIXADESTINO": registro.DSCAIXADESTINO,
+                        "NUVOUCHER": registro.NUVOUCHER,
+                        "VRVOUCHER": registro.VRVOUCHER,
+                        "STATIVO": registro.STATIVO,
+                        "STCANCELADO": registro.STCANCELADO,
+                        "RAZAOEMPORIGEM": registro.RAZAOEMPORIGEM,
+                        "EMPORIGEM": registro.EMPORIGEM,
+                        "CNPJEMPORIGEM": registro.CNPJEMPORIGEM,
+                        "ENDEMPORIGEM": registro.ENDEMPORIGEM,
+                        "BAIRROEMPORIGEM": registro.BAIRROEMPORIGEM,
+                        "CIDADEEMPORIGEM": registro.CIDADEEMPORIGEM,
+                        "SGUFEMPORIGEM": registro.SGUFEMPORIGEM,
+                        "NUTELEMPORIGEM": registro.NUTELEMPORIGEM,
+                        "EMAILEMPORIGEM": registro.EMAILEMPORIGEM,
+                        "EMPDESTINO": registro.EMPDESTINO,
+                        "IDCAIXAORIGEM": registro.IDCAIXAORIGEM,
+                        "IDVENDEDOR": registro.IDVENDEDOR,
+                        "IDNFEDEVOLUCAO": registro.IDNFEDEVOLUCAO,
+                        "STSTATUS": registro.STSTATUS,
+                        "STTIPOTROCA": registro.STTIPOTROCA,
+                        "MOTIVOTROCA": registro.MOTIVOTROCA,
+                        "DSMOTIVOCANCELAMENTO": registro.DSMOTIVOCANCELAMENTO,
+                        "IDUSRLIBERACAOCRIACAO": registro.IDUSRLIBERACAOCRIACAO,
+                        "NOFUNCIONARIOLIBERACAOCRIACAO": registro.NOFUNCIONARIOLIBERACAOCRIACAO,
+                        "IDUSRLIBERACAOCONSUMO": registro.IDUSRLIBERACAOCONSUMO,
+                        "NOFUNCIONARIOLIBERACAOCONSUMO": registro.NOFUNCIONARIOLIBERACAOCONSUMO,
+                        "DTHORAFECHAMENTOVENDAORIGEM": registro.DTHORAFECHAMENTOVENDAORIGEM
+                    },
+                    detalhedestino,
+                    detalhevoucher,
+                    voucherorigem
+                }
+            } catch(error) {
                 
-                "IDVOUCHER": registro.IDVOUCHER,
-                "IDEMPRESAORIGEM": registro.IDEMPRESAORIGEM,
-                "IDSUBGRUPOEMPRESARIAL": registro.SUBGRUPOEMPORIGEM,
-                "IDRESUMOVENDAWEB": registro.IDRESUMOVENDAWEB,
-                "NUCPFCNPJ": registro.NUCPFCNPJ,
-                "DSNOMERAZAOSOCIAL": registro.DSNOMERAZAOSOCIAL,
-                "DSAPELIDONOMEFANTASIA": registro.DSAPELIDONOMEFANTASIA,
-                "IDRESUMOVENDAWEBDESTINO": registro.IDRESUMOVENDAWEBDESTINO,
-                "DTINVOUCHER": registro.DTINVOUCHER,
-                "DTINVOUCHERFORMATADO": registro.DTINVOUCHERFORMATADO,
-                "DTOUTVOUCHER": registro.DTOUTVOUCHER,
-                "DTOUTVOUCHERFORMATADO": registro.DTOUTVOUCHERFORMATADO,
-                "DSCAIXAORIGEM": registro.DSCAIXAORIGEM,
-                "DSCAIXADESTINO": registro.DSCAIXADESTINO,
-                "NUVOUCHER": registro.NUVOUCHER,
-                "VRVOUCHER": registro.VRVOUCHER,
-                "STATIVO": registro.STATIVO,
-                "STCANCELADO": registro.STCANCELADO,
-                "RAZAOEMPORIGEM": registro.RAZAOEMPORIGEM,
-                "EMPORIGEM": registro.EMPORIGEM,
-                "CNPJEMPORIGEM": registro.CNPJEMPORIGEM,
-                "ENDEMPORIGEM": registro.ENDEMPORIGEM,
-                "BAIRROEMPORIGEM": registro.BAIRROEMPORIGEM,
-                "CIDADEEMPORIGEM": registro.CIDADEEMPORIGEM,
-                "SGUFEMPORIGEM": registro.SGUFEMPORIGEM,
-                "NUTELEMPORIGEM": registro.NUTELEMPORIGEM,
-                "EMAILEMPORIGEM": registro.EMAILEMPORIGEM,
-                "EMPDESTINO": registro.EMPDESTINO,
-                "IDCAIXAORIGEM": registro.IDCAIXAORIGEM,
-                "IDVENDEDOR": registro.IDVENDEDOR,
-                "IDNFEDEVOLUCAO": registro.IDNFEDEVOLUCAO,
-                "STSTATUS": registro.STSTATUS,
-                "STTIPOTROCA": registro.STTIPOTROCA,
-                "MOTIVOTROCA": registro.MOTIVOTROCA,
-                "DSMOTIVOCANCELAMENTO": registro.DSMOTIVOCANCELAMENTO,
-                "IDUSRLIBERACAOCRIACAO": registro.IDUSRLIBERACAOCRIACAO,
-                "NOFUNCIONARIOLIBERACAOCRIACAO": registro.NOFUNCIONARIOLIBERACAOCRIACAO,
-                "IDUSRLIBERACAOCONSUMO": registro.IDUSRLIBERACAOCONSUMO,
-                "NOFUNCIONARIOLIBERACAOCONSUMO": registro.NOFUNCIONARIOLIBERACAOCONSUMO,
-                "DTHORAFECHAMENTOVENDAORIGEM": registro.DTHORAFECHAMENTOVENDAORIGEM
-            },
-            detalhedestino: await getListaDetalheResumoVenda(registro.IDRESUMOVENDAWEBDESTINO),
-            detalhevoucher: await getListaDetalhe(registro.IDVOUCHER),
-            voucherorigem: await getListaVoucherDeOrigem(registro.IDVOUCHER),
-        })))
-
+                console.error('Erro ao executar a consulta voucher detalhado:', error);
+            }
+        }))
+        
+    
         return {
             page,
             pageSize,

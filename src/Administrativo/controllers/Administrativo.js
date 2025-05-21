@@ -2,7 +2,13 @@ import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getDetalheVendas } from "../Vendas/repositories/detalheVenda.js";
 import { getDetalheVoucherDados } from "../Vouchers/repositories/detalheVoucherDados.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import { getListaMovimentoCaixa } from "../Caixa/repositories/listaCaixaMovimentos.js";
+import { getDetalheVoucher } from "../Vouchers/repositories/detalheVoucher.js";
+import { getCaixasFechados } from "../Caixa/repositories/listaCaixasFechados.js";
+import { getVendaVendedor } from "../Vendas/repositories/vendaVendedor.js";
+import { getResumoVendaConvenioDesconto } from "../../DashBoard/Vendas/repositories/resumoVendaConvenioDesconto.js";
+import { getDetalheFatura } from "../Detalhes/detalheFatura.js";
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class AdministrativoControllers {
 
@@ -48,17 +54,23 @@ class AdministrativoControllers {
         }
     }
 
-    async retornoListaCaixasMovimento(req, res) {
-        let { idEmpresa, dataFechamento } = req.query;
-      
-        idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
-        dataFechamento = dataFormatada(dataFechamento) ? dataFechamento : '';
+    async getListaCaixasMovimento(req, res) {
+        let {byId, idEmpresa, dataFechamento, page, pageSize } = req.query;
+        byId = byId ? byId : '';
+        idEmpresa = idEmpresa ? idEmpresa : '';
+        dataFechamento = dataFechamento ? dataFechamento : '';
+        pageSize = pageSize ? pageSize : '';
+        page = page ? page : '';
         // ajaxGet('api/administrativo/lista-caixas-movimento.xsjs?idEmpresa=' + idemp + '&dataFechamento=' + datapesq)
         try {
-            const apiUrl = `${url}/api/administrativo/lista-caixas-movimento.xsjs?idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
-            const response = await axios.get(apiUrl)
+            if(!idEmpresa) {
+                return res.status(400).json({ error: "ID da empresa não informado" });
+            }
+            // const apiUrl = `${url}/api/administrativo/lista-caixas-movimento.xsjs?idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+            // const response = await axios.get(apiUrl)
+            const response = await getListaMovimentoCaixa(byId, idEmpresa, dataFechamento, page, pageSize)
 
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -66,19 +78,22 @@ class AdministrativoControllers {
         
     }
 
-    async retornoListaCaixasFechados(req, res) {
+    async getListaCaixasFechados(req, res) {
 
-        let { idEmpresa, pageSize, dataFechamento } = req.query;
+        let { idEmpresa, dataFechamento, page, pageSize } = req.query;
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+            dataFechamento = dataFormatada(dataFechamento) ? dataFechamento : '';
             pageSize = pageSize ? pageSize : '';
-            dataFechamento = dataFormatada(dataFechamento)
+            page = page ? page : '';
+           
             // ajaxGet('api/administrativo/lista-caixas-fechados.xsjs?idEmpresa=' + idemp + '&dataFechamento=' + dataFechamento)
             try {
-                const apiUrl = `${url}/api/administrativo/lista-caixas-fechados.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
-                const response = await axios.get(apiUrl)
+                // const apiUrl = `${url}/api/administrativo/lista-caixas-fechados.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+                // const response = await axios.get(apiUrl)
+                const response = await getCaixasFechados(idEmpresa, dataFechamento, page, pageSize)
 
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -111,19 +126,24 @@ class AdministrativoControllers {
         
     }
 
-    async getVendaVendedor(req, res) {
-        let { idEmpresa, dataPesquisaInicio, dataPesquisaFim } = req.query;
+    async getListaVendaVendedor(req, res) {
+        let { idVenda, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
         if (!isNaN(idEmpresa)) {
 
-            idEmpresa = Number(idEmpresa);
-            dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
-            dataPesquisaFim = dataFormatada(dataPesquisaFim)
+            idVenda = idVenda ? idVenda : '';
+            idGrupo = idGrupo ? idGrupo : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
 
             try {
-                const apiUrl = `${url}/api/administrativo/venda-vendedor.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-                const response = await axios.get(apiUrl)
+                // const apiUrl = `${url}/api/administrativo/venda-vendedor.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+                // const response = await axios.get(apiUrl)
+                const response = await getVendaVendedor(idVenda, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -297,7 +317,7 @@ class AdministrativoControllers {
 
         let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
+            idEmpresa = idEmpresa ? Number(idEmpresa) : '';
             const pageSize = 100;
             const offset = (pageNumber - 1) * pageSize;
             dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
@@ -454,19 +474,23 @@ class AdministrativoControllers {
 
     async getDetalheFatura(req, res) {
 
-        let { idEmpresa, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
+        let { idDetalheFatura, idEmpresa, dataPesquisaInicio, dataPesquisaFim, nuCodigoAutorizacao, page, pageSize } = req.query;
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
-            pageSize = pageSize ? pageSize : '';
+            idDetalheFatura = idDetalheFatura ? idDetalheFatura : '';
+            nuCodigoAutorizacao = nuCodigoAutorizacao ? nuCodigoAutorizacao : '';
             dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
             dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
       
             // ajaxGet('api/administrativo/detalhe-fatura.xsjs?idEmpresa=' + idemp + '&dataPesquisaInic=' + datapesq + '&dataPesquisaFim=' + datapesq)
             try {
-                const apiUrl = `${url}/api/administrativo/detalhe-fatura.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-                const response = await axios.get(apiUrl)
+                // const apiUrl = `${url}/api/administrativo/detalhe-fatura.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+                // const response = await axios.get(apiUrl)
+                const response = await getDetalheFatura(idDetalheFatura, idEmpresa, dataPesquisaInicio, dataPesquisaFim, nuCodigoAutorizacao, page, pageSize) 
 
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -494,18 +518,21 @@ class AdministrativoControllers {
         }
     }
 
-    async getDetalheVoucher(req, res) {
+    async getListaDetalheVoucher(req, res) {
 
-        let { idEmpresa, page, pageSize, datapesq } = req.query;
+        let { idEmpresa, dataPesquisa, page, pageSize } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
            
-            datapesq = dataFormatada(datapesq) ? datapesq : '';
             // ajaxGet('api/administrativo/detalhe-voucher.xsjs?idEmpresa=' + idemp + '&dataPesquisa=' + datapesq)
             try {
-                const apiUrl = `${url}/api/administrativo/detalhe-voucher.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${datapesq}`
-                const response = await axios.get(apiUrl)
-                return res.json(response.data); // Retorna
+                // const apiUrl = `${url}/api/administrativo/detalhe-voucher.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${datapesq}`
+                // const response = await axios.get(apiUrl)
+                const response = await getDetalheVoucher(idEmpresa, dataPesquisa, page, pageSize)
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -533,19 +560,23 @@ class AdministrativoControllers {
 
     async getResumoVendaConvenio(req, res) {
 
-        let { idEmpresa, pageNumber } = req.query;
+        let { statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize} = req.query;
         if (!isNaN(idEmpresa)) {
 
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            datapesq = dataFormatada(datapesq)
+            statusCancelado = statusCancelado ? statusCancelado : '';
+            idVenda = idVenda ? idVenda : '';
+            idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+            idFuncionario = idFuncionario ? idFuncionario : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
+            pageSize = pageSize ? pageSize : '';
+            page = page ? page : '';
             try {
-                const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
-                const response = await axios.get(apiUrl)
-
+                // const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
+                // const response = await axios.get(apiUrl)
+                const response = await getResumoVendaConvenioDesconto(statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
                 // return console.log(response.data);
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -555,17 +586,23 @@ class AdministrativoControllers {
 
     async getResumoVendaConvenioDesconto(req, res) {
 
-        let { idEmpresa, pageNumber } = req.query;
+        let { statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize} = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            datapesq = dataFormatada(datapesq)
+            statusCancelado = statusCancelado ? statusCancelado : '';
+            idVenda = idVenda ? idVenda : '';
+            idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+            idFuncionario = idFuncionario ? idFuncionario : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
+            pageSize = pageSize ? pageSize : '';
+            page = page ? page : '';
+           
             try {
-                const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
-                const response = await axios.get(apiUrl)
+                // const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?idEmpresa=${idEmpresa}&dataInicio=${dataFechamento}&dataFechamento=${dataFechamento}`
+                // const response = await axios.get(apiUrl)
+                const response = await getResumoVendaConvenioDesconto(statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -575,12 +612,13 @@ class AdministrativoControllers {
     }
     
     async getResumoVenda(req, res) {
-        let { idEmpresa, pageSize, dataPesquisa } = req.query;
+        let { idEmpresa, pageNumber, dataPesquisa } = req.query;
   
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
-            pageSize = pageSize ? pageSize : '';
-            dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
+            const pageSize = 100;
+            const offset = (pageNumber - 1) * pageSize;
+           dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
 
             try {
                 const apiUrl = `${url}/api/administrativo/resumo-venda.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
@@ -594,12 +632,13 @@ class AdministrativoControllers {
         }
     }
     async getListaDespesasLojaADM(req, res) {
-        let { idEmpresa, pageSize, dataPesquisa } = req.query;
+        let { idEmpresa, pageNumber, dataPesquisa } = req.query;
   
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
-            pageSize = pageSize ? pageSize : '';
-            dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
+            const pageSize = 100;
+            const offset = (pageNumber - 1) * pageSize;
+           dataPesquisa = dataFormatada(dataPesquisa) ? dataPesquisa : '';
 
             try {
                 const apiUrl = `${url}/api/administrativo/despesa-loja.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
@@ -859,13 +898,13 @@ class AdministrativoControllers {
         pageSize = pageSize ? pageSize : ''
         try {
             // ${url}/api/resumo-voucher/detalhe-voucher-dados.xsjs?page=1&dataPesquisaInicio=2024-01-03&dataPesquisaFim=2024-01-03&subgrupoEmpresa=1&idEmpresa=1
-            const apiUrl = `${url}/api/administrativo/detalhe-voucher-dados.xsjs?dadosVoucher=${dadosVoucher}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`
-            const response = await axios.get(apiUrl)
-            // const response = await getDetalheVoucherDados(idSubGrupoEmpresa, idEmpresa, idVoucher, dataPesquisaInicio, dataPesquisaFim, dadosVoucher, stStatus, stTipoTroca, page, pageSize)
+            // const apiUrl = `${url}/api/administrativo/detalhe-voucher-dados.xsjs?dadosVoucher=${dadosVoucher}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`
+            // const response = await axios.get(apiUrl)
+            const response = await getDetalheVoucherDados(idSubGrupoEmpresa, idEmpresa, idVoucher, dataPesquisaInicio, dataPesquisaFim, dadosVoucher, stStatus, stTipoTroca, page, pageSize)
     
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no AdministraivoControllers.getListaDetalheVoucherDados:", error);
             throw error;
         }
     }

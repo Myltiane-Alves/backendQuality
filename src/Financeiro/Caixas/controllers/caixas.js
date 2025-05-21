@@ -5,7 +5,7 @@ import { getCaixaStatus } from "../repositories/listaCaixaStatus.js";
 import { getCaixaZerados } from "../repositories/listaCaixaZerados.js";
 import { putFecharCaixaZerados } from "../repositories/fechaCaixaZerados.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 class CaixasControllers {
@@ -21,11 +21,11 @@ class CaixasControllers {
         pageSize = pageSize ? pageSize : '';
         try {
           
-          const apiUrl = `${url}/api/financeiro/lista-caixas-movimento.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLoja=${idLoja}&idLojaPesquisa=${idLojaPesquisa}&page=${page}&pageSize=${pageSize}`
-          const response = await axios.get(apiUrl)
-          // const response = await getListaPCJById(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja)
+          // const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/financeiro/lista-caixas-movimento.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLoja=${idLoja}&idLojaPesquisa=${idLojaPesquisa}&page=${page}&pageSize=${pageSize}`
+          // const response = await axios.get(apiUrl)
+          const response = await getListaPCJById(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja)
           
-          return res.json(response.data); // Retorna
+          return res.json(response); // Retorna
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -43,12 +43,12 @@ class CaixasControllers {
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
         try {
-          const apiUrl = `${url}/api/financeiro/lista-caixas-status.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
-          const response = await axios.get(apiUrl)
-          // const response = await getCaixaStatus(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+          // const apiUrl = `${url}/api/financeiro/lista-caixas-status.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+          // const response = await axios.get(apiUrl)
+          const response = await getCaixaStatus(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
           
-          return res.json(response.data);
+          return res.json(response);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -66,9 +66,8 @@ class CaixasControllers {
         pageSize = pageSize ? pageSize : ''
       try {
           
-        const apiUrl = `${url}/api/financeiro/lista-caixas-zerados.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
-        const response = await axios.get(apiUrl)
-        // const response = await getCaixaZerados(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+        // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/lista-caixas-zerados.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+        const response = await getCaixaZerados(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
   
         return res.json(response);
       } catch (error) {

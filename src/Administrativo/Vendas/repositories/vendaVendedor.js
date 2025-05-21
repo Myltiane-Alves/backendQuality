@@ -23,7 +23,7 @@ export const getLinhasDoTotalVendido = async (numeroMatricula, idEmpresa, dataPe
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
 
-      
+        
         return result.length > 0 ? result[0] : { TOTALVENDIDOVENDEDOR: 0, QTDVENDIDOVENDEDOR: 0 };
     } catch (error) {
         console.error('Erro ao executar a consulta de vendas:', error);
@@ -66,7 +66,8 @@ export const getLinhasDoTotalVoucher = async (numeroMatricula, idEmpresa, dataPe
     }
 };
 
-export const getVendaVendedor = async (idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize, byId) => {
+export const getVendaVendedor = async (idVenda, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize) => {
+    try {
     page = page && !isNaN(page) ? parseInt(page) : 1;
     pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
@@ -88,12 +89,13 @@ export const getVendaVendedor = async (idGrupo, idEmpresa, dataPesquisaInicio, d
             AND tbv.STCANCELADO = 'False' 
             AND tbvd.STCANCELADO = 'False'
     `;
-
+    
+    
     const params = [];
 
-    if (byId) {
+    if (idVenda) {
         query += ' AND tbv.IDVENDA = ?';
-        params.push(byId);
+        params.push(idVenda);
     }
 
     if (idGrupo > 0) {
@@ -102,8 +104,7 @@ export const getVendaVendedor = async (idGrupo, idEmpresa, dataPesquisaInicio, d
     }
 
     if (idEmpresa > 0) {
-        query += ' AND tbv.IDEMPRESA IN (?)';
-        params.push(idEmpresa);
+        query += ` AND tbv.IDEMPRESA IN (${idEmpresa})`;
     }
 
     if (dataPesquisaInicio && dataPesquisaFim) {
@@ -125,53 +126,44 @@ export const getVendaVendedor = async (idGrupo, idEmpresa, dataPesquisaInicio, d
             tbvd.VENDEDOR_MATRICULA
     `;
 
-    try {
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
+    
+        if(!Array.isArray(result) || result.length === 0) return [];
 
-        const totalRows = result.length;
-        const startIndex = (page - 1) * pageSize;
-        const endIndex = Math.min(startIndex + pageSize, totalRows);
-        const paginatedResult = result.slice(startIndex, endIndex);
+        const data = await Promise.all(result.map(async (registro) => {
+            const totalVendido = await getLinhasDoTotalVendido(
+                registro.VENDEDOR_MATRICULA, 
+                registro.IDEMPRESA, 
+                dataPesquisaInicio, 
+                dataPesquisaFim
+            );
 
-        const data = await Promise.all(paginatedResult.map(async (registro) => {
-            try {
-                const totalVendido = await getLinhasDoTotalVendido(
-                    registro.VENDEDOR_MATRICULA, 
-                    registro.IDEMPRESA, 
-                    dataPesquisaInicio, 
-                    dataPesquisaFim
-                );
+            const totalVoucher = await getLinhasDoTotalVoucher(
+                registro.VENDEDOR_MATRICULA, 
+                registro.IDEMPRESA, 
+                dataPesquisaInicio, 
+                dataPesquisaFim
+            );
 
-                const totalVoucher = await getLinhasDoTotalVoucher(
-                    registro.VENDEDOR_MATRICULA, 
-                    registro.IDEMPRESA, 
-                    dataPesquisaInicio, 
-                    dataPesquisaFim
-                );
-
-                return {
-                    vendedor: {
-                        VENDEDOR_MATRICULA: registro.NOLOGIN,
-                        VENDEDOR_NOME: registro.VENDEDOR_NOME,
-                        VENDEDOR_CPF: registro.VENDEDOR_CPF,
-                        NOFANTASIA: registro.NOFANTASIA
-                    },
-                    totalVendido: totalVendido,
-                    Vouchers: totalVoucher
-                };
-            } catch (error) {
-                console.error('Erro ao processar dados do vendedor:', registro.NOLOGIN, error);
-                throw error;
-            }
+            return {
+                vendedor: {
+                    VENDEDOR_MATRICULA: registro.NOLOGIN,
+                    VENDEDOR_NOME: registro.VENDEDOR_NOME,
+                    VENDEDOR_CPF: registro.VENDEDOR_CPF,
+                    NOFANTASIA: registro.NOFANTASIA
+                },
+                totalVendido: totalVendido,
+                Vouchers: totalVoucher
+            };
         }));
-
+       
         return {
-            data,
-            rows: totalRows,
             page,
-            pageSize
-        };
+            pageSize,
+            rows: data.length,
+            data: data
+        }
     } catch (error) {
         console.error('Erro ao executar a consulta:', error);
         throw error;
@@ -179,114 +171,50 @@ export const getVendaVendedor = async (idGrupo, idEmpresa, dataPesquisaInicio, d
 };
 
 
-export const updateVendaVendedor = async (vendas) => {
+export const updateVendaVendedor = async (bodyJson) => {
+    const registro = bodyJson[0];
+    let matFuncionario = '';
+    let nomeFuncionario = '';
+    let cpfFuncionario = '';
 
     try {
-        let matFuncionario = '';
-        let nomeFuncionario = '';
-        let cpfFuncionario = '';
-    
-        if(vendas.IDVENDEDOR === 0) {
+        if (registro.IDVENDEDOR === 0) {
             matFuncionario = 0;
             nomeFuncionario = 'LOJA';
             cpfFuncionario = '00000000000';
         } else {
-            const queryFuncionario = ` SELECT IDFUNCIONARIO, NOFUNCIONARIO, NUCPF 
-              FROM  
-                "${databaseSchema}".FUNCIONARIO  
-              WHERE  
-                ID = ?  
-              ORDER BY ID  `;
-            const statement = await conn.prepare(queryFuncionario);
-            const result = await statement.exec([vendas.IDVENDEDOR]);
-            return result;
-        }
-        const query = `
-           UPDATE "${databaseSchema}"."VENDADETALHE" SET 
-              "VENDEDOR_MATRICULA" = ?, 
-              "VENDEDOR_NOME" = ?, 
-              "VENDEDOR_CPF" = ? 
-              WHERE "IDVENDADETALHE" = ?
-        `;
+            const queryFunc = `
+                SELECT IDFUNCIONARIO, NOFUNCIONARIO, NUCPF 
+                FROM "${process.env.HANA_DATABASE}".FUNCIONARIO 
+                WHERE ID = ? 
+                ORDER BY ID
+            `;
+            const statementFunc = await conn.prepare(queryFunc);
+            const resultFunc = await statementFunc.exec([registro.IDVENDEDOR]);
 
-        const statement = await conn.prepare(query);
-
-        for (const venda of vendas) {
-            const params = [
-                venda.IDVENDADETALHE,
-            ];
-            
-            await statement.exec(params);
+            if (resultFunc.length > 0) {
+                matFuncionario = parseInt(resultFunc[0].IDFUNCIONARIO);
+                nomeFuncionario = resultFunc[0].NOFUNCIONARIO;
+                cpfFuncionario = resultFunc[0].NUCPF;
+            }
         }
 
-        conn.commit();
-        return {
-            status: 'success',
-            message: 'Data Compensação Vendas atualizadas com sucesso!',
-        };
-    } catch (e) {
-        throw new Error(`Erro ao atualizar vendas: ${e.message}`);
+        for (let i = 0; i < registro.IDVENDADETALHE.length; i++) {
+            const query = `
+                UPDATE "${process.env.HANA_DATABASE}".VENDADETALHE SET 
+                "VENDEDOR_MATRICULA" = ?, 
+                "VENDEDOR_NOME" = ?, 
+                "VENDEDOR_CPF" = ? 
+                WHERE "IDVENDADETALHE" = ?
+            `;
+            const statement = await conn.prepare(query);
+            await statement.exec([matFuncionario, nomeFuncionario, cpfFuncionario, registro.IDVENDADETALHE[i]]);
+        }
+
+        await conn.commit();
+        return { msg: "Atualização realizada com sucesso!" };
+    } catch (error) {
+        console.error('Erro ao atualizar venda vendedor:', error);
+        throw error;
     }
 };
-
-
-// export const updateVendaVendedor = async (vendas) => {
-//     try {
-//         let matFuncionario = '';
-//         let nomeFuncionario = '';
-//         let cpfFuncionario = '';
-
-//         // Se o ID do vendedor for 0, atribuir valores padrão
-//         if (vendas.IDVENDEDOR === 0) {
-//             matFuncionario = 0;
-//             nomeFuncionario = 'LOJA';
-//             cpfFuncionario = '00000000000';
-//         } else {
-//             // Buscar os dados do funcionário na tabela FUNCIONARIO com base no IDVENDEDOR
-//             const queryFuncionario = `
-//                 SELECT IDFUNCIONARIO, NOFUNCIONARIO, NUCPF 
-//                 FROM "${databaseSchema}".FUNCIONARIO 
-//                 WHERE ID = ? 
-//                 ORDER BY ID
-//             `;
-//             const statementFunc = await conn.prepare(queryFuncionario);
-//             const resultFunc = await statementFunc.exec([vendas.IDVENDEDOR]);
-
-//             // Se houver resultado, atribuir os valores do funcionário
-//             if (resultFunc.length > 0) {
-//                 matFuncionario = parseInt(resultFunc[0].IDFUNCIONARIO);
-//                 nomeFuncionario = resultFunc[0].NOFUNCIONARIO;
-//                 cpfFuncionario = resultFunc[0].NUCPF;
-//             } else {
-//                 throw new Error("Vendedor não encontrado");
-//             }
-//         }
-
-//         // Preparar a query de atualização de detalhes da venda
-//         const queryUpdate = `
-//             UPDATE "${databaseSchema}"."VENDADETALHE" SET 
-//                 "VENDEDOR_MATRICULA" = ?, 
-//                 "VENDEDOR_NOME" = ?, 
-//                 "VENDEDOR_CPF" = ? 
-//             WHERE "IDVENDADETALHE" = ?
-//         `;
-//         const statementUpdate = await conn.prepare(queryUpdate);
-
-//         // Iterar sobre as vendas e realizar a atualização
-//         for (const vendaDetalhe of vendas.IDVENDADETALHE) {
-//             const params = [matFuncionario, nomeFuncionario, cpfFuncionario, vendaDetalhe];
-//             await statementUpdate.exec(params);
-//         }
-
-//         // Confirmar a transação
-//         await conn.commit();
-
-//         return {
-//             status: 'success',
-//             message: 'Atualização realizada com sucesso!',
-//         };
-//     } catch (e) {
-//         // Tratar erros
-//         throw new Error(`Erro ao atualizar vendas: ${e.message}`);
-//     }
-// };

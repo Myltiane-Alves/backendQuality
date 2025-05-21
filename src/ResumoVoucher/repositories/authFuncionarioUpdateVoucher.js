@@ -170,8 +170,6 @@ export const createAuthFuncionarioUpdateVoucher = async (data) => {
 
     } catch (error) {
         console.error('Erro ao executar a atualização de funcionários:', error);
-        throw error;
+        // throw error;
     }
 };
-
-

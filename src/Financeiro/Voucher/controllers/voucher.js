@@ -13,13 +13,13 @@ class VoucherControllers {
         idEmpresa = idEmpresa ? idEmpresa : '';
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        pageSize = pageSize ? pageSize : '';
+        page = page ? page : '';
         try {
-          const apiUrl = `${url}/api/financeiro/resumo-voucher.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-          
-          const response = await axios.get(apiUrl);
-          // const response = await getResumoVoucher(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+          // const apiUrl = `${url}/api/financeiro/resumo-voucher.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+          const response = await getResumoVoucher(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
     
-          return res.json(response.data);
+          return res.json(response);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;

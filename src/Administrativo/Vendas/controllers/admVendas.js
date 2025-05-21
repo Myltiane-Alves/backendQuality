@@ -22,12 +22,11 @@ class AdmVendasControllers {
         idGrupo = idGrupo ? idGrupo : '';
 
         try {
-            //                    /api/administrativo/venda-total-forma-pag.xsjs?pageSize=1000&page=1&idEmpresa=1&dataPesquisaInicio=2024-12-07&dataPesquisaFim=2024-12-07&idFunc=&dSFormaPag=&dSParc=&idEmpGrupo=1
-            const apiUrl = `${url}/api/administrativo/venda-total-forma-pag.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${dsFormaPagamento}&dSParc=${dsParcela}&idEmpGrupo=${idMarca}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getVendaTotalFormaPagamento(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize);
+            // const apiUrl = `${url}/api/administrativo/venda-total-forma-pag.xsjs?pageSize=500&page=&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${formaPagamento}&dSParc=${parcela}&idEmpGrupo=${idMarca}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getVendaTotalFormaPagamento(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize);
         
-            return res.json(response.data);
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -46,11 +45,11 @@ class AdmVendasControllers {
 
         try {
 
-            const apiUrl = `${url}/api/administrativo/venda-total-recebido-periodo.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${formaPagamento}&dSParc=${parcela}&idEmpGrupo=${idMarca}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getVendaTotalRecebidoPeriodo(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize)
+            // const apiUrl = `${url}/api/administrativo/venda-total-recebido-periodo.xsjs?pageSize=500&page=4&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${formaPagamento}&dSParc=${parcela}&idEmpGrupo=${idMarca}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getVendaTotalRecebidoPeriodo(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize)
         
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -59,22 +58,22 @@ class AdmVendasControllers {
 
 
     async getVendaVendedorAction(req, res) {
-        let { idEmpresa, idGrupo, dataPesquisaInicio, dataPesquisaFim, page, pageSize, byId } = req.query;
-
+        let { idVenda, idEmpresa, idGrupo, dataPesquisaInicio, dataPesquisaFim, page, pageSize} = req.query;
+        idVenda = idVenda ? idVenda : '';
         idEmpresa = idEmpresa ? Number(idEmpresa) : '';
         idGrupo = idGrupo ? Number(idGrupo) : '';
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
-        byId = byId ? byId : '';
+       
 
         try {
-            const apiUrl = `${url}/api/administrativo/venda-vendedor.xsjs?idGrupo=${idGrupo}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-            const response = await axios.get(apiUrl)
-            // const response = await getVendaVendedor(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
+            // const apiUrl = `${url}/api/administrativo/venda-vendedor.xsjs?idGrupo=${idGrupo}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+            // const response = await axios.get(apiUrl)
+            const response = await getVendaVendedor(idVenda, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
 
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -84,7 +83,7 @@ class AdmVendasControllers {
 
     async getListaVendaAtiva(req, res) {
 
-        let { statusCancelado, statusContingencia, statusCanceladoWeb, stCanceladoPDVEmitida, stCanceladoPDVEmTela, statusCanceladoDepois30Minutos, cpfCliente, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
+        let {  statusCancelado, statusContingencia, statusCanceladoWeb, stCanceladoPDVEmitida, stCanceladoPDVEmTela, statusCanceladoDepois30Minutos, cpfCliente, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, ufVenda, page, pageSize} = req.query;
         statusCancelado = statusCancelado ? statusCancelado : '';
         statusCanceladoWeb = statusCanceladoWeb ? statusCanceladoWeb : '';
         stCanceladoPDVEmitida = stCanceladoPDVEmitida ? stCanceladoPDVEmitida : '';
@@ -92,20 +91,18 @@ class AdmVendasControllers {
         statusCanceladoDepois30Minutos = statusCanceladoDepois30Minutos ? statusCanceladoDepois30Minutos : '';
         statusContingencia = statusContingencia ? statusContingencia : '';
         cpfCliente = cpfCliente ? cpfCliente : '';
-        idGrupo = Number(idGrupo) ? Number(idGrupo) : '';
-        idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
+        idGrupo = idGrupo ? idGrupo : '';
+        idEmpresa = idEmpresa ? idEmpresa : '';
         dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
         dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+        ufVenda = ufVenda ? ufVenda : '';
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
 
         try {
-            // http://164.152.245.77:8000/quality/concentrador/api/administrativo/venda-ativa.xsjs?idMarca=0&idEmpresa=&dataFechamento=2024-12-07&dataFechamentoFim=2024-12-07&status=True&stCanceladoWeb=&stCanceladoPDVEmitida=&stCanceladoApos30Min=&stCanceladoPDVEmTela=&page=1
-           
-            const apiUrl = `${url}/api/administrativo/venda-ativa.xsjs?idMarca=${idGrupo}&idEmpresa=${idEmpresa}&dataFechamento=${dataPesquisaInicio}&dataFechamentoFim=${dataPesquisaFim}&status=${statusCancelado}&stCanceladoWeb=${statusCanceladoWeb}&stCanceladoPDVEmitida=${stCanceladoPDVEmitida}&stCanceladoApos30Min=${statusCanceladoDepois30Minutos}&stCanceladoPDVEmTela=${stCanceladoPDVEmTela}&page=${page}&pageSize=${pageSize}`;
-            const response = await axios.get(apiUrl) 
-            // const response = await getVendaAtiva(statusCancelado, statusContingencia, statusCanceladoWeb, stCanceladoPDVEmitida, stCanceladoPDVEmTela, statusCanceladoDepois30Minutos, cpfCliente, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            return res.json(response.data); 
+            const response = await getVendaAtiva(statusCancelado, statusContingencia, statusCanceladoWeb, stCanceladoPDVEmitida, stCanceladoPDVEmTela, statusCanceladoDepois30Minutos, cpfCliente, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, ufVenda, page, pageSize)
+         
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -140,11 +137,9 @@ class AdmVendasControllers {
         pageSize = pageSize ? pageSize : '';
                 
         try {
-            const apiUrl = `${url}/api/administrativo/lista-venda.xsjs?nnf=${nnf}&serie=${serie}&idEmpresa=${idEmpresa}&idVenda=${idVenda}&pageSize=${pageSize}&page=${page}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getListaVenda(nnf, serie, idEmpresa, idVenda, page, pageSize)
+            const response = await getListaVenda(nnf, serie, idEmpresa, idVenda, page, pageSize)
      
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -166,16 +161,15 @@ class AdmVendasControllers {
         pageSize = pageSize ? pageSize : '';
                 
         try {
-            // const response = await getVendaCliente(nnf, serie, idEmpresa, idVenda, idSubGrupoEmpresarial, cpfOUidVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            // const response = await getVendaDetalhe(nnf, serie, idEmpresa, idVenda, idSubGrupoEmpresarial, cpfOUidVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            const apiUrl = `${url}/api/venda/lista-venda-cliente.xsjs?id=${idVenda}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&idSubgrupoEmpresarial=${idSubGrupoEmpresarial}&idEmpresa=${idEmpresa}&cpfouIdVenda=${cpfOUidVenda}&nnf=${nnf}&serie=${serie}&pageSize=${pageSize}&page=${page}`;
-            const response = await axios.get(apiUrl)
-            return res.json(response.data); 
+            // const apiUrl = `${url}/api/venda/lista-venda-cliente.xsjs?dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&idSubgrupoEmpresarial=${idSubGrupoEmpresarial}&idEmpresa=${idEmpresa}&cpfouIdVenda=${cpfOUidVenda}&id=${idVenda}&nnf=${nnf}&serie=${serie}&pageSize=${pageSize}&page=${page}`
+            // const response = await axios.get(apiUrl)
+            const response = await getVendaCliente(nnf, serie, idEmpresa, idVenda, idSubGrupoEmpresarial, cpfOUidVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
+
+            return res.json(response); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no AdmVendasControllers getListaVendaCliente:", error);
             throw error;
         }
-        
     }
 
     async putAlterarVendasPagamento(req, res) {

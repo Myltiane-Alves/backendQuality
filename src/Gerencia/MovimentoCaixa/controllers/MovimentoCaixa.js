@@ -55,11 +55,9 @@ class MovimentoCaixaControllers {
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
 
         try {
-            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/movimento-caixa/gerencia.xsjs?idEmpresa=1&dataPesquisaInic=2023-12-09&dataPesquisaFim=2024-12-09
-            const apiUrl = `${url}/api/movimento-caixa/gerencia.xsjs?idEmpresa=${idEmpresa}&idMovimentoCaixa=${idMovimentoCaixa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`
-            const response = await axios.get(apiUrl)
-            // const response = await getMovimentoCaixaGerencia(idEmpresa, idMovimentoCaixa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            return res.json(response.data);
+
+            const response = await getMovimentoCaixaGerencia(idEmpresa, idMovimentoCaixa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -91,10 +89,9 @@ class MovimentoCaixaControllers {
 
     async putListaAtualizacaoStatus(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await axios.put(`${url}/api/movimento-caixa/atualizacao-status.xsjs`, dados);
-            // const response = await putAtualizacaoStatus(status);
-            return res.json(response.dados);
+            const status = Array.isArray(req.body) ? req.body : [req.body]; 
+            const response = await putAtualizacaoStatus(status);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
@@ -102,10 +99,9 @@ class MovimentoCaixaControllers {
     }
     async putListaAjusteRecebimento(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await axios.put(`${url}/api/movimento-caixa/ajuste-recebimento.xsjs`, dados)
-            // const response = await putAjusteRecebimento(dados);
-            return res.json(response.data);
+            const status = Array.isArray(req.body) ? req.body : [req.body]; 
+            const response = await putAjusteRecebimento(status);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });

@@ -117,7 +117,7 @@ export const getDetalheFechamento = async (idEmpresa, dataPesquisa, page = 1, pa
 
         const params = [dataPesquisa, dataPesquisa, dataPesquisa];
 
-        if (idEmpresa) {
+        if (idEmpresa > 0) {
             query += ' AND tbv.IDEMPRESA = ?';
             params.push(idEmpresa);
         }

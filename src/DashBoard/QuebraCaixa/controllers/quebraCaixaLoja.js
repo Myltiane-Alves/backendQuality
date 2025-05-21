@@ -3,7 +3,6 @@ import { getQuebraCaixaLoja } from "../repositories/quebraCaixaLoja.js";
 import { getQuebraCaixa, updateStatusQuebraCaixa } from "../repositories/listaQuebraCaixa.js";
 import { createQuebraCaixa, updateQuebraCaixa, } from "../repositories/todos.js";
 import { getQuebraCaixaID } from "../repositories/quebraCaixa.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class QuebraCaixaControllers {
     async getListaQuebraCaixaResumoADM(req, res) {
@@ -16,12 +15,9 @@ class QuebraCaixaControllers {
         
         try {
             
-            //                   /api/administrativo/quebra-caixa-loja.xsjs?idEmpresa=1&dataPesquisa=2024-12-07
-            const apiUrl = `${url}/api/administrativo/quebra-caixa-loja.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}&pageSize=${pageSize}`;
-            const response = await axios.get(apiUrl);
-            // const response = await getQuebraCaixaLoja(idEmpresa, dataPesquisa, page, pageSize)
+            const response = await getQuebraCaixaLoja(idEmpresa, dataPesquisa, page, pageSize)
            
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -30,8 +26,8 @@ class QuebraCaixaControllers {
     }
 
     async getListaQuebraCaixa(req, res) {
-        let { idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page } = req.query;
-
+        let {idMovimentoCaixa, idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page } = req.query;
+        idMovimentoCaixa = idMovimentoCaixa ? idMovimentoCaixa : '';
         idMarca = idMarca ? idMarca : '';
         idEmpresa = idEmpresa ? idEmpresa : '';
         cpfOperadorQuebra = cpfOperadorQuebra ? cpfOperadorQuebra : '';
@@ -42,14 +38,12 @@ class QuebraCaixaControllers {
         pageSize = pageSize ? pageSize : '';
         
         try {
-            // http://164.152.245.77:8000/quality/concentrador/api/dashboard/quebra-caixa/lista-quebra-caixa.xsjs?pageSize=1000&page=2&idEmpresa=0&dataPesquisaInic=2024-12-06&dataPesquisaFim=2024-12-06&idMarca=0&cpfquebraop=
-            const apiUrl = `${url}/api/dashboard/quebra-caixa/lista-quebra-caixa.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&cpfquebraop=${cpfOperadorQuebra}&stQuebraPositivaNegativa=${stQuebraPositivaNegativa}`;
-            const response = await axios.get(apiUrl);
-            // const response = await getQuebraCaixa(idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
             
-            return res.json(response.data); 
+            const response = await getQuebraCaixa(idMovimentoCaixa, idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+            
+            return res.json(response); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no QuebraCaixaControllers.getListaQuebraCaixa:", error);
             throw error;
         }
         
@@ -73,9 +67,16 @@ class QuebraCaixaControllers {
         }
     }
     async putListaStatusQuebraCaixa(req, res) {
+        let { IDQUEBRACAIXA, STATIVO } = req.body;
+
+        // Verifica se os parâmetros estão presentes
+        if (!IDQUEBRACAIXA || !STATIVO) {
+            return res.status(400).json({ error: "IDQUEBRACAIXA e STATIVO são obrigatórios" });
+        }
+    
         try {
-            const quebras = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await  updateStatusQuebraCaixa(quebras);
+            const quebras = Array.isArray(req.body) ? req.body : [req.body];
+            const response = await updateStatusQuebraCaixa(quebras);
             return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);

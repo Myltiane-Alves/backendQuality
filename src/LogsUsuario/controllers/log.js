@@ -2,7 +2,7 @@
 import axios from "axios";
 import { getLogsUsuarios, postLogUsuario } from "../repositories/logWeb.js";
 
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 class LogsControllers {
@@ -27,12 +27,11 @@ class LogsControllers {
     }
 
     async createLogsUsuario(req, res) {
-        
+        const logs = Array.isArray(req.body) ? req.body : [req.body]; 
+
         try {
-            const logs = Array.isArray(req.body) ? req.body : [req.body]; 
             
-            // const response = await postLogUsuario(logs);
-            const response = await axios.post(`${url}/api/log-usuario`, logs);
+            const response = await postLogUsuario(logs);
 
             return res.json(response);
         } catch (error) {

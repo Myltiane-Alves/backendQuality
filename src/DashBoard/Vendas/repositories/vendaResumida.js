@@ -31,7 +31,7 @@ export const getVendasResumida = async (idEmpresa, dataPesquisaInicio, dataPesqu
 
 
         if (idEmpresa > 0) {
-            query += ' AND TBV.IDEMPRESA = ?';
+            query += ' AND VWV.IDEMPRESA = ?';
             params.push(idEmpresa);
         }
 

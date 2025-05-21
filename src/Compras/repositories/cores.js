@@ -4,16 +4,17 @@ const databaseSchema = process.env.HANA_DATABASE;
 
 export const getCores = async (idGrupoCor, idCor, descricao, page, pageSize) => {
     try {
+       
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
         let query = `
             SELECT 
-                A.IDCOR ID_COR, 
-                A.IDGRUPOCOR ID_GRUPOCOR, 
-                A.DSCOR DS_COR, 
+                A.IDCOR AS ID_COR, 
+                A.IDGRUPOCOR AS ID_GRUPOCOR, 
+                A.DSCOR AS DS_COR, 
                 A.STATIVO, 
-                B.DSGRUPOCOR DS_GRUPOCOR 
+                B.DSGRUPOCOR AS DS_GRUPOCOR 
             FROM 
                 "${databaseSchema}".COR A 
             INNER JOIN 
@@ -24,45 +25,47 @@ export const getCores = async (idGrupoCor, idCor, descricao, page, pageSize) => 
                 1 = ?
         `;
 
-        const params = [1];
+        const params = [1]; 
 
+   
         if (idGrupoCor) {
-            query += ' And A.IDGRUPOCOR = ? ';
+            query += ' AND A.IDGRUPOCOR = ? ';
             params.push(idGrupoCor);
         }
-    
-        if(idCor) {
-            query += ' And A.IDCOR = ? ';
+
+        if (idCor) {
+            query += ' AND A.IDCOR = ? ';
             params.push(idCor);
         }
 
-        if(descricao) {
-            query += ' And  A.DSCOR LIKE ? OR A.DSCOR LIKE ? ';
+        if (descricao) {
+            query += ' AND (A.DSCOR LIKE ? OR A.DSCOR LIKE ?) ';
             params.push(`%${descricao}%`, `%${descricao}%`);
         }
 
+    
+        query += ' ORDER BY A."IDGRUPOCOR", A."DSCOR" ';
+        query += ' LIMIT ? OFFSET ? ';
+
         const offset = (page - 1) * pageSize;
-        query += ' LIMIT ? OFFSET ?';
         params.push(pageSize, offset);
-        
-        query += 'ORDER BY A."IDGRUPOCOR",  A."DSCOR"';
+
 
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
-
 
         return {
             page: page,
             pageSize: pageSize,
             rows: result.length,
             data: result,
-        }
-
+        };
     } catch (error) {
-        console.error('Erro ao consultar Cores:', error);
-        throw error;
+        console.error('Erro ao consultar Cores:', error.message);
+        throw new Error(`Erro ao consultar Cores: ${error.message}`);
     }
-}
+};
+
 
 export const updateCor = async (dados) => {
     try {
@@ -101,7 +104,7 @@ export const createCor = async (dados) => {
     try {
         const queriId = `
             SELECT 
-                IFNULL(MAX(TO_INT("IDCOR")), 0) + 1 
+                IFNULL(MAX(TO_INT("IDCOR")), 0) + 1  AS NEXT_ID
             FROM 
                 "${databaseSchema}"."COR" 
             WHERE 
@@ -109,7 +112,7 @@ export const createCor = async (dados) => {
         `;
         const statementId = await conn.prepare(queriId);
         const resultId = await statementId.exec([1]);
-        const idCor = resultId[0][''];
+        const idCor = resultId[0].NEXT_ID;
         const insertQuery = `
             INSERT INTO "${databaseSchema}"."COR" 
                 ( 
@@ -125,10 +128,10 @@ export const createCor = async (dados) => {
 
         for (const dado of dados) {
             const params = [
+                idCor,
                 dado.IDGRUPOCOR,
                 dado.DSCOR,
                 dado.STATIVO,
-                idCor
             ];
             
             await statement.exec(params);

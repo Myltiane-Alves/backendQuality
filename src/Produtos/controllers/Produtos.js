@@ -1,7 +1,13 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getProdutoQuality } from "../repositories/produtoQuality.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import { getAlteracoesPrecoResumo } from "../repositories/alteracoesDePrecosResumo.js";
+import { getAlteracaoPrecoProduto } from "../repositories/alteracaoPrecoProduto.js";
+import { getDePrecosSap } from "../repositories/listaDePrecoSAP.js";
+import { getProdutos } from "../repositories/produto.js";
+import { getProdutoPrecoInformatica } from "../repositories/produtoPreco.js";
+import { getProdutoPrecoNovo } from "../../Informatica/Produtos/repositories/produtoPrecoNovo.js";
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class ProdutoControllers  {
 
@@ -35,10 +41,10 @@ class ProdutoControllers  {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/produto-sap/produto-quality.xsjs?codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresa}&IdListaLoja=${idListaLoja}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getProdutoQuality(idEmpresa, codBarrasOuNome, page, pageSize);
-            return res.json(response.data); // Retorna
+            // const apiUrl = `${url}/api/produto-sap/produto-quality.xsjs?codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresa}&IdListaLoja=${idListaLoja}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getProdutoQuality(idEmpresa, codBarrasOuNome, page, pageSize);
+            return res.json(response); // Retorna
         } catch(error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -46,17 +52,35 @@ class ProdutoControllers  {
     }
     async getListaProdutosPrecoInformatica(req, res) {
         let { idEmpresa, dsProduto, page, pageSize } = req.query;
-    
+ 
     
         dsProduto = dsProduto ? dsProduto : ''; 
         idEmpresa = idEmpresa ? idEmpresa : ''; 
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/informatica/produto-preco.xsjs?idEmpresa=${idEmpresa}&dsProduto=${dsProduto}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getProdutoPreco(idEmpresa, codBarrasOuNome, page, pageSize);
-            return res.json(response.data); // Retorna
+            // const apiUrl = `${url}/api/informatica/produto-preco.xsjs?idEmpresa=${idEmpresa}&dsProduto=${dsProduto}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getProdutoPrecoInformatica(idEmpresa, dsProduto, page, pageSize);
+            return res.json(response); // Retorna
+        } catch(error) {
+            console.error("Unable to connect to the database:", error);
+            throw error;
+        } 
+    }
+    async getListaProdutosPrecoNovo(req, res) {
+        let { idEmpresa, dsProduto, page, pageSize } = req.query;
+ 
+    
+        dsProduto = dsProduto ? dsProduto : ''; 
+        idEmpresa = idEmpresa ? idEmpresa : ''; 
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
+        try {   
+            // const apiUrl = `${url}/api/informatica/produto-preco.xsjs?idEmpresa=${idEmpresa}&dsProduto=${dsProduto}`;
+            // const response = await axios.get(apiUrl)
+            const response = await  getProdutoPrecoNovo(idEmpresa, dsProduto, page, pageSize)
+            return res.json(response); // Retorna
         } catch(error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -87,7 +111,13 @@ class ProdutoControllers  {
     }
     
     async getListaProdutosLojaSap(req, res) {
-        let { descricaoProduto, idEmpresaLogin, idListaLoja, pageNumber  } = req.query;
+        let { 
+        
+            descricaoProduto, 
+            idEmpresaLogin,
+            idListaLoja,
+            pageNumber 
+        } = req.query;
     
     
         descricaoProduto = descricaoProduto ? descricaoProduto : ''; 
@@ -111,19 +141,22 @@ class ProdutoControllers  {
     }
 
     async getListaProdutos(req, res) {
-        let { idEmpresa  } = req.query; 
-        idEmpresa = idEmpresa ? idEmpresa : '';        
-        pageNumber = pageNumber ? pageNumber : 1; 
-  
-        const pageSize = 100;
-        const offset = (pageNumber - 1) * pageSize;
-    
+        let { idEmpresa, idProduto, descProduto, codBarras, ufNcm, dataPesquisa, page, pageSize } = req.query; 
+            idEmpresa = idEmpresa ? String(idEmpresa) : '';        
+            idProduto = idProduto ? idProduto : '';
+            descProduto = descProduto ? descProduto : '';
+            codBarras = codBarras ? codBarras : '';
+            ufNcm = ufNcm ? ufNcm : '';
+            dataPesquisa = dataPesquisa ? dataPesquisa : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/produto.xsjs?idEmpresa=${idEmpresa}`;
-            const response = await axios.get(apiUrl)
-            return res.json(response.data); // Retorna
+            // const apiUrl = `${url}/api/produto.xsjs?idEmpresa=${idEmpresa}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getProdutos(idEmpresa, idProduto, descProduto, codBarras, ufNcm, dataPesquisa, page, pageSize)
+            return res.json(response); // Retorna
         } catch(error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("erro no ProdutoControllers ListaProdutosEtiqueta", error);
             throw error;
         } 
     }
@@ -156,17 +189,25 @@ class ProdutoControllers  {
         }
     }
 
-    async ListaProdutosEtiqueta(req, res) {
-        let { idEmpresa } = req.query;
+    async getListaDePrecosSap(req, res) {
+        let { idResumoLista, idEmpresa, dataPesquisaInicio, dataPesquisaFim, nomeLista, page, pageSize } = req.query;
+            idResumoLista = idResumoLista ? idResumoLista : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+            nomeLista = nomeLista ? nomeLista : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
 
         try {
 
             const apiUrl = `${url}/api/produtos/listas-de-precos-SAP.xsjs?page=1`;
             const response = await axios.get(apiUrl)
+            // const response = await getDePrecosSap(idResumoLista, idEmpresa, dataPesquisaInicio, dataPesquisaFim, nomeLista, page, pageSize)
 
-            return res.json(response.data); // Retorna
+            return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("erro no ProdutoControllers ListaProdutosEtiqueta", error);
             throw error;
         }
     }
@@ -185,9 +226,9 @@ class ProdutoControllers  {
             throw error;
         }
     }
-    
+
     async getListaAlteracaoPrecoResumo(req, res) {
-        let { dataPesquisaInicio, dataPesquisaFim, id, idLista, idLoja, idUsuario, idProduto, descProduto, codBarras, page, pageSize } = req.query;
+        let { idResumoAlteracao, idLoja, idLista, idUsuario, idProduto, codBarras, descProduto, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
         idResumoAlteracao = idResumoAlteracao ? idResumoAlteracao : '';
         idLoja = idLoja ? idLoja : '';
         idLista = idLista ? idLista : '';
@@ -201,8 +242,9 @@ class ProdutoControllers  {
         pageSize = pageSize ? pageSize : '';
         try {
             // http://164.152.245.77:8000/quality/concentrador_homologacao/api/produtos/alteracoes-de-precos-resumo.xsjs?dtInicio=2024-12-11&dtFim=2024-12-11&id=&idLista=&idLoja=&idUser=&idProd=&descProd=&codeBars=&page=1
-            const apiUrl = `${url}/api/produtos/alteracoes-de-precos-resumo.xsjs?dtIinicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&id=${id}&idLista=${idLista}&idLoja=${idLoja}&idUser=${idUsuario}&idProd=${idProduto}&descProd=${descProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/produtos/alteracoes-de-precos-resumo.xsjs?dtIinicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&id=${idResumoAlteracao}&idLista=${idLista}&idLoja=${idLoja}&idUser=${idUsuario}&idProd=${idProduto}&descProd=${descProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
+            // const response = await getAlteracoesPrecoResumo()
             
             return res.json(response.data); // Retorna
         } catch (error) {
@@ -211,6 +253,31 @@ class ProdutoControllers  {
         }
     }
 
+    async getListaAlteracaoPrecoProduto(req, res) {
+        let { idProduto, idEmpresa, idGrupoEmpresarial, codBarras, descricaoProduto, dataUltimaAtualizacao, horaUltimaAtualizacao, page, pageSize } = req.query;
+            idProduto = idProduto ? idProduto : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            idGrupoEmpresarial = idGrupoEmpresarial ? idGrupoEmpresarial : '';
+            codBarras = codBarras ? codBarras : '';
+            descricaoProduto = descricaoProduto ? descricaoProduto : '';
+            dataUltimaAtualizacao = dataUltimaAtualizacao ? dataUltimaAtualizacao : '';
+            horaUltimaAtualizacao = horaUltimaAtualizacao ? horaUltimaAtualizacao : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+        try {
+          
+            // const apiUrl = `${url}/api/produtos/alteracoes-de-precos-resumo.xsjs?dtIinicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&id=${idResumoAlteracao}&idLista=${idLista}&idLoja=${idLoja}&idUser=${idUsuario}&idProd=${idProduto}&descProd=${descProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getAlteracaoPrecoProduto(idProduto, idEmpresa, idGrupoEmpresarial, codBarras, descricaoProduto, dataUltimaAtualizacao, horaUltimaAtualizacao, page, pageSize)
+            
+            return res.json(response); // Retorna
+        } catch (error) {
+            console.error("Unable to connect to the database:", error);
+            throw error;
+        }
+    }
+
+
     async getListaAlteracaoPrecoDetalhe(req, res) {
         let { idAlteracaoPreco, page, pageSize } = req.query;
         
@@ -218,7 +285,7 @@ class ProdutoControllers  {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/produtos/alteracoes-de-precos-resumo.xsjs?dtInicio=2024-12-11&dtFim=2024-12-11&id=&idLista=&idLoja=&idUser=&idProd=&descProd=&codeBars=&page=1
+            
             const apiUrl = `${url}/api/produtos/alteracoes-de-precos-detalhes.xsjs?idAlteracao=${idAlteracaoPreco}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             

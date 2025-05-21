@@ -5,49 +5,49 @@ const databaseSchema = process.env.HANA_DATABASE;
 export const getDetalheFatura = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim, codigoFatura, idDetalheFatura, page, pageSize) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
-        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
+        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;   
 
-       
         let query = `
-            SELECT 
-                tbdf.IDDETALHEFATURA,
-                tbdf.IDEMPRESA,
-                EMP.NOFANTASIA,
-                tbdf.IDFUNCIONARIO,
-                tbdf.IDDETALHEFATURALOCAL,
-                tbdf.IDCAIXAWEB,
-                tbdf.IDCAIXALOCAL,
-                tbdf.NUESTABELECIMENTO,
-                tbdf.NUCARTAO,
-                TO_VARCHAR(tbdf.DTPROCESSAMENTO, 'DD-MM-YYYY') AS DTPROCESSAMENTO,
-                TO_VARCHAR(tbdf.HRPROCESSAMENTO, 'HH24:MI:SS') AS HRPROCESSAMENTO,
-                tbdf.NUNSU,
-                tbdf.NUNSUHOST,
-                tbdf.NUCODAUTORIZACAO,
-                tbdf.VRRECEBIDO,
-                TO_VARCHAR(tbdf.DTHRMIGRACAO, 'YYYY-MM-DD HH24:MI:SS') AS DTHRMIGRACAO,
-                tbdf.STCANCELADO,
-                tbdf.IDUSRCACELAMENTO,
-                tbf.NOFUNCIONARIO,
-                tbc.DSCAIXA,
-                tbdf.IDMOVIMENTOCAIXAWEB,
-                tbdf.TXTMOTIVOCANCELAMENTO,
-                tbdf.STPIX,
-                tbdf.NUAUTORIZACAO,
-                tbmc.ID AS IDMOVCAIXA,
-                tbmc.STCONFERIDO
-               
-            FROM 
-                "${databaseSchema}".DETALHEFATURA tbdf
-                INNER JOIN "${databaseSchema}".CAIXA tbc ON tbc.IDCAIXAWEB = tbdf.IDCAIXAWEB
-                LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbdf.IDFUNCIONARIO = tbf.IDFUNCIONARIO
-                LEFT JOIN "${databaseSchema}".MOVIMENTOCAIXA tbmc ON tbdf.IDMOVIMENTOCAIXAWEB = tbmc.ID
-                LEFT JOIN "${databaseSchema}".EMPRESA EMP ON tbdf.IDEMPRESA = EMP.IDEMPRESA
-            WHERE 
-                1 = 1
+              SELECT 
+            tbdf.IDDETALHEFATURA,
+            tbdf.IDEMPRESA,
+            EMP.NOFANTASIA,
+            tbdf.IDFUNCIONARIO,
+            tbdf.IDDETALHEFATURALOCAL,
+            tbdf.IDCAIXAWEB,
+            tbdf.IDCAIXALOCAL,
+            tbdf.NUESTABELECIMENTO,
+            tbdf.NUCARTAO,
+            TO_VARCHAR(tbdf.DTPROCESSAMENTO, 'DD-MM-YYYY') AS DTPROCESSAMENTO,
+            TO_VARCHAR(tbdf.HRPROCESSAMENTO, 'HH24:MI:SS') AS HRPROCESSAMENTO,
+            tbdf.NUNSU,
+            tbdf.NUNSUHOST,
+            tbdf.NUCODAUTORIZACAO,
+            tbdf.VRRECEBIDO,
+            TO_VARCHAR(tbdf.DTHRMIGRACAO, 'YYYY-MM-DD HH24:MI:SS') AS DTHRMIGRACAO,
+            tbdf.STCANCELADO,
+            tbdf.IDUSRCACELAMENTO,
+            tbf.NOFUNCIONARIO,
+            tbc.DSCAIXA,
+            tbdf.IDMOVIMENTOCAIXAWEB,
+            tbdf.TXTMOTIVOCANCELAMENTO,
+            tbdf.STPIX,
+            tbdf.NUAUTORIZACAO,
+            tbmc.ID AS IDMOVCAIXA,
+            tbmc.STCONFERIDO,
+            tbdf.STRECOMPRA
+        FROM 
+            "${databaseSchema}".DETALHEFATURA tbdf
+            INNER JOIN "${databaseSchema}".CAIXA tbc ON tbc.IDCAIXAWEB = tbdf.IDCAIXAWEB
+            LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbdf.IDFuncionario = tbf.IDFuncionario
+            LEFT JOIN "${databaseSchema}".MOVIMENTOCAIXA tbmc ON tbdf.IDMOVIMENTOCAIXAWEB = tbmc.ID
+            LEFT JOIN "${databaseSchema}".EMPRESA EMP ON tbdf.IDEMPRESA = EMP.IDEMPRESA
+        WHERE 
+            1 = ?
         `;
 
-        const params = [];
+
+        const params = [1];
         
        
         if (idDetalheFatura) {
@@ -55,8 +55,12 @@ export const getDetalheFatura = async (idEmpresa, dataPesquisaInicio, dataPesqui
             params.push(idDetalheFatura);
         }
         
+        if (codigoFatura) {
+            query += ` AND tbdf.NUCODAUTORIZACAO = ?`;
+            params.push(codigoFatura);
+        }
         
-        if (idEmpresa && idEmpresa > 0) {
+        if (idEmpresa > 0) {
             query += ` AND tbdf.IDEMPRESA = ?`;
             params.push(idEmpresa);
         }
@@ -68,10 +72,6 @@ export const getDetalheFatura = async (idEmpresa, dataPesquisaInicio, dataPesqui
         }
         
         
-        if (codigoFatura) {
-            query += ` AND tbdf.NUCODAUTORIZACAO = ?`;
-            params.push(codigoFatura);
-        }
 
         
         const offset = (page - 1) * pageSize;

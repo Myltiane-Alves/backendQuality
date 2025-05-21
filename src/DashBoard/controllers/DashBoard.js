@@ -2,30 +2,36 @@
 import { getQuebraCaixa } from "../QuebraCaixa/repositories/listaQuebraCaixa.js";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 // let url = `http://164.152.245.77:8000/quality/concentrador_react_node`;
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 import axios from 'axios';
+import { getResumoVendaConvenioDesconto } from "../Vendas/repositories/resumoVendaConvenioDesconto.js";
+import { getVendaVendedor } from "../Vendas/repositories/vendasVendedor.js";
+import { getResumoVendaCaixa } from "../Vendas/repositories/resumoVendaCaixa.js";
+import { getResumoVenda } from "../repositories/resumoVenda.js";
+import { getRelatorioBI } from "../../ralatorioBI/relatorioBI.js";
 
 class DashBoardControllers {
 
     async getResumoVendaGerencia(req, res) {
 
-        let { idEmpresa, pageNumber, dataPesquisa } = req.query;
+        let { idEmpresa, dataFechamento, page, pageSize } = req.query;
 
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            dataPesquisa = dataFormatada(dataPesquisa)
-
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataFechamento = dataFechamento ? dataFechamento : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+          
             try {
-                const apiUrl = `${url}/api/dashboard/resumo-venda.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
+                // const apiUrl = `${url}/api/dashboard/resumo-venda.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
 
-                const response = await axios.get(apiUrl);
+                // const response = await axios.get(apiUrl);
+                const response = await getResumoVenda(idEmpresa, dataFechamento, page, pageSize) 
 
 
-                return res.json(response.data);
+                return res.json(response);
             } catch (error) {
-                console.error("Erro ao conectar ao servidor:", error);
+                console.error("Erro no DashBoardControllers.getResumoVendaGerencia:", error);
 
                 throw error;
             }
@@ -42,7 +48,7 @@ class DashBoardControllers {
         try {
             // ajaxGet('api/dashboard/venda/venda-resumido.xsjs?pageSize=500&idLoja=' + IDEmpresaLogin + '&dataPesquisaInicio=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim)
 
-            const apiUrl = `${url}/api/dashboard/venda/venda-resumido.xsjs?pageSize=500&idLoja=${idEmpresaLogin}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
+            const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/dashboard/venda/venda-resumido.xsjs?pageSize=500&idLoja=${idEmpresaLogin}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
 
             const response = await axios.get(apiUrl);
             return res.json(response.data);
@@ -70,11 +76,10 @@ class DashBoardControllers {
 
         try {
             // quebra-caixa/lista-quebra-caixa.xsjs?idEmpresa=1&dataPesquisaInic=2024-02-01&dataPesquisaFim=2024-02-13
-            const apiUrl = `${url}/api/dashboard/quebra-caixa/lista-quebra-caixa.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&cpfquebraop=${cpfOperadorQuebra}`
-            const response = await axios.get(apiUrl)
-            // const response = await getQuebraCaixa(idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+            // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/dashboard/quebra-caixa/lista-quebra-caixa.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&cpfquebraop=${cpfOperadorQuebra}`
+            const response = await getQuebraCaixa(idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
 
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -219,16 +224,25 @@ class DashBoardControllers {
     // }
 
     async getRetornoListaVendasConvenioDesconto(req, res) {
-        let { idEmpresa, dataFechamento, dataInicio } = req.query;
+        let { statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
 
+        statusCancelado = statusCancelado ? statusCancelado : '';
+        idVenda = idVenda ? idVenda : '';
+        idEmpresa = idEmpresa ? idEmpresa : '';
+        idFuncionario = idFuncionario ? idFuncionario : '';
+        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
         try {
-            idEmpresa = idEmpresa ? idEmpresa : '';
-            dataFormatada(dataFechamento) = dataFormatada(dataFechamento) ? dataFormatada(dataFechamento) : '';
-            dataFormatada(dataInicio) = dataFormatada(dataInicio) ? dataFormatada(dataInicio) : '';
-            const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?pagesize=1000&status=False&idEmpresa=${idEmpresa}&dataInicio=${dataInicio}&dataFechamento=${dataFechamento}`
-            const response = await axios.get(apiUrl)
+           
 
-            return res.json(response.data);
+            // const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?pagesize=1000&status=False&idEmpresa=${idEmpresa}&dataInicio=${dataInicio}&dataFechamento=${dataFechamento}`
+            // const response = await axios.get(apiUrl)
+           const response = await getResumoVendaConvenioDesconto(statusCancelado, idVenda, idEmpresa, idFuncionario, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+    
+
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -256,18 +270,20 @@ class DashBoardControllers {
     // }
 
     async getListaVendasVendedorGerencia(req, res) {
-        let { idEmpresa, pageNumber, dataFechamento } = req.query;
+        let { idEmpresa, byId, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            dataFechamento = dataFormatada(dataFechamento)
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            byId = byId ? byId : '';
+            dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : ''
+            dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : ''
+            page = page ? page : ''
+            pageSize = pageSize ? pageSize : '' 
+            
             try {
-                const apiUrl = `${url}/api/dashboard/venda/vendedor.xsjs?pagesize=100&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
-                const response = await axios.get(apiUrl)
-
-                return res.json(response.data); // Retorna
+                // const apiUrl = `${url}/api/dashboard/venda/vendedor.xsjs?pagesize=100&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+                // const response = await axios.get(apiUrl)
+                const response = await getVendaVendedor(idEmpresa, byId, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -297,18 +313,20 @@ class DashBoardControllers {
     // }
 
     async getListaResumoVendasAtivaGerencia(req, res) {
-        let { idEmpresa, pageNumber, dataFechamento } = req.query;
+        let { idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
+            idVenda = idVenda ? idVenda : '';
+            idEmpresa = idEmpresa ? idVenda : '';
+            dataFechamento = dataFechamento ? dataFechamento : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
 
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            dataFechamento = dataFormatada(dataFechamento)
             try {
-                const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa.xsjs?pagesize=100&status=False&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
-                const response = await axios.get(apiUrl)
+                // const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa.xsjs?pagesize=100&status=False&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+                // const response = await axios.get(apiUrl)
+                const response = await getResumoVendaCaixa(idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize)
 
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -424,11 +442,12 @@ class DashBoardControllers {
     }
 
     async getListaExtratoDaLojaPeriodoADM(req, res) {
-        let { idEmpresa, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
+        let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
 
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa);
-            pageSize = pageSize ? pageSize : '';
+            const pageSize = 100;
+            const offset = (pageNumber - 1) * pageSize;
             dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
             dataPesquisaFim = dataFormatada(dataPesquisaFim)
             // ajaxGet('api/dashboard/extrato-loja-periodo.xsjs?pageSize=500&page=1&idEmpresa=' + idemp + '&dataPesquisaInicio=' + datapesq + '&dataPesquisaFim=' + datapesq)
@@ -467,18 +486,22 @@ class DashBoardControllers {
     }
 
     async getListaRelatorioBIGerencia(req, res) {
-        let { idEmpresaLogin, idRelatorio } = req.query;
+        let { idEmpresa, idRelatorio } = req.query;
 
-        if (!isNaN(idEmpresaLogin)) {
-            idEmpresaLogin = Number(idEmpresaLogin);
-            let numPage = 1
+        if (idEmpresa == '') {
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            idRelatorio = idRelatorio ? idRelatorio : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+
             try {
-                const apiUrl = `${url}/api/relatorio-bi.xsjs?page=1&id=${idEmpresaLogin}&idrelatorio=${idRelatorio}`
-                const response = await axios.get(apiUrl)
+                // const apiUrl = `${url}/api/relatorio-bi.xsjs?page=1&id=${idEmpresaLogin}&idrelatorio=${idRelatorio}`
+                // const response = await axios.get(apiUrl)
+                const response = await getRelatorioBI(idEmpresa, idRelatorio,  page, pageSize)
 
-                return res.json(response.data); // Retorna
+                return res.json(response); // Retorna
             } catch (error) {
-                console.error("Unable to connect to the database:", error);
+                console.error("Erro no DashBoardController.getListaRelatorioBIGerencia")
                 throw error;
             }
         }

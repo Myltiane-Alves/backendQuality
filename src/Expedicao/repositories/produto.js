@@ -9,7 +9,7 @@ export const getProdutos = async (idEmpresa, codBarras, dsProduto, page, pageSiz
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
         
-        var query = `
+        let query = `
             SELECT 
                 p.IDPRODUTO, 
                 p.NUCODBARRAS, 
@@ -22,6 +22,11 @@ export const getProdutos = async (idEmpresa, codBarras, dsProduto, page, pageSiz
         `;
 
         const params = [idEmpresa, 1];
+
+        // if(idEmpresa) {
+        //     query = ` AND pp.IDEMPRESA = ?`
+        //     params.push(idEmpresa)
+        // }
 
         if(codBarras) {
             query += ' AND p.NUCODBARRAS = ?';

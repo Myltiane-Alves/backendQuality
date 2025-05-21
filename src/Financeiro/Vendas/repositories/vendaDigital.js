@@ -3,14 +3,14 @@ import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
 
 
-export const getVendaDigital = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize) => {
+export const getVendaDigital = async (idVenda, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
         const offset = (page - 1) * pageSize;
 
-        var query = `
+        let query = `
             SELECT DISTINCT 
                 tbe.NUCNPJ,
                 tbe.NOFANTASIA,
@@ -20,19 +20,26 @@ export const getVendaDigital = async (idEmpresa, dataPesquisaInicio, dataPesquis
                 tbp.DSNOME,
                 tbvd.QTD,
                 tbvd.VRTOTALLIQUIDO,
-                tbv.DTHORAFECHAMENTO
+                TO_VARCHAR(tbv.DTHORAFECHAMENTO, 'DD/mm/YYYY HH24:MI:SS') AS DTHORAFECHAMENTOFORMATADA 
             FROM 
                 "${databaseSchema}".VENDA tbv
-                INNER JOIN "${databaseSchema}".VENDADETALHE tbvd ON tbvd.IDVENDA = tbv.IDVENDA
-                INNER JOIN "${databaseSchema}".PRODUTO tbp ON tbp.IDPRODUTO = tbvd.CPROD
-                INNER JOIN "${databaseSchema}".EMPRESA tbe ON tbe.IDEMPRESA = tbv.IDEMPRESA
-                INNER JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbf.IDFUNCIONARIO = tbvd.VENDEDOR_MATRICULA
+                INNER JOIN "${databaseSchema}".VENDADETALHE tbvd on tbvd.IDVENDA = tbv.IDVENDA
+                INNER JOIN "${databaseSchema}".PRODUTO tbp on tbp.IDPRODUTO = tbvd.CPROD
+                INNER JOIN "${databaseSchema}".EMPRESA tbe on tbe.IDEMPRESA = tbv.IDEMPRESA
+                INNER JOIN "${databaseSchema}".FUNCIONARIO tbf on tbf.IDFUNCIONARIO = tbvd.VENDEDOR_MATRICULA
             WHERE 
-                tbv.STCANCELADO = 'False'
+                1 = ?
+                AND tbv.STCANCELADO = 'False'
                 AND tbvd.STVENDIGITAL = 'True'
+
         `;
 
-        const params = [];
+        const params = [1];
+
+        if (idVenda) {
+            query += ' AND tbv.IDVENDA = ?';
+            params.push(idVenda);
+        }
 
         if (idEmpresa > 0) {
             query += ' AND tbv.IDEMPRESA = ?';
@@ -44,7 +51,6 @@ export const getVendaDigital = async (idEmpresa, dataPesquisaInicio, dataPesquis
             params.push(`${dataPesquisaInicio} 00:00:00`, `${dataPesquisaFim} 23:59:59`);
         }
 
-        query += ' ORDER BY tbv.DTHORAFECHAMENTO';
         query += ' LIMIT ? OFFSET ?';
         params.push(pageSize, offset);
 

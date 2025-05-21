@@ -43,8 +43,8 @@ export const getProdutosMaisVendidos = async (
         }
 
         if(idGrupoEmpresarial > 0) {
-            query += 'AND VWV.IDGRUPOEMPRESARIAL IN (?) ';
-            params.push(idGrupoEmpresarial);
+            query += `AND VWV.IDGRUPOEMPRESARIAL IN (${idGrupoEmpresarial}) `;
+            // params.push(idGrupoEmpresarial);
         }
 
         if (idEmpresa) {
@@ -63,7 +63,7 @@ export const getProdutosMaisVendidos = async (
         }
 
         if (idFornecedor) {
-            query += 'AND VWV.IDRAZAO_SOCIAL_FORNECEDOR IN (?) ';
+            query += `AND VWV.IDRAZAO_SOCIAL_FORNECEDOR IN (${idFornecedor}) `;
             params.push(idFornecedor);
         }
 
@@ -112,20 +112,20 @@ export const getProdutosMaisVendidos = async (
         }
 
         if (idSubGrupo) {
-            query += 'AND VWV.IDSUBGRUPO IN (?) ';
+            query += `AND VWV.IDSUBGRUPO IN (${idSubGrupo}) `;
             params.push(idSubGrupo);
         }
 
         if (idMarca) {
-            query += 'AND VWV.IDMARCA IN (?) ';
+            query += `AND VWV.IDMARCA IN (${idMarca}) `;
             params.push(idMarca);
         }
 
-        query += 'GROUP BY VWV.CPROD, P.NUCODBARRAS, P.DSNOME,VWV.VUNCOM';
-        query += 'ORDER BY SUM(VWV.QTD) DESC';
+        query += ' GROUP BY VWV.CPROD, P.NUCODBARRAS, P.DSNOME, VWV.VUNCOM';
+        query += ' ORDER BY SUM(VWV.QTD) DESC';
 
         const offset = (page - 1) * pageSize;
-        query += 'LIMIT ? OFFSET ? ';
+        query += ' LIMIT ? OFFSET ? ';
         params.push(pageSize, offset);
 
         const statement = await conn.prepare(query);

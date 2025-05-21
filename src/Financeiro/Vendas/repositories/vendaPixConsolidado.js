@@ -1,3 +1,4 @@
+
 import conn from '../../../config/dbConnection.js';
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
@@ -22,7 +23,7 @@ export const getVendaPixConsolidado = async (idMarca, dataPesquisaInicio, dataPe
                 AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL)
                 AND tbvp.NOTEF = 'PIX' AND tbvp.DSTIPOPAGAMENTO = 'PIX'
         `;
-
+     
         const params = [];
 
         
@@ -40,12 +41,11 @@ export const getVendaPixConsolidado = async (idMarca, dataPesquisaInicio, dataPe
         }
 
         query += ` GROUP BY tbse.DSSUBGRUPOEMPRESARIAL`;
-
         
         const offset = (page - 1) * pageSize;
         query += ` LIMIT ? OFFSET ?`;
         params.push(pageSize, offset);
-
+        
         
         const statement = conn.prepare(query);
         const result = await statement.exec(params);

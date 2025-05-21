@@ -14,10 +14,10 @@ class EmpresaControllers {
         pageSize = pageSize ? pageSize : '';
        
         try {
-            const response = await axios.get(`${url}/api/empresa.xsjs`)
-            // const response = await getEmpresasLista(idEmpresa, idSubGrupoEmpresa,  page, pageSize)
+            // const response = await axios.get(`${url}/api/empresa.xsjs`)
+            const response = await getEmpresasLista(idEmpresa, idSubGrupoEmpresa,  page, pageSize)
             
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; // Lança o erro para tratamento posterior, se necessário
@@ -28,8 +28,8 @@ class EmpresaControllers {
 
         try {
             idEmpresa = idEmpresa ? idEmpresa : '';
-            const apiUrl = `${url}/api/empresa.xsjs?id=${idEmpresa}`;
-            const response = await axios.get(apiUrl)
+            
+            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/empresa.xsjs?id=${idEmpresa}`)
 
             return res.json(response.data); // Retorna
         } catch (error) {
@@ -79,13 +79,26 @@ class EmpresaControllers {
 
     async putListaEmpresas(req, res) {
         try {
-            const empresas = Array.isArray(req.body) ? req.body : [req.body];   
+            const empresas = Array.isArray(req.body) ? req.body : [req.body];  
+            
+            for(const empresa of empresas) {
+                if(!empresa.IDEMPRESA) {
+                    return res.status(400).json({
+                        status: 'error',
+                        message: 'IDEMPRESA é obrigatório para atualização.'
+                    });
+                }
+            }
+
             const response = await updateEmpresa(empresas)
         
             return res.json(response);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro ao atualizar empresa:", error);
+            return res.status(500).json({
+                status: 'error',
+                message: 'Erro interno do servidor.'
+            });
         }
     }
 

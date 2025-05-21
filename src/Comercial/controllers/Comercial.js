@@ -1,7 +1,11 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getEmpresas } from "../../Informatica/Empresas/empresas.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import { getListaMetaVendas } from "../Metas/repositories/listaMetaVendas.js";
+import { getVendasMarcaPeriodo } from "../Vendas/repositories/vendaMarcaPeriodo.js";
+import { getFuncionariosLoja, updateFuncionario } from "../Funcionarios/funcionarioLoja.js";
+import { getFuncionarioRelatorio } from "../Funcionarios/funcionarioRelatorio.js";
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 class CormercialControllers {
 
     async getListaFornecedorProduto(req, res) {
@@ -30,6 +34,7 @@ class CormercialControllers {
             throw error;
         }
     }
+    
 
     async getListaGrupoProduto(req, res) {
         let { idEmpresa } = req.query;
@@ -78,10 +83,10 @@ class CormercialControllers {
        
           
             try {
-                const apiUrl = `${url}/api/comercial/empresa.xsjs?idmarca=${idMarca}`;
-                const response = await axios.get(apiUrl)
-                // const response = await getEmpresas(idMarca, idEmpresa, ufProd, page, pageSize)
-                return res.json(response.data); // Retorna
+                // const apiUrl = `${url}/api/comercial/empresa.xsjs?idmarca=${idMarca}`;
+                const response = await getEmpresas(idMarca, idEmpresa, ufProd, page, pageSize)
+
+                return res.json(response); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -190,10 +195,10 @@ class CormercialControllers {
     // }
 
     async getListaProdutosEstoquePrecoLoja(req, res) {
-        let { dataPesquisaInicio, dataPesquisaFim, idMarcaProduto, idEmpresa, descricaoProduto, ufPesquisa, idFornecedor, idGrupo, idGrade, idMarca, vlPrecoProduto } = req.query;
+        let { dataPesquisaInicio, dataPesquisaFim, idMarcaProduto, idEmpresa, descricaoProduto, uf, idFornecedor, idGrupo, idGrade, idMarca, vlPrecoProduto } = req.query;
         idEmpresa = idEmpresa ? idEmpresa : '';
         descricaoProduto = descricaoProduto ? descricaoProduto : '';
-        ufPesquisa = ufPesquisa ? ufPesquisa : '';
+        uf = uf ? uf : '';
         idFornecedor = idFornecedor ? idFornecedor : '';
         idGrupo = idGrupo ? idGrupo : '';
         idGrade = idGrade ? idGrade : '';
@@ -205,7 +210,7 @@ class CormercialControllers {
 
         try {
             // ajaxGet('api/comercial/produtos-precos-estoques-lojas.xsjs?page='+numPage+'&dataPesquisaInicio=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim + '&idMarca=' + IDMarcaPesqVenda + '&idEmpresa=' + IDLojaPesqVenda + '&descricaoProduto=' + ProdutoPesqVenda + '&uf=' + UFPesquisa+ '&idFornecedor=' + IDForn+ '&idGrupoGrade=' + IDGrupo+ '&idGrade=' + IDGrade + '&idMarcaProduto=' + IDMarca + '&vlPreco='+vlPrecoProduto)
-            const apiUrl = `${url}/api/comercial/produtos-precos-estoques-lojas.xsjs?page=&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&uf=${ufPesquisa}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idGrade}&idMarcaProduto=${idMarcaProduto}&vlPreco=${vlPrecoProduto}`;
+            const apiUrl = `${url}/api/comercial/produtos-precos-estoques-lojas.xsjs?&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&uf=${uf}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idGrade}&idMarcaProduto=${idMarcaProduto}&vlPreco=${vlPrecoProduto}`;
             const response = await axios.get(apiUrl)
 
             return res.json(response.data); // Retorna
@@ -217,47 +222,51 @@ class CormercialControllers {
     }
 
     async getListaVendasMarcaPorPeriodoComercial(req, res) {
-        let { idMarcaPesqVenda, page, pageSize, dataPesqInicio, dataPesqFim } = req.query;
+        let { idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
+        
+            idMarca = idMarca ? idMarca : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
     
-            idMarcaPesqVenda = idMarcaPesqVenda ? idMarcaPesqVenda : '';
-            dataPesqInicio = dataFormatada(dataPesqInicio) ? dataFormatada(dataPesqInicio) : ''
-            dataPesqFim = dataFormatada(dataPesqFim) ? dataFormatada(dataPesqFim) : ''
-            pageSize = pageSize ? pageSize : '';
-            pageSize = pageSize ? pageSize : '';
-
           try {
-            const apiUrl = `${url}/api/comercial/venda-marca-periodo.xsjs?pageSize=${pageSize}&idMarca=${idMarcaPesqVenda}&dataInicio=${dataPesqInicio}&dataFim=${dataPesqFim}`
-            const response = await axios.get(apiUrl)
+            // const apiUrl = `${url}/api/comercial/venda-marca-periodo.xsjs?pageSize=${pageSize}&idMarca=${idMarcaPesqVenda}&dataInicio=${dataPesqInicio}&dataFim=${dataPesqFim}`
+            // const response = await axios.get(apiUrl)
+            const response = await getVendasMarcaPeriodo(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
           } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("erro no ComercialControllers getListaVendasMarcaPorPeriodoComercial:", error);
             throw error;
           }
         
     }
 
     async getListaVendasEstoqueGrupoSubGrupoComercial(req, res) {
-        let { idMarca, pageNumber, dataInicio, dataFim, idGrupo, idGrade } = req.query;
+        let { idMarca, dataPesquisaInicio, dataPesquisaFim, idGrupo, idGrade, page, pageSize } = req.query;
     
-        if (!isNaN(idMarca)) {
-          idMarca = idMarca ? idMarca : '';
-          const pageSize = 100;
-          const offset = (pageNumber - 1) * pageSize;
-          dataInicio = dataFormatada(dataInicio) ? dataInicio : ''
-          dataFim = dataFormatada(dataFim) ? dataFim : '' 
+            idMarca = idMarca ? idMarca : '';
+            idGrupo = idGrupo ? idGrupo : '';
+            idGrade = idGrade ? idGrade : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+      
     
           try {
             // ajaxGet('api/comercial/vendas-estoque-grupo-subgrupo.xsjs?page='+numPage+'&dataPesquisaInicio=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim + '&idMarca=' + IDMarcaPesqVenda + '&idGrupoGrade=' + IDGrupo+ '&idGrade=' + IDGrade )
-            const apiUrl = `${url}/api/comercial/vendas-estoque-grupo-subgrupo.xsjs?pageSize=${pageSize}&dataPesquisaInicio=${dataInicio}&dataPesquisaFim=${dataFim}&idMarca=${idMarca}&idGrupoGrade=${idGrupo}&idGrade=${idGrade}`
+            const apiUrl = `${url}/api/comercial/vendas-estoque-grupo-subgrupo.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&idGrupoGrade=${idGrupo}&idGrade=${idGrade}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
     
-            return res.json(response.data); // Retorna
+            return res.json(response.data); 
           } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("erro no ComercialControllers getListaVendasEstoqueGrupoSubGrupoComercial:", error);
             throw error;
           }
-        }
+        
     }
 
     async getListaVendasPosicionamentoEstoquePeriodos(req, res) {
@@ -274,26 +283,28 @@ class CormercialControllers {
             idFornecedor, 
             idGrupo, 
             idGrade, 
-      
+            page,
+            pageSize  
          
         } = req.query;
         
-        descricaoProduto = descricaoProduto ? descricaoProduto : '';
-        ufPesquisa = ufPesquisa ? ufPesquisa : '';
-        idFornecedor = idFornecedor ? idFornecedor : '';
-        idGrupo = idGrupo ? idGrupo : '';
-        idGrade = idGrade ? idGrade : '';
-        idMarcaProduto = idMarcaProduto ? idMarcaProduto : '';
-        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
-        dataPesquisaInicioB = dataFormatada(dataPesquisaInicioB) ? dataFormatada(dataPesquisaInicioB) : '';
-        dataPesquisaFimB = dataFormatada(dataPesquisaFimB) ? dataFormatada(dataPesquisaFimB) : '';
-        dataPesquisaInicioC = dataFormatada(dataPesquisaInicioC) ? dataFormatada(dataPesquisaInicioC) : '';
-        dataPesquisaFimC = dataFormatada(dataPesquisaFimC) ? dataFormatada(dataPesquisaFimC) : '';
-    
+            descricaoProduto = descricaoProduto ? descricaoProduto : '';
+            idFornecedor = idFornecedor ? idFornecedor : '';
+            idGrupo = idGrupo ? idGrupo : '';
+            idGrade = idGrade ? idGrade : '';
+            idMarcaProduto = idMarcaProduto ? idMarcaProduto : '';
+            dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+            dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+            dataPesquisaInicioB = dataFormatada(dataPesquisaInicioB) ? dataFormatada(dataPesquisaInicioB) : '';
+            dataPesquisaFimB = dataFormatada(dataPesquisaFimB) ? dataFormatada(dataPesquisaFimB) : '';
+            dataPesquisaInicioC = dataFormatada(dataPesquisaInicioC) ? dataFormatada(dataPesquisaInicioC) : '';
+            dataPesquisaFimC = dataFormatada(dataPesquisaFimC) ? dataFormatada(dataPesquisaFimC) : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
         try {
+ 
             // ajaxGet('api/comercial/vendas-estoque-produto.xsjs?page='+numPage+'&dataPesquisaInicio=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim + '&dataPesquisaInicioB=' + datapesqinicioB + '&dataPesquisaFimB=' + datapesqfimB + '&dataPesquisaInicioC=' + datapesqinicioC + '&dataPesquisaFimC=' + datapesqfimC + '&descricaoProduto=' + ProdutoPesqVenda + '&idFornecedor=' + IDForn+ '&idGrupoGrade=' + IDGrupo+ '&idGrade=' + IDGrade + '&idMarcaProduto='+IDMarca)
-            const apiUrl = `${url}/api/comercial/vendas-estoque-produto.xsjs?page=&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataPesquisaInicioB=${dataPesquisaInicioB}&dataPesquisaFimB${dataPesquisaFimB}&dataPesquisaInicioC=${dataPesquisaInicioC}&dataPesquisaFimC=${dataPesquisaFimC}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idGrade}&idMarcaProduto=${idMarcaProduto}`
+            const apiUrl = `${url}/api/comercial/vendas-estoque-produto.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataPesquisaInicioB=${dataPesquisaInicioB}&dataPesquisaFimB=${dataPesquisaFimB}&dataPesquisaInicioC=${dataPesquisaInicioC}&dataPesquisaFimC=${dataPesquisaFimC}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idGrade}&idMarcaProduto=${idMarcaProduto}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             return res.json(response.data); 
         } catch (error) {
@@ -304,15 +315,18 @@ class CormercialControllers {
     }
 
     async getListaColaboradorRelatorio(req, res) {
-        let { idEmpresa } = req.query;
-        idEmpresa = idEmpresa ? idEmpresa : '';
+        let { idEmpresa, page, pageSize } = req.query;
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
         try {
             const apiUrl = `${url}/api/comercial/funcionariorel.xsjs?idEmpresa=${idEmpresa}`
-            const response = await axios.get(apiUrl)
+            // const response = await axios.get(apiUrl)
+            const response = await getFuncionarioRelatorio(idEmpresa, page, pageSize)
     
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
-            console.error("Unable to connect to the database tabela :", error);
+            console.error("erro no ComercialControllers getListaColaboradorRelatorio:", error);
             throw error;
         }
     }
@@ -399,16 +413,18 @@ class CormercialControllers {
 
     }
     async getListaMetasGrupo(req, res) {
-        let {  } = req.query;
-        
+        let { page, pageSize } = req.query;
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
         try {
             // ajaxGetComAnimacaoDeCarregamento(`api/comercial/lista-premiacoes.xsjs?page=${numPage}`)
-            const apiUrl = `${url}/api/comercial/lista-meta-vendas.xsjs?page=1`;
-            const response = await axios.get(apiUrl)
+            const apiUrl = `${url}/api/comercial/lista-meta-vendas.xsjs?page=${page}&pageSize=${pageSize}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getListaMetaVendas(page, pageSize)
 
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("erro no ComercialControllers getListaMetasGrupo:", error);
             throw error;
         }
 
@@ -428,6 +444,41 @@ class CormercialControllers {
             throw error;
         }
 
+    }
+
+    async getListaFuncionariosLojaComercial(req, res) {
+        let {byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize  } = req.query;
+
+            byId = byId ? byId : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            cpf = cpf ? cpf : '';
+            noFuncionarioCPF = noFuncionarioCPF ? noFuncionarioCPF : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+        try {
+            // ajaxGetComAnimacaoDeCarregamento(`api/comercial/lista-premiacoes.xsjs?page=${numPage}`)
+            // const apiUrl = `${url}/api/comercial/funcionario-loja.xsjs`;
+            // const response = await axios.get(apiUrl)
+            const response = getFuncionariosLoja(byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize)
+
+            return res.json(response); 
+        } catch (error) {
+            console.error("Unable to connect to the database:", error);
+            throw error;
+        }
+
+    }
+
+    async putFuncionarioLoja(req, res) {
+        try {
+            const detalhes = Array.isArray(req.body) ? req.body : [req.body];   
+            const response = await updateFuncionario(detalhes)
+        
+            return res.json(response);
+        } catch (error) {
+            console.error("erro no ComercialControllers putFuncionarioLoja:", error);
+            throw error;
+        }
     }
 }
 

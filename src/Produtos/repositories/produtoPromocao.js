@@ -1,7 +1,7 @@
-import conn from "../../config/dbConnection.js";
-import 'dotenv/config';
+// import conn from "../../config/dbConnection.js";
+// import 'dotenv/config';
 
-const databaseSchema = process.env.HANA_DATABASE;
+// const databaseSchema = process.env.HANA_DATABASE;
 
 export const getProdutoPromocao = async (idProduto, codeBarsOuNome, page, pageSize) => {
     try {
@@ -150,7 +150,11 @@ export const updateProdutoPromocao = async (dados) => {
     }
 }
 
-export const incluirDetalhePromocao = async (dados, idPromocao) => {
+import conn from "../../config/dbConnection.js";
+import 'dotenv/config';
+
+const databaseSchema = process.env.HANA_DATABASE;
+export const incluirDetalhesPromocao = async (dados, idPromocao) => {
     try {
         const query = `
             INSERT INTO "${databaseSchema}"."DETALHEPROMOCAO" 
@@ -195,7 +199,7 @@ export const incluirDetalhePromocao = async (dados, idPromocao) => {
     }
 };
 
-export const incluirDetalheEmpresaPromocao = async (idPromocao, idGrupo, listEmpresas) => {
+export const incluirDetalhesEmpresaPromocao = async (idPromocao, idGrupo, listEmpresas) => {
     try {
         const query = `
             INSERT INTO "${databaseSchema}"."DETALHEEMPPROMO" 
@@ -243,23 +247,14 @@ export const incluirDetalheEmpresaPromocao = async (idPromocao, idGrupo, listEmp
     } catch (error) {
         console.error('Erro ao executar a inclusão de Empresa na Promoção:', error);
         throw error;
-    } finally {
-        conn.close();
-    }
+    } 
 };
 
 export const createProdutoPromocao = async (dados) => {
     try {
-        const queryId = `SELECT IFNULL(MAX(TO_INT("IDRESUMOPROMO")),0) + 1 AS novoId FROM "${databaseSchema}"."RESUMOPROMOCAO" WHERE 1 = 1`;
-        const idResult = await conn.exec(queryId);
+        const registros = Array.isArray(dados) ? dados : [dados];
 
-        if (!idResult || !Array.isArray(idResult) || !idResult.length) {
-            throw new Error('Erro ao gerar o ID para IDRESUMOPROMO.');
-        }
-
-        const idPromocao = idResult[0].NOVOID;
-
-        const query = `
+        const statement = await conn.prepare(`
             INSERT INTO "${databaseSchema}"."RESUMOPROMOCAO" 
             (
                 "IDRESUMOPROMO", 
@@ -275,11 +270,17 @@ export const createProdutoPromocao = async (dados) => {
                 "STATIVO"
             ) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
+        `);
 
-        const statement = await conn.prepare(query);
+        for (const registro of registros) {
+           
+            const queryId = `
+                SELECT IFNULL(MAX(TO_INT("IDRESUMOPROMO")),0) + 1 AS novoId 
+                FROM "${databaseSchema}"."RESUMOPROMOCAO"
+            `;
+            const idResult = await conn.exec(queryId); 
+            const idPromocao = idResult[0].NOVOID;
 
-        for (const registro of dados) {
             const params = [
                 idPromocao,
                 registro.DSPROMO,
@@ -293,30 +294,26 @@ export const createProdutoPromocao = async (dados) => {
                 registro.DTFIMPROMO,
                 registro.STATIVO
             ];
+
             await statement.exec(params);
+ 
+            if (Array.isArray(registro.PRODUTOS) && registro.PRODUTOS.length > 0) {
+                await incluirDetalhesPromocao(registro.PRODUTOS, idPromocao);
+            }
 
-            // if (Array.isArray(registro.PRODUTOS) && registro.PRODUTOS.length > 0) {
-            //     await incluirDetalhePromocao(registro.PRODUTOS, idPromocao);
-            // } 
-
-            // if (Array.isArray(registro.EMPRESAS) && registro.EMPRESAS.length > 0) {
-            //     await incluirDetalheEmpresaPromocao(idPromocao, registro.IDGRUPO, registro.EMPRESAS);
-            // } 
+            if (Array.isArray(registro.EMPRESAS) && registro.EMPRESAS.length > 0) {
+                await incluirDetalhesEmpresaPromocao(idPromocao, registro.IDGRUPO, registro.EMPRESAS);
+            }
         }
 
         conn.commit();
         return {
             status: 'success',
-            message: 'Produto Promoção incluída com sucesso'
+            message: 'Produto Promoção incluída com sucesso',
+            dados
         };
     } catch (error) {
         console.error('Erro ao executar a inclusão do Produto Promoção:', error);
         throw error;
-    } finally {
-        conn.close(); // Fechar a conexão aqui
-    }
+    } 
 };
-
-// IDRESUMOPROMO: undefined
-// Novo ID para IDRESUMOPROMO: undefined
-

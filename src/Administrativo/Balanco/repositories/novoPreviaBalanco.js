@@ -1,7 +1,7 @@
 import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
-
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getNovoPreviaBalanco = async (idResumo, diferenca, processa,  page, pageSize) => {
     try {
@@ -15,8 +15,8 @@ export const getNovoPreviaBalanco = async (idResumo, diferenca, processa,  page,
         let query = `
             SELECT 
                 pb.IDPREVIABALANCO, pb.IDPRODUTO, pb.IDRESUMOBALANCO, pb.IDEMPRESA, pb.QTD, pb.QTDFINAL, pb.QTDFALTA, pb.QTDSOBRA, pb.PRECOVENDA, pb.TOTALVENDA,
-                IFNULL(p.NUCODBARRAS, (SELECT IFNULL("CodeBars", '') FROM "SBO_GTO_PRD"."OITM" WHERE "ItemCode" = pb.IDPRODUTO)) AS NUCODBARRAS,
-                IFNULL(p.DSNOME, (SELECT IFNULL("ItemName", '') FROM "SBO_GTO_PRD"."OITM" WHERE "ItemCode" = pb.IDPRODUTO)) AS DSNOME
+                IFNULL(p.NUCODBARRAS, (SELECT IFNULL("CodeBars", '') FROM "${databaseSchemaSBO}"."OITM" WHERE "ItemCode" = pb.IDPRODUTO)) AS NUCODBARRAS,
+                IFNULL(p.DSNOME, (SELECT IFNULL("ItemName", '') FROM "${databaseSchemaSBO}"."OITM" WHERE "ItemCode" = pb.IDPRODUTO)) AS DSNOME
             FROM "${databaseSchema}".PREVIABALANCO pb
             LEFT JOIN "${databaseSchema}".PRODUTO p ON p.IDPRODUTO = pb.IDPRODUTO
             WHERE 1 = ?

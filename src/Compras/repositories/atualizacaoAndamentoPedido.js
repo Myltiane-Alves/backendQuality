@@ -16,6 +16,7 @@ export const updateAndamentoPedido = async (dados) => {
         const statement = await conn.prepare(query);
 
         for (const dado of dados) {
+            
             const params = [dado.IDANDAMENTO, dado.TXTOBSDEVPEDIDO, dado.IDRESUMOPEDIDO];
 
             await statement.exec(params);

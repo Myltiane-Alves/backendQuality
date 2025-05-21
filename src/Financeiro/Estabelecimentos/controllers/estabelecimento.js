@@ -6,26 +6,26 @@ let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 class EstabelecimentoControllers {
-    async getListaEstabelecimentos(req, res) {
-        let { idGrupo, idEstabelecimento, idEmpresa,  page, pageSize } = req.query;
-    
-    
-        pageSize = pageSize ? pageSize : ''
-        page = page ? page : '';
-        idEmpresa = idEmpresa ? idEmpresa : '';
-        idGrupo = idGrupo ? idGrupo : '';
-        try {
-          const apiUrl = `${url}/api/financeiro/estabelecimentos.xsjs?page=${page}&pageSize=${pageSize}&idGrupoEmpresa=${idGrupo}&idLojaEmpresa=${idEmpresa}`
-          const response = await axios.get(apiUrl);
-          // const response = await getEstabelecimentos(idGrupo, idEstabelecimento, idEmpresa,  page, pageSize)
-    
-          return res.json(response.data);
-        } catch (error) {
-          console.error("Unable to connect to the database:", error);
-          throw error;
-        }
-    
+  async getListaEstabelecimentos(req, res) {
+    let { idGrupo, idEstabelecimento, idEmpresa,  page, pageSize } = req.query;
+
+
+      idGrupo = idGrupo ? idGrupo : '';
+      idEstabelecimento = idEstabelecimento ? idEstabelecimento : '';
+      idEmpresa = idEmpresa ? idEmpresa : '';
+      page = page ? page : '';
+      pageSize = pageSize ? pageSize : ''
+    try {
+      // const apiUrl = `${url}/api/financeiro/estabelecimentos.xsjs?page=${page}&pageSize=${pageSize}&idGrupoEmpresa=${idGrupo}&idLojaEmpresa=${idEmpresa}`
+      const response = await getEstabelecimentos(idGrupo, idEstabelecimento, idEmpresa,  page, pageSize)
+
+      return res.json(response);
+    } catch (error) {
+      console.error("Erro no EstabelecimentoControllers.getListaEstabelecimentos: ", error);
+      throw error;
     }
+  
+  }
 }
 
 export default new EstabelecimentoControllers();

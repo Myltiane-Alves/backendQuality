@@ -6,7 +6,7 @@ export const getProdutoQuality = async (idEmpresa, codBarrasOuNome, page, pageSi
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
-        codBarrasOuNome = codBarrasOuNome.replace(' ', '%');
+     
 
     
         let query = `
@@ -18,12 +18,13 @@ export const getProdutoQuality = async (idEmpresa, codBarrasOuNome, page, pageSi
                 T2.PRECO_VENDA 
             FROM ${databaseSchema}.PRODUTO T1 
             INNER JOIN "${databaseSchema}"."PRODUTO_PRECO" T2 ON T2."IDPRODUTO" = T1.IDPRODUTO
-            WHERE 1 = 1
+            WHERE 1 = ?
             AND T2.IDEMPRESA = ?
             AND (T1.NUCODBARRAS = ? OR UPPER(T1.DSNOME) LIKE UPPER(?))
         `;
 
-        const params = [idEmpresa, codBarrasOuNome, `%${codBarrasOuNome}%`];
+        const params = [1, idEmpresa, codBarrasOuNome, `%${codBarrasOuNome}%`];
+        // const params = [];
 
         const offset = (page - 1) * pageSize;
         query += ' LIMIT ? OFFSET ?';

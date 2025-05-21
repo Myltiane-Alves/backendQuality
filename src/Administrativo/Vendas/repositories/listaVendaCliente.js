@@ -2,19 +2,58 @@ import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
 
-export const getVendaDetalhe = async (idVenda) => {
+export const getVendaDetalhe = async (idVenda, page, pageSize) => {
     try {
+        page = page && !isNaN(page) ? parseInt(page) : 1;
+        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 500;
         let query = `
-        SELECT IDVENDADETALHE, IDVENDA, NITEM, CPROD, CEAN, XPROD, NCM, CFOP, UCOM, QCOM,
-        VUNCOM, VPROD, CEANTRIB, UTRIB, QTRIB, VUNTRIB, INDTOT, ICMS_ORIG, ICMS_CST, ICMS_MODBC, ICMS_VBC,
-        ICMS_PICMS, ICMS_VICMS, PIS_CST, PIS_VBC, PIS_PPIS, PIS_VPIS, COFINS_CST, COFINS_VBC, COFINS_PCOFINS,
-        COFINS_VCOFINS, VENDEDOR_MATRICULA, VENDEDOR_NOME, VENDEDOR_CPF, tbp.NUCODBARRAS, QTD, VRTOTALLIQUIDO, STTROCA
-        FROM "QUALITY_CONC_HML".VENDADETALHE tbvd
-        INNER JOIN "QUALITY_CONC_HML".PRODUTO tbp ON tbp.IDPRODUTO = tbvd.CPROD
-        WHERE IDVENDA = ?
-        ORDER BY IDVENDADETALHE`;
+            SELECT 
+                IDVENDADETALHE, 
+                IDVENDA, 
+                NITEM, 
+                CPROD, 
+                CEAN, 
+                XPROD, 
+                NCM, 
+                CFOP, 
+                UCOM, 
+                QCOM,
+                VUNCOM, 
+                VPROD, 
+                CEANTRIB, 
+                UTRIB, 
+                QTRIB, 
+                VUNTRIB, 
+                INDTOT, 
+                ICMS_ORIG, 
+                ICMS_CST, 
+                ICMS_MODBC, 
+                ICMS_VBC,
+                ICMS_PICMS, 
+                ICMS_VICMS, 
+                PIS_CST, 
+                PIS_VBC, 
+                PIS_PPIS, 
+                PIS_VPIS, 
+                COFINS_CST, 
+                COFINS_VBC, 
+                COFINS_PCOFINS,
+                COFINS_VCOFINS, 
+                VENDEDOR_MATRICULA, 
+                VENDEDOR_NOME, 
+                VENDEDOR_CPF, 
+                tbp.NUCODBARRAS, 
+                QTD, 
+                VRTOTALLIQUIDO, 
+                STTROCA
+            FROM "${databaseSchema}".VENDADETALHE tbvd
+            INNER JOIN "${databaseSchema}".PRODUTO tbp ON tbp.IDPRODUTO = tbvd.CPROD
+                WHERE IDVENDA = ?
+                ORDER BY IDVENDADETALHE`;
 
         const params = [idVenda];
+        query += ' LIMIT ? OFFSET ?';
+        params.push(pageSize, (page - 1) * pageSize);
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params);
       
@@ -64,7 +103,7 @@ export const getVendaDetalhe = async (idVenda) => {
         	    "STTROCA": det.STTROCA
             }
         }))
-      
+        
         return data;
     } catch (error) {
         console.error('Erro ao executar consulta lista venda detalhe:', error);
@@ -72,16 +111,42 @@ export const getVendaDetalhe = async (idVenda) => {
     }
 }
 
-export const getPagamento = async (idVenda) => {
+export const getPagamento = async (idVenda, page, pageSize) => {
     try {
+        page = page && !isNaN(page) ? parseInt(page) : 1;
+        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 500;
         let query = `
-        SELECT IDVENDAPAGAMENTO, IDVENDA, NITEM, TPAG, DSTIPOPAGAMENTO, VALORRECEBIDO, VALORDEDUZIDO, VALORLIQUIDO,
-        DTPROCESSAMENTO, TO_VARCHAR(DTVENCIMENTO,'DD-MM-YYYY') AS DTVENCIMENTO, NPARCELAS, NOTEF, NOAUTORIZADOR, NOCARTAO, NUOPERACAO, NSUTEF, NSUAUTORIZADORA, NUAUTORIZACAO, CPF, NOME
-        FROM "QUALITY_CONC_HML".VENDAPAGAMENTO
-        WHERE IDVENDA = ?
-        ORDER BY IDVENDAPAGAMENTO`;
+            SELECT 
+                IDVENDAPAGAMENTO, 
+                IDVENDA, 
+                NITEM, 
+                TPAG, 
+                DSTIPOPAGAMENTO, 
+                VALORRECEBIDO, 
+                VALORDEDUZIDO, 
+                VALORLIQUIDO,
+                DTPROCESSAMENTO, 
+                TO_VARCHAR(DTVENCIMENTO,'DD-MM-YYYY') AS DTVENCIMENTO, 
+                NPARCELAS, 
+                NOTEF, 
+                NOAUTORIZADOR, 
+                NOCARTAO, 
+                NUOPERACAO, 
+                NSUTEF, 
+                NSUAUTORIZADORA, 
+                NUAUTORIZACAO, 
+                CPF, 
+                NOME
+            FROM "${databaseSchema}".VENDAPAGAMENTO
+                WHERE IDVENDA = ?
+                ORDER BY IDVENDAPAGAMENTO
+
+                
+            `;
         
         const params = [idVenda];
+        query += ' LIMIT ? OFFSET ?';
+        params.push(pageSize, (page - 1) * pageSize);
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params);
         
@@ -111,7 +176,7 @@ export const getPagamento = async (idVenda) => {
 				"NOME": det.NOME
             }
         }))
-    
+        
         return data;
     } catch (error) {
         console.error('Erro ao executar consulta lista venda pagamento:', error);
@@ -122,7 +187,7 @@ export const getPagamento = async (idVenda) => {
 export const getVendaCliente = async (nnf, serie, idEmpresa, idVenda, idSubGrupoEmpresarial, cpfOUidVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
-        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
+        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 500;
 
         let query = `
             SELECT 
@@ -144,6 +209,7 @@ export const getVendaCliente = async (nnf, serie, idEmpresa, idVenda, idSubGrupo
                 tbv.VRTOTALPAGO,
                 tbv.VRTROCO,
                 TO_VARCHAR(tbv.DTHORAFECHAMENTO,'DD-MM-YYYY HH24:MI:SS') AS DTHORAFECHAMENTO,
+                tbv.DTHORAFECHAMENTO AS DTHORAFECHAMENTOFORMATEUA,
                 tbv.STATIVO,
                 tbv.STCANCELADO,
                 tbv.IDUSUARIOCANCELAMENTO,
@@ -198,7 +264,8 @@ export const getVendaCliente = async (nnf, serie, idEmpresa, idVenda, idSubGrupo
             params.push(nnf, serie);
         }
 
-        query += ' ORDER BY tbv.DTHORAFECHAMENTO ASC LIMIT ? OFFSET ?';
+        query += ' ORDER BY tbv.DTHORAFECHAMENTO ';
+        query += ' LIMIT ? OFFSET ?';
         params.push(pageSize, (page - 1) * pageSize);
 
         const statement = await conn.prepare(query);
@@ -208,6 +275,9 @@ export const getVendaCliente = async (nnf, serie, idEmpresa, idVenda, idSubGrupo
 
         const data = await Promise.all(rows.map(async (registro) => {
             try {
+                const  detalhe = await getVendaDetalhe(registro.IDVENDA)
+                const pagamento = await getPagamento(registro.IDVENDA)
+              
                 return {
                     "venda": {
                         "IDVENDA": registro.IDVENDA,
@@ -228,6 +298,7 @@ export const getVendaCliente = async (nnf, serie, idEmpresa, idVenda, idSubGrupo
                         "VRTOTALPAGO": registro.VRTOTALPAGO,
                         "VRTROCO": registro.VRTROCO,
                         "DTHORAFECHAMENTO": registro.DTHORAFECHAMENTO,
+                        "DTHORAFECHAMENTOFORMATEUA": registro.DTHORAFECHAMENTOFORMATEUA,
                         "STATIVO": registro.STATIVO,
                         "STCANCELADO": registro.STCANCELADO,
                         "IDUSUARIOCANCELAMENTO": registro.IDUSUARIOCANCELAMENTO,
@@ -239,17 +310,18 @@ export const getVendaCliente = async (nnf, serie, idEmpresa, idVenda, idSubGrupo
                         "DSNOMERAZAOSOCIAL": registro.DSNOMERAZAOSOCIAL,
                         "DSAPELIDONOMEFANTASIA": registro.DSAPELIDONOMEFANTASIA
                     },
-                    detalhe: await getVendaDetalhe(registro.IDVENDA),
-                    pagamento: await getPagamento(registro.IDVENDA)
-
+                    detalhe: JSON.parse(JSON.stringify(detalhe)),
+                    pagamento: JSON.parse(JSON.stringify(pagamento))
+                    
                 }
-
             } catch (error) {
                 console.error('Erro ao executar consulta lista venda detalhe:', error);
                 throw error;
             }
+            
         }));
 
+        
         return {
             page,
             pageSize,

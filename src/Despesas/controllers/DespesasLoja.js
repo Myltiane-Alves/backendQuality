@@ -17,34 +17,31 @@ class DespesasLojaControllers  {
             page = page ? page : '';
       
         try {
-                                // api/despesa-loja/empresa.xsjs?idEmpresa=1&dataPesquisa=2024-12-09
-            const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getDespesasEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page);
-            return res.json(response.data); // Retorna
+            // const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getDespesasEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page);
+            return res.json(response); // Retorna
         } catch(error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
-        }
-        
-    }
-
-    async getListaDespesasEmpresaGerencia(req,res) {
-        let {idEmpresa, dataPesquisa,  } = req.query;
-        idEmpresa = idEmpresa ? idEmpresa : ''; 
-        dataPesquisa = dataPesquisa ? dataPesquisa : '';
-        
-        try {
-            const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
-            const response = await axios.get(apiUrl)
-            return res.json(response.data); // Retorna
-        } catch(error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no DespesasLojaControllers.getListaDespesasLojaEmpresa:", error);
                 throw error;
         }
         
     }
-
+    // async getListaDespesasEmpresaGerencia(req,res) {
+    //     let {idEmpresa, dataPesquisa,  } = req.query;
+    //     idEmpresa = idEmpresa ? idEmpresa : ''; 
+    //     dataPesquisa = dataPesquisa ? dataPesquisa : '';
+        
+    //     try {
+    //         const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
+    //         const response = await axios.get(apiUrl)
+    //         return res.json(response.data); // Retorna
+    //     } catch(error) {
+    //         console.error("Unable to connect to the database:", error);
+    //             throw error;
+    //     }
+        
+    // }
     async getListaTodasDespesasLojas(req,res) {
         let { idDespesas, pageSize, page } = req.query;
 
@@ -53,9 +50,9 @@ class DespesasLojaControllers  {
             pageSize = pageSize ? pageSize : '';
             page = page ? page : '';
 
-            const apiUrl = `${url}/api/despesa-loja/todos.xsjs?id=${idEmpresa}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getDespesasTodos(idDespesas, pageSize, page)
+            // const apiUrl = `${url}/api/despesa-loja/todos.xsjs?id=${idEmpresa}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getDespesasTodos(idDespesas, pageSize, page)
             return res.json(response);
         } catch(error) {
             console.error("Unable to connect to the database:", error);
@@ -74,12 +71,10 @@ class DespesasLojaControllers  {
         pageSize = Number(pageSize) ? Number(pageSize) : '';
     
         try {
-            // http://164.152.245./api/dashboard/despesa-loja.xsjs?idEmpresa=1&dataPesquisa=2024-12-07
-            const apiUrl = `${url}/api/dashboard/despesa-loja.xsjs?idDespesaLoja=${idDespesaLoja}&idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}&pageSize=${pageSize}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getDespesaLojaDashBoard(idDespesaLoja, idEmpresa, dataPesquisa, page, pageSize)
+    
+          const response = await getDespesaLojaDashBoard(idDespesaLoja, idEmpresa, dataPesquisa, page, pageSize)
           
-            return res.json(response.data);
+          return res.json(response);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
@@ -101,9 +96,8 @@ class DespesasLojaControllers  {
     async postCadastrarDespesasLoja(req, res) {
         try {
             const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
-            // const response = await  createDespesaTodos(despesas);
-            const response = await  await axios.post(`${url}/api/despesa-loja/todos.xsjs`, despesas)
-            return res.json(response.data);
+            const response = await  createDespesaTodos(despesas);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });

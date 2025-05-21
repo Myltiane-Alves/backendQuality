@@ -2,38 +2,44 @@ import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
 
-export const getQuebraCaixa = async (idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page) => {
+export const getQuebraCaixa = async (idMovimentoCaixa, idMarca, idEmpresa, cpfOperadorQuebra, stQuebraPositivaNegativa, dataPesquisaInicio, dataPesquisaFim, pageSize, page) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
-        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 10;
+        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
-        let query = `SELECT 
-            tbqc.IDQUEBRACAIXA,
-            tbemp.NOFANTASIA,
-            tbqc.IDCAIXAWEB,
-            tbqc.IDMOVIMENTOCAIXA,
-            tbqc.IDGERENTE,
-            tbqc.IDFUNCIONARIO,
-            TO_VARCHAR(tbqc.DTLANCAMENTO, 'DD-MM-YYYY') AS DTLANCAMENTO,
-            tbqc.VRQUEBRASISTEMA,
-            tbqc.VRQUEBRAEFETIVADO,
-            tbqc.TXTHISTORICO,
-            tbqc.STATIVO,
-            tbf.NOFUNCIONARIO AS NOMEOPERADOR,
-            tbf.DSFUNCAO,
-            tbf.NUCPF AS CPFOPERADOR,
-            tbf1.NOFUNCIONARIO AS NOMEGERENTE
-        FROM 
-            "${databaseSchema}".QUEBRACAIXA tbqc
-            LEFT JOIN "${databaseSchema}".MOVIMENTOCAIXA tbmc ON tbqc.IDMOVIMENTOCAIXA = tbmc.ID
-            LEFT JOIN "${databaseSchema}".EMPRESA tbemp ON tbmc.IDEMPRESA = tbemp.IDEMPRESA
-            LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbqc.IDFUNCIONARIO = tbf.IDFUNCIONARIO
-            LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf1 ON tbqc.IDGERENTE = tbf1.IDFUNCIONARIO
-        WHERE 
-            1 = 1`;
+        let query = `
+            SELECT 
+                tbqc.IDQUEBRACAIXA,
+                tbemp.NOFANTASIA,
+                tbqc.IDCAIXAWEB,
+                tbqc.IDMOVIMENTOCAIXA,
+                tbqc.IDGERENTE,
+                tbqc.IDFUNCIONARIO,
+                TO_VARCHAR(tbqc.DTLANCAMENTO,'DD-MM-YYYY') AS DTLANCAMENTO,
+                tbqc.VRQUEBRASISTEMA,
+                tbqc.VRQUEBRAEFETIVADO,
+                tbqc.TXTHISTORICO,
+                tbqc.STATIVO,
+                tbf.NOFUNCIONARIO AS NOMEOPERADOR,
+                tbf.DSFUNCAO,
+                tbf.NUCPF AS CPFOPERADOR,
+                tbf1.NOFUNCIONARIO AS NOMEGERENTE
+            FROM 
+                "${databaseSchema}".QUEBRACAIXA tbqc
+                LEFT JOIN "${databaseSchema}".MOVIMENTOCAIXA tbmc ON tbqc.IDMOVIMENTOCAIXA = tbmc.ID
+                LEFT JOIN "${databaseSchema}".EMPRESA tbemp ON tbmc.IDEMPRESA = tbemp.IDEMPRESA
+                LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbqc.IDFUNCIONARIO = tbf.IDFUNCIONARIO
+                LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf1 ON tbqc.IDGERENTE = tbf1.IDFUNCIONARIO
+            WHERE 
+                1 = ? 
+        `;
 
-        const params = [];
+        const params = [1];
 
+        if(idMovimentoCaixa) {
+            query += ' AND tbqc.IDMOVIMENTOCAIXA = ?';
+            params.push(idMovimentoCaixa);
+        }
         if (idMarca > 0) {
             query += ' AND tbemp.IDGRUPOEMPRESARIAL IN (?)';
             params.push(idMarca);

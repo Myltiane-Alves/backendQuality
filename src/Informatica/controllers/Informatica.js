@@ -3,7 +3,7 @@ import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getMarcas } from "../Marcas/marca.js";
 import { getGrupoEmpresa } from "../Marcas/grupoEmpresa.js";
 import { updateFuncionarioLoja } from "../Funcionarios/repositories/funcionario.js";
-import { createFuncionario, getFuncionariosLoja, updateFuncionario } from "../../Funcionarios/repositories/funcionarioLoja.js";
+import { createFuncionario, getFuncionariosAtivos, getFuncionariosLoja, updateFuncionario } from "../../Funcionarios/repositories/funcionarioLoja.js";
 import { updateInativarFuncionario } from "../../Funcionarios/repositories/funcionarioInativa.js";
 import { getAtualizaEmpresaDiario, updateAtualizaEmpresaDiario } from "../Empresas/autualizaEmpresDiario.js";
 import { updateAtualizarTodosCaixa } from "../caixas/atualizarTodosCaixas.js";
@@ -21,7 +21,8 @@ import { getParceriaCredSystem } from "../credSystem/parceria.js";
 import { createCaixa, getCaixa, updateCaixa } from "../caixas/caixa.js";
 import { createConfiguracao, getConfiguracoes, updateConfiguracao } from "../configuracao/repositories/configuracao.js";
 import { updateFuncionarioDesconto } from "../Funcionarios/repositories/funcionarioDesconto.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import { getFuncionariosById } from "../../Funcionarios/repositories/funcionario.js";
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class InformaticaControllers {
 
@@ -58,11 +59,11 @@ class InformaticaControllers {
     async getListaMarcas(req, res) {
          let {  } = req.query;
         try {
-            const apiUrl = `${url}/api/grupo-empresarial.xsjs`
-            const response = await axios.get(apiUrl)
-            // const response = await getGrupoEmpresa()
+            // const apiUrl = `${url}/api/grupo-empresarial.xsjs`
+            // const response = await axios.get(apiUrl)
+            const response = await getGrupoEmpresa()
             
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -137,11 +138,11 @@ class InformaticaControllers {
                 page = page ? page : '';
                 pageSize = pageSize ? pageSize : '';
 
-                const apiUrl = `${url}/api/informatica/caixa.xsjs?idEmpresa=${idEmpresa}`
-                const response = await axios.get(apiUrl)
-                // const response = await getCaixa(idEmpresa, idCaixaWeb, dataUltimaAtualizacao,   page, pageSize) 
+                // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/informatica/caixa.xsjs?idEmpresa=${idEmpresa}`
+                // const response = await axios.get(apiUrl)
+                const response = await getCaixa(idEmpresa, idCaixaWeb, dataUltimaAtualizacao,   page, pageSize) 
                 
-                return res.json(response.data); 
+                return res.json(response); 
              
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
@@ -174,12 +175,11 @@ class InformaticaControllers {
         try {
             idEmpresa = idEmpresa ? idEmpresa : '';
             page = page ? page : '';
-            pageSize = pageSize ? pageSize : '';    
-            const apiUrl = `${url}/api/informatica/atualiza-empresa-diario.xsjs?id=${idEmpresa}`
-            const response = await axios.get(apiUrl)
-            // const response = await getAtualizaEmpresaDiario(idEmpresa)
+            pageSize = pageSize ? pageSize : '';
+
+            const response = await getAtualizaEmpresaDiario(idEmpresa)
             
-            return res.json(response.data); 
+            return res.json(response); 
             
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -198,11 +198,11 @@ class InformaticaControllers {
             dataPesquisaFim = dataPesquisaFim ? dataFormatada(dataPesquisaFim) : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const apiUrl = `${url}/api/informatica/vendas-lojas.xsjs?idEmpresa=${idEmpresa}&status=${status}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
-            const response = await axios.get(apiUrl)
-            // const response = await getVendasLoja(idEmpresa, status, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            // const apiUrl = `${url}/api/informatica/vendas-lojas.xsjs?idEmpresa=${idEmpresa}&status=${status}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
+            // const response = await axios.get(apiUrl)
+            const response = await getVendasLoja(idEmpresa, status, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
    
-            return res.json(response.data); 
+            return res.json(response); 
          
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -263,13 +263,29 @@ class InformaticaControllers {
             noFuncionarioCPF = noFuncionarioCPF ? noFuncionarioCPF : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/informatica/funcionario-loja.xsjs?pagesize=1000&idEmpresa=&dsNomeFunc=
-            const apiUrl = `${url}/api/informatica/funcionario-loja.xsjs?byId=${byId}&idEmpresa=${idEmpresa}&dsNomeFunc=${noFuncionarioCPF}&page=${page}&pagesize=${pageSize}`;
-            const response = await axios.get(apiUrl)
-
-            // const response = await getFuncionariosLoja(byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize)
+            const response = await getFuncionariosLoja(byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize)
            
-            return res.json(response.data);
+            return res.json(response);
+        } catch (error) {
+            console.error("Unable to connect to the database:", error);
+            throw error;
+        }
+        
+    }
+
+    async getListaFuncionariosAtivos(req, res) {
+        let { byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize} = req.query;
+        
+        try {
+            byId = byId ? byId : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            cpf = cpf ? cpf : '';
+            noFuncionarioCPF = noFuncionarioCPF ? noFuncionarioCPF : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+            const response = await getFuncionariosAtivos(byId, idEmpresa, cpf, noFuncionarioCPF, page, pageSize)
+           
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -286,12 +302,12 @@ class InformaticaControllers {
         dataPesquisaFim = dataPesquisaFim ? dataFormatada(dataPesquisaFim) : '';
         try {
             // ajaxGet('api/informatica/lista-vendas-alloc.xsjs?idVenda=' + idVenda + '&idEmpresa=' + IDEmpresaLoja + '&dataPesquisaInic=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim + '&stvendasalloc=' + stvendasalloc)
-            const apiUrl = `${url}/api/informatica/lista-vendas-alloc.xsjs?idVenda=${idVenda}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquiaFim}&stvendasalloc=${stVendasAlloc}`
-            const response = await axios.get(apiUrl)
+            // const apiUrl = `${url}/api/informatica/lista-vendas-alloc.xsjs?idVenda=${idVenda}&idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquiaFim}&stvendasalloc=${stVendasAlloc}`
+            // const response = await axios.get(apiUrl)
 
-            // const response = await getVendasAlloc(idEmpresa, status, idVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            const response = await getVendasAlloc(idEmpresa, status, idVenda, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             
-            return res.json(response.data); 
+            return res.json(response); 
             
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -310,10 +326,10 @@ class InformaticaControllers {
       
         try {
             // ajaxGet('api/informatica/lista-vendas-contingencia.xsjs?idEmpresa=' + IDEmpresaLoja + '&dataPesquisaInic=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim)
-            const apiUrl = `${url}/api/informatica/lista-vendas-contingencia.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-            const response = await axios.get(apiUrl)
-            // const response = await getVendasContigencia(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            return res.json(response.data); 
+            // const apiUrl = `${url}/api/informatica/lista-vendas-contingencia.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+            // const response = await axios.get(apiUrl)
+            const response = await getVendasContigencia(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            return res.json(response); 
   
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -380,11 +396,11 @@ class InformaticaControllers {
         pageSize = pageSize ? pageSize : '';
         try {
             // ajaxGet('api/informatica/linkrelatoriobi.xsjs?page=' + numPage + '&id=' + idrelatoriobi + '&idfilial=' + idloja)
-            const apiUrl = `${url}/api/informatica/linkrelatoriobi.xsjs?id=${idRelatorio}&idfilial=${idLoja}&page=${page}&pageSize=${pageSize}`
-            const response = await axios.get(apiUrl)
-            // const response = await getLinkRelatorioBI(idRelatorio, idEmpresa, page, pageSize)
+            // const apiUrl = `${url}/api/informatica/linkrelatoriobi.xsjs?id=${idRelatorio}&idfilial=${idLoja}`
+            // const response = await axios.get(apiUrl)
+            const response = await getLinkRelatorioBI(idRelatorio, idEmpresa, page, pageSize)
         
-            return res.json(response.data); 
+            return res.json(response); 
          
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -401,11 +417,11 @@ class InformaticaControllers {
             status = status ? status : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const apiUrl = `${url}/api/informatica/relatoriobi.xsjs?`
-            const response = await axios.get(apiUrl)
-            // const response = await getRelatorioBI(idRelatorio, status, page, pageSize)
+            // const apiUrl = `${url}/api/informatica/relatoriobi.xsjs?`
+            // const response = await axios.get(apiUrl)
+            const response = await getRelatorioBI(idRelatorio, status, page, pageSize)
           
-            return res.json(response.data); 
+            return res.json(response); 
          
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -424,13 +440,9 @@ class InformaticaControllers {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
           
-            // http://164.152.245.77:8000/quality/concentrador/api/informatica/cadastro-cliente-credsystem.xsjs?idEmpresa=&dtInicio=2024-12-09&dtFim=2024-12-09&page=1
-            const apiUrl = `${url}/api/informatica/cadastro-cliente-credsystem.xsjs?idEmpresa=${idEmpresa}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
-            const response = await axios.get(apiUrl)
-            
-            // const response = await getCadastroClienteCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
+            const response = await getCadastroClienteCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
           
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -446,13 +458,10 @@ class InformaticaControllers {
             dataPesquisaFim = dataPesquisaFim ? dataFormatada(dataPesquisaFim) : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            
-            const apiUrl = `${url}/api/informatica/meio-pagamento-credsystem.xsjs?idEmpresa=${idEmpresa}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`
-            const response = await axios.get(apiUrl)
-            
-            // const response = await getMeioPagamentoCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
+          
+            const response = await getMeioPagamentoCredSystem(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize)
         
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -503,9 +512,8 @@ class InformaticaControllers {
     async putInativarFuncionario(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await axios.put(`${url}/api/informatica/funcionario-inativa.xsjs`, dados)
-            // const response = await updateInativarFuncionario(dados);
-            return res.json(response.data);
+            const response = await updateInativarFuncionario(dados);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
@@ -514,10 +522,8 @@ class InformaticaControllers {
     async putRelatorioBI(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-
-            const response = await axios.put(`${url}/api/informatica/relatoriobi.xsjs`, dados)
-            // const response = await updateRelatarioBI(dados);
-            return res.json(response.data);
+            const response = await updateRelatarioBI(dados);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
@@ -526,10 +532,8 @@ class InformaticaControllers {
     async putLinkRelatorioBI(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await axios.put(`${url}/api/informatica/linkrelatoriobi.xsjs`, dados)
-
-            // const response = await updateLinkRelatarioBI(dados);
-            return res.json(response.data);
+            const response = await updateLinkRelatarioBI(dados);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
@@ -540,9 +544,9 @@ class InformaticaControllers {
     async putAtualizaEmpresaDiario(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.put(`${url}/api/informatica/atualiza-empresa-diario.xsjs`, dados)
-            // const response = await updateAtualizaEmpresaDiario(dados)
-            return res.json(response.data);
+            const response = await updateAtualizaEmpresaDiario(dados)
+        
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -553,11 +557,9 @@ class InformaticaControllers {
     async putAtualizarTodosCaixas(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.put(`${url}/api/informatica/atualizar_todos_caixa.xsjs`, dados)
-
-            // const response = await updateAtualizarTodosCaixa(dados)
+            const response = await updateAtualizarTodosCaixa(dados)
         
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -567,10 +569,9 @@ class InformaticaControllers {
     async putFuncionarioLoja(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.put(`${url}/api/informatica/funcionario-loja.xsjs`, dados)
-            // const response = await updateFuncionario(dados)
+            const response = await updateFuncionario(dados)
         
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -579,22 +580,40 @@ class InformaticaControllers {
     async postFuncionarioLoja(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await createFuncionario(dados)
+            
+            for (const registro of dados) {
+                if (parseFloat(registro.PERC) > 50) {
+                    return res.status(400).json({ msg: "Valor desconto maior que permitido!" });
+                }
+            }
+
+           for(const registro of dados){
+                if(registro.NUCPF){
+                    const cpf = registro.NUCPF.replace(/\D/g, '');
+                    const response = await getFuncionariosLoja('', '', cpf, '');
+                    if(response.length > 0){
+                        return res.status(400).json({ msg: "CPF já cadastrado!" });
+
+                    }
+                }
+            }
+          
+
+            const response = await createFuncionario(dados);
         
             return res.json(response);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no InformaticaControllers.postFuncionarioLoja:", error);
+            return res.status(500).json({ error: error.message });
         }
     }
 
     async putFuncionarioDesconto(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.put(`${url}/api/informatica/funcionario-desconto.xsjs`, dados)
-            // const response = await updateFuncionarioDesconto(dados)
-
-            return res.json(response.data);
+            const response = await updateFuncionarioDesconto(dados)
+        
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -628,11 +647,9 @@ class InformaticaControllers {
     async postRelatorioBI(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.post(`${url}/api/informatica/relatoriobi.xsjs`, dados)
-
-            // const response = await createRelatarioBI(dados)
+            const response = await createRelatarioBI(dados)
         
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -641,11 +658,9 @@ class InformaticaControllers {
     async postLinkRelatorioBI(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.post(`${url}/api/informatica/linkrelatoriobi.xsjs`, dados)
-
-            // const response = await createLinkRelatarioBI(dados)
+            const response = await createLinkRelatarioBI(dados)
         
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

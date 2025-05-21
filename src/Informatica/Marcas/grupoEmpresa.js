@@ -1,4 +1,6 @@
 import conn from "../../config/dbConnection.js";
+import 'dotenv/config';
+const databaseSchema = process.env.HANA_DATABASE;
 
 export const getGrupoEmpresa = async () => {
   try {
@@ -12,7 +14,7 @@ export const getGrupoEmpresa = async () => {
           WHEN e2.IDGRUPOEMPRESARIAL = 4 THEN 'FC - FREE CENTER' 
         END AS GRUPOEMPRESARIAL 
       FROM 
-        "QUALITY_CONC_HML".EMPRESA e2 
+        "${databaseSchema}".EMPRESA e2 
       WHERE 
         1 = 1
     `;
@@ -23,7 +25,7 @@ export const getGrupoEmpresa = async () => {
     return {data: result};
 
   } catch (error) {
-    console.error('Error executing query', error);
+    console.error('Erro ao executar a consulta getGrupoEmpresa', error);
     throw error;
   }
 };

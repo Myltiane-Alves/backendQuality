@@ -83,10 +83,8 @@ export const getEmpresasLista = async (idEmpresa, idSubGrupoEmpresa, page, pageS
 };
 
 export const updateEmpresa = async (empresas) => {
-    try {
-        
-        
-        var query = `
+    try { 
+        let query = `
             UPDATE "${databaseSchema}"."EMPRESA" SET 
                 "STGRUPOEMPRESARIAL" = ?, 
                 "IDGRUPOEMPRESARIAL" = ?, 

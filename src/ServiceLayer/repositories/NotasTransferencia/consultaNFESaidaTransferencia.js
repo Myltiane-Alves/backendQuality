@@ -1,14 +1,13 @@
-import { get } from "http";
 import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
-
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getAtualizaCamposNota = async (idSapOrigem, dados) => {
     try {
         
         const query = `
-            UPDATE "QUALITY_CONC_HML"."RESUMOORDEMTRANSFERENCIA"
+            UPDATE "${databaseSchema}"."RESUMOORDEMTRANSFERENCIA"
                 SET IDSTATUSSEFAZ = ?,
                 CODIGORETORNOSEFAZ = ?,
                 CHAVESEFAZ = ?,
@@ -41,7 +40,7 @@ export const getAtualizaCamposNota = async (idSapOrigem, dados) => {
         conn.commit();
         return 'True';
     } catch (error) {
-        console.error('Erro ao executar a consulta Empresas Vouchers:', error);
+        console.error('Erro ao executar a consulta Eatualiza campos nota:', error);
         throw error;
     }
 };

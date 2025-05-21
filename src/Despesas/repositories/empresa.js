@@ -28,10 +28,11 @@ export const getDespesasEmpresa = async (idEmpresa, dataPesquisaInicio, dataPesq
                 LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbdl.IDUSR = tbf.IDFUNCIONARIO  
                 LEFT JOIN "${databaseSchema}".FUNCIONARIO tbfv ON tbdl.IDFUNCIONARIO = tbfv.IDFUNCIONARIO  
             WHERE 
-            1 = ?
+            1 = 1
+
           `;
 
-        const params = [1];
+        const params = [];
 
         if (idEmpresa) {
             query += 'AND tbdl.IDEMPRESA = ?';

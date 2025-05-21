@@ -2,43 +2,43 @@ import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
 
-export const getCondicaoPagamento = async (idCondPagamento, dsCondPagamanto, idGrupoEmpresarial, page, pageSize) => {
+export const getCondicaoPagamento = async (idCondPagamento, dsCondPagamento, idGrupoEmpresarial, page, pageSize) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
         let query = `
             SELECT 
-            tbcp.IDCONDICAOPAGAMENTO,
-            tbcp.IDGRUPOEMPRESARIAL,
-            tbcp.IDEMPRESA,
-            tbcp.DSCONDICAOPAG,
-            tbcp.STPARCELADO,
-            tbcp.NUPARCELAS,
-            tbcp.NUNDIA1PAG,
-            tbcp.NUNDIA2PAG,
-            tbcp.NUNDIA3PAG,
-            tbcp.NUNDIA4PAG,
-            tbcp.NUNDIA5PAG,
-            tbcp.NUNDIA6PAG,
-            tbcp.NUNDIA7PAG,
-            tbcp.NUNDIA8PAG,
-            tbcp.NUNDIA9PAG,
-            tbcp.NUNDIA10PAG,
-            tbcp.NUNDIA11PAG,
-            tbcp.NUNDIA12PAG,
-            tbcp.TPDOCUMENTO,
-            tbcp.DTULTALTERACAO,
-            tbcp.STATIVO,
-            tbcp.QTDDIAS,
-            tbcp.IDTPDOCUMENTO,
-            t2.DSTPDOCUMENTO
+                tbcp.IDCONDICAOPAGAMENTO,
+                tbcp.IDGRUPOEMPRESARIAL,
+                tbcp.IDEMPRESA,
+                tbcp.DSCONDICAOPAG,
+                tbcp.STPARCELADO,
+                tbcp.NUPARCELAS,
+                tbcp.NUNDIA1PAG,
+                tbcp.NUNDIA2PAG,
+                tbcp.NUNDIA3PAG,
+                tbcp.NUNDIA4PAG,
+                tbcp.NUNDIA5PAG,
+                tbcp.NUNDIA6PAG,
+                tbcp.NUNDIA7PAG,
+                tbcp.NUNDIA8PAG,
+                tbcp.NUNDIA9PAG,
+                tbcp.NUNDIA10PAG,
+                tbcp.NUNDIA11PAG,
+                tbcp.NUNDIA12PAG,
+                tbcp.TPDOCUMENTO,
+                tbcp.DTULTALTERACAO,
+                tbcp.STATIVO,
+                tbcp.QTDDIAS,
+                tbcp.IDTPDOCUMENTO,
+                t2.DSTPDOCUMENTO
             FROM 
-            "${databaseSchema}".CONDICAOPAGAMENTO tbcp
-            LEFT JOIN "${databaseSchema}"."TIPODOCUMENTO" t2 on tbcp.IDTPDOCUMENTO = t2.IDTPDOCUMENTO 
+                "${databaseSchema}".CONDICAOPAGAMENTO tbcp
+                LEFT JOIN "${databaseSchema}"."TIPODOCUMENTO" t2 on tbcp.IDTPDOCUMENTO = t2.IDTPDOCUMENTO 
             WHERE 
-            1 = ?
-            AND tbcp.STATIVO='True'
+                1 = ?
+                AND tbcp.STATIVO='True'
         `;
 
         const params = [1];
@@ -53,9 +53,9 @@ export const getCondicaoPagamento = async (idCondPagamento, dsCondPagamanto, idG
             params.push(idCondPagamento);
         }
 
-        if (dsCondPagamanto) {
+        if (dsCondPagamento) {
             query += ' And tbcp.DSCONDICAOPAG LIKE ? OR tbcp.DSCONDICAOPAG LIKE ? ';
-            params.push(`%${dsCondPagamanto}% `, `%${dsCondPagamanto}%`);
+            params.push(`%${dsCondPagamento}% `, `%${dsCondPagamento}%`);
         }
         const offset = (page - 1) * pageSize;
         query += ' LIMIT ? OFFSET ?';
@@ -81,7 +81,7 @@ export const getCondicaoPagamento = async (idCondPagamento, dsCondPagamanto, idG
 export const updateCondicaoPagamento = async (dados) => {
     try {
         const queryUpdate = `
-            UPDATE "${databaseSchema}"."CONDICAOPAGAMENTO" SET 
+             UPDATE "${databaseSchema}"."CONDICAOPAGAMENTO" SET 
                 "IDGRUPOEMPRESARIAL" = ?, 
                 "DSCONDICAOPAG" = ?, 
                 "STPARCELADO" = ?, 
@@ -180,7 +180,7 @@ export const createCondicaoPagamento = async (dados) => {
         const statement = await conn.prepare(queryInsert);
 
         for (const dado of dados) {
-            const [result] = await conn.exec(queryId); // Obtem o próximo ID
+            const [result] = await conn.exec(queryId); 
             const nextId = result.NEXT_ID;
 
             const params = [

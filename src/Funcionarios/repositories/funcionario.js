@@ -1,45 +1,6 @@
 import conn from "../../config/dbConnection.js";
-
-// export const getFuncionarios = async () => {
-//   try {
-//     const sql = `
-//       SELECT 
-//         tbf.ID,
-//         tbf.IDFUNCIONARIO,
-//         tbf.IDGRUPOEMPRESARIAL,
-//         tbf.IDSUBGRUPOEMPRESARIAL,
-//         IFNULL(tbf.IDEMPRESA, 1) AS IDEMPRESA,
-//         tbf.NOFUNCIONARIO,
-//         tbf.IDPERFIL,
-//         tbf.NUCPF,
-//         tbf.NOLOGIN,
-//         tbf.PWSENHA,
-//         tbf.DSFUNCAO,
-//         IFNULL(TO_VARCHAR(tbf.DATAULTIMAALTERACAO, 'YYYY-MM-DD HH:MM:SS'), TO_VARCHAR(NOW(), 'YYYY-MM-DD HH:MM:SS')) AS DTULTALTERACAO,
-//         tbf.VALORSALARIO,
-//         tbf.DATA_DEMISSAO,
-//         tbf.PERC,
-//         tbf.STATIVO,
-//         IFNULL(tbf.PERCDESCPDV, 0) AS PERCDESCPDV,
-//         tbf.DSTIPO,
-//         IFNULL(tbf.VALORDISPONIVEL, 0) AS VALORDISPONIVEL,
-//         IFNULL(TO_VARCHAR(tbf.DTINICIODESC, 'YYYY-MM-DD HH:MM:SS'), '') AS DTINICIODESC,
-//         IFNULL(TO_VARCHAR(tbf.DTFIMDESC, 'YYYY-MM-DD HH:MM:SS'), '') AS DTFIMDESC,
-//         IFNULL(tbf.PERCDESCUSUAUTORIZADO, 0) AS PERCDESCUSUAUTORIZADO
-//       FROM 
-//         QUALITY_CONC_HML.FUNCIONARIO tbf
-//     `;
-
-//     const statement = conn.prepare(sql);
-//     const result = await statement.exec();
-
-
-//     return result;
-//   } catch (error) {
-//     console.error('Erro ao executar a consulta Funcionarios:', error);
-//     throw error;
-//   }
-// };
+import 'dotenv/config';
+const databaseSchema = process.env.HANA_DATABASE;
 
 export const getFuncionarios = async (
   page, 
@@ -73,7 +34,7 @@ export const getFuncionarios = async (
         IFNULL(TO_VARCHAR(tbf.DTFIMDESC, 'YYYY-MM-DD HH:MM:SS'), '') AS DTFIMDESC,
         IFNULL(tbf.PERCDESCUSUAUTORIZADO, 0) AS PERCDESCUSUAUTORIZADO
       FROM 
-        QUALITY_CONC_HML.FUNCIONARIO tbf
+        ${databaseSchema}.FUNCIONARIO tbf
       LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
     `;
 
@@ -122,7 +83,7 @@ export const getFuncionariosById = async (cpf, id, idEmpresa, matricula, senha, 
         IFNULL(TO_VARCHAR(tbf.DTFIMDESC, 'YYYY-MM-DD HH:MM:SS'), '') AS DTFIMDESC,
         IFNULL(tbf.PERCDESCUSUAUTORIZADO, 0) AS PERCDESCUSUAUTORIZADO
       FROM 
-        QUALITY_CONC_HML.FUNCIONARIO tbf
+        ${databaseSchema}.FUNCIONARIO tbf
       WHERE 1 = 1`;
 
     const params = [];
@@ -174,7 +135,7 @@ export const getFuncionariosById = async (cpf, id, idEmpresa, matricula, senha, 
 export const handlePutFuncionario = async (data) => {
   try {
     const query = `
-      UPDATE QUALITY_CONC_HML."FUNCIONARIO" 
+      UPDATE ${databaseSchema}."FUNCIONARIO" 
       SET 
         "IDFUNCIONARIO" = ?, 
         "IDGRUPOEMPRESARIAL" = ?, 
@@ -234,7 +195,7 @@ export const handlePutFuncionario = async (data) => {
 export const handlePostFuncionario = async (data) => {
   try {
     const query = `
-      INSERT INTO QUALITY_CONC_HML."FUNCIONARIO" 
+      INSERT INTO ${databaseSchema}."FUNCIONARIO" 
       (
         "IDFUNCIONARIO",
         "IDGRUPOEMPRESARIAL",

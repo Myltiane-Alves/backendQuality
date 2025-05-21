@@ -8,12 +8,22 @@ export const getVendaAtiva = async (
     statusCanceladoWeb, 
     stCanceladoPDVEmitida, 
     stCanceladoPDVEmTela, 
-    statusCanceladoDepois30Minutos, cpfCliente, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize) => {
+    statusCanceladoDepois30Minutos, 
+    cpfCliente, 
+    idGrupo, 
+    idEmpresa, 
+    dataPesquisaInicio, 
+    dataPesquisaFim, 
+    ufVenda, 
+    page, 
+    pageSize
+) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(page) : 1000;
 
-        let query = `SELECT 
+        let query = `
+        SELECT 
             TEMP.NOFANTASIA, 
             TBC.IDCAIXAWEB, 
             TBC.DSCAIXA, 
@@ -30,22 +40,22 @@ export const getVendaAtiva = async (
             TBV.NFE_INFNFE_IDE_SERIE, 
             TBV.NFE_INFNFE_IDE_NNF, 
             TO_VARCHAR(TBV.DTHORAFECHAMENTO,'DD-MM-YYYY HH24:MI:SS') AS DTHORAFECHAMENTO, 
-            TBV.NFE_INFNFE_TOTAL_ICMSTOT_VNF AS VRTOTALPAGO, 
-            TBV.NFE_INFNFE_TOTAL_ICMSTOT_VPROD AS VRTOTALVENDA, 
-            TBV.NFE_INFNFE_TOTAL_ICMSTOT_VDESC AS VRTOTALDESCONTO, 
-            (SELECT IFNULL(SUM(tbvp.VRTOTALLIQUIDO),0) 
-                FROM "${databaseSchema}".VENDADETALHE tbvp 
-                WHERE tbvp.IDVENDA = TBV.IDVENDA 
-                AND tbvp.STCANCELADO = '${statusCancelado}'
-            ) AS TOTALVENDAPROD, 
+            TBV.NFE_INFNFE_TOTAL_ICMSTOT_VNF AS VRTOTALPAGO,
+            TBV.NFE_INFNFE_TOTAL_ICMSTOT_VPROD AS VRTOTALVENDA,
+            TBV.NFE_INFNFE_TOTAL_ICMSTOT_VDESC AS VRTOTALDESCONTO,
+            (SELECT IFNULL (SUM(tbvp.VRTOTALLIQUIDO),0) FROM "${databaseSchema}".VENDADETALHE tbvp WHERE tbvp.IDVENDA = TBV.IDVENDA AND (tbvp.STCANCELADO = '${statusCancelado}' ) ) AS TOTALVENDAPROD,
             TBV.TXTMOTIVOCANCELAMENTO, 
             TBV.STCONTINGENCIA,
             MOVC.STCONFERIDO,
-            TBV.PROTNFE_INFPROT_XMOTIVO
+            TBV.PROTNFE_INFPROT_CSTAT, 
+            TBV.PROTNFE_INFPROT_XMOTIVO, 
+            TBV.NFE_INFNFE_EMIT_ENDEREMIT_UF AS UF,
+            BASE64_DECODE(CAST(TBV2.XML AS NVARCHAR(40000))) AS XML_FORMATADO
         FROM 
             "${databaseSchema}".VENDA TBV 
             INNER JOIN "${databaseSchema}".CAIXA TBC ON TBV.IDCAIXAWEB = TBC.IDCAIXAWEB 
             INNER JOIN "${databaseSchema}".FUNCIONARIO TBF ON TBV.IDOPERADOR = TBF.IDFUNCIONARIO 
+            LEFT JOIN "${databaseSchema}".VENDAXML TBV2 ON TBV.IDVENDA = TBV2.IDVENDA 
             LEFT JOIN "${databaseSchema}".FUNCIONARIO TBFC ON TBV.IDUSUARIOCANCELAMENTO = TBFC.IDFUNCIONARIO 
             LEFT JOIN "${databaseSchema}".EMPRESA TEMP ON TBV.IDEMPRESA = TEMP.IDEMPRESA 
             LEFT JOIN "${databaseSchema}".MOVIMENTOCAIXA MOVC ON TBV.IDMOVIMENTOCAIXAWEB = MOVC.ID 
@@ -102,6 +112,10 @@ export const getVendaAtiva = async (
         if (dataPesquisaInicio && dataPesquisaFim) {
             query += ' AND (TBV.DTHORAFECHAMENTO BETWEEN ? AND ?)';
             params.push(`${dataPesquisaInicio} 00:00:00`, `${dataPesquisaFim} 23:59:59`);
+        }
+
+        if(ufVenda) {
+            query += ` AND CONTAINS(TBV.NFE_INFNFE_EMIT_ENDEREMIT_UF, '${ufVenda}') `;
         }
 
         query += ' ORDER BY DTHORAFECHAMENTO, TBV.IDEMPRESA ASC';

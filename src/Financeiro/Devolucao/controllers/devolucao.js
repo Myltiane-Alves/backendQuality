@@ -16,10 +16,10 @@ class DevolucaoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/financeiro/motivo-devolucao.xsjs?idMotivo=${idMotivo}&descMotivo=${descricaoMotivo}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl);
-      // const response = await getMotivoDevolucao(idMotivo, descricaoMotivo, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-      return res.json(response.data);
+
+      const response = await getMotivoDevolucao(idMotivo, descricaoMotivo, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+
+      return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -27,6 +27,10 @@ class DevolucaoControllers {
   }
 
   async updateMotivoDevolucao(req, res) {
+    // let = {DSMOTIVO, STATIVO, IDUSUARIO, IDMOTIVODEVOLUCAO} = req.body;
+    // if(!IDMOTIVODEVOLUCAO) {
+    //   return res.status(400).json({message: 'IDMOTIVODEVOLUCAO é obrigatório'});
+    // }
     try {
       const devolucoes = Array.isArray(req.body) ? req.body : [req.body];
       const response = await putMotivoDevolucao(devolucoes)

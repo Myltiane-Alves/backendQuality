@@ -3,6 +3,14 @@ import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getDetalheFechamento } from "../Detalhes/repositories/detalheFachamento.js";
 import { getFaturaPixConsolidadoLoja } from "../Faturas/repositories/faturaPixConsolidadoLoja.js";
 import { getExtratoLojaPeriodo } from "../Extrato/repositories/extratoLojaPeriodo.js";
+import { getVendasMarcaRob } from "../Vendas/repositories/vendaMarcaRob.js";
+import { updateFatura } from "../Faturas/repositories/atualizarFatura.js";
+import { getDepositoLojaConsolidado } from "../Depositos/repositories/depositoLojaConsolidado.js";
+import { getVendasMarcaMarckup } from "../Vendas/repositories/vendaMarcaMarckup.js";
+import { getPendenciasMalotes } from "../Malotes/pendenciasMalotes.js";
+import { getMalortesPorLoja, updateMalote } from "../Malotes/malotesPorLoja.js";
+import { getHistoricosMalotes } from "../Malotes/historicosMalotes.js";
+import { getVendaDetalheRecebimentoEletronico } from "../Vendas/repositories/vendaDetalheRecebimentoEletronico.js";
 // import { getVendaTotal } from "../Financeiro/Vendas/repositories/vendaTotal.js";
 // import { getTotaisVenda} from "../Financeiro/Vendas/repositories/vendaLojaPeriodo.js";
 // import { getVendasPagamentos } from "../Financeiro/Vendas/repositories/vendaPagamentos.js";
@@ -33,10 +41,90 @@ import { getExtratoLojaPeriodo } from "../Extrato/repositories/extratoLojaPeriod
 // import { getPedidosCompras } from "../Financeiro/Pedidos/repositories/pedidosCompra.js";
 // import { getMotivoDevolucao, putMotivoDevolucao } from "../Financeiro/Devolucao/repositories/motivoDevolucao.js";
 // import { getVendas } from "../repositories/repositoriesVendaTotal.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class FinanceiroControllers {
 
+
+  async getListasHistoricosMalotes(req, res) {
+    let { idEmpresa, idMalote, idHistoricoMalote, dataPesquisaInicio, dataPesquisaFim, dataConferenciaInicio, dataConferenciaFim, page, pageSize} = req.query;
+
+      idEmpresa = idEmpresa ? idEmpresa : '';
+      idMalote = idMalote ? idMalote : '';
+      idHistoricoMalote = idHistoricoMalote ? idHistoricoMalote : '';
+      dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+      dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+      dataConferenciaInicio = dataFormatada(dataConferenciaInicio) ? dataFormatada(dataConferenciaInicio) : '';
+      dataConferenciaFim = dataFormatada(dataConferenciaFim) ? dataFormatada(dataConferenciaFim) : '';
+      page = page ? page : '';
+      pageSize = pageSize ? pageSize : '';
+
+    try {
+              
+      const response = await getHistoricosMalotes(idEmpresa, idMalote, idHistoricoMalote, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+     
+      return res.json(response); 
+    } catch (error) {
+      console.error("Erro no FinanceiroControllers.getListasHistoricosMalotes verifique se os parâmetros estão sendo preenchidos:", error);
+      throw error;
+    }
+  }
+
+  async getListasMalotesLojas(req, res) {
+    let {idEmpresa, idMarca, idMalote, statusMalote, pendenciaMalote, dataPesquisaInicio, dataPesquisaFim, dataConferenciaInicio, dataConferenciaFim, page, pageSize} = req.query;
+
+   
+    idEmpresa = idEmpresa ? idEmpresa : '';
+    idMalote = idMalote ? idMalote : '';
+    statusMalote = statusMalote ? statusMalote : '';
+    pendenciaMalote = pendenciaMalote ? pendenciaMalote : '';
+    dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+    dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+    idMarca = idMarca ? idMarca : '';
+    dataConferenciaInicio = dataFormatada(dataConferenciaInicio) ? dataFormatada(dataConferenciaInicio) : '';
+    dataConferenciaFim = dataFormatada(dataConferenciaFim) ? dataFormatada(dataConferenciaFim) : '';
+    page = page ? page : '';
+    pageSize = pageSize ? pageSize : '';
+
+    try {
+                
+
+    
+      // const apiUrl = `${url}/api/financeiro/malotes-por-loja.xsjs?idGrupoEmpresarial=${idMarca}&idEmpresa=${idEmpresa}&statusMalote=${statusMalote}&idMalote=${idMalote}&idPendenciaMalote=${pendenciaMalote}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataConferenciaInicio=${dataConferenciaInicio}&dataConferenciaFim=${dataConferenciaFim}&page=${page}&pageSize=${pageSize}`
+      // console.log("apiUrl", apiUrl)
+      // const response = await axios.get(apiUrl)
+      const response = await getMalortesPorLoja(idEmpresa, idMarca, idMalote, statusMalote, pendenciaMalote, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+     
+      return res.json(response); 
+    } catch (error) {
+      console.error("Erro no FinanceiroControllers.getListasMalotes verifique se os parâmetros estão sendo preenchidos:", error);
+      throw error;
+    }
+  }
+
+  async getListaPendenciasMalotes(req, res) {
+    let { idEmpresa, idMalote, statusMalote, pendenciaMalote, page, pageSize} = req.query;
+    
+   
+      idEmpresa = idEmpresa ? idEmpresa : '';
+      idMalote = idMalote ? idMalote : '';
+      statusMalote = statusMalote ? statusMalote : '';
+      pendenciaMalote = pendenciaMalote ? pendenciaMalote : '';
+      page = page ? page : '';
+      pageSize = pageSize ? pageSize : '';
+
+      try {
+        // const apiUrl = `${url}/api/financeiro/pendencias-malotes.xsjs?idEmpresa=${idEmpresa}&idMalote=${idMalote}&statusMalote=${statusMalote}&pendenciaMalote=${pendenciaMalote}&page=${page}&pageSize=${pageSize}`
+        // const response = await axios.get(apiUrl)
+        const response = await getPendenciasMalotes(idEmpresa, idMalote, statusMalote, pendenciaMalote, page, pageSize)
+
+        return res.json(response); 
+      } catch (error) {
+        console.error("Erro no FinanceiroControllers.getListaPendenciasMalotes verifique se os parâmetros estão sendo preenchidos:", error);
+        throw error;
+      }
+    
+  }
 
   async getListaExtratoDaLojaPeriodoFinan(req, res) {
     let { idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize} = req.query;
@@ -495,21 +583,21 @@ class FinanceiroControllers {
   }
 
   async getListaVendasMarcaROB(req, res) {
-    let { idMarca, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
+    let { idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
 
     if (!isNaN(idMarca)) {
-      idMarca = Number(idMarca);
-      const pageSize = 100;
-      const offset = (pageNumber - 1) * pageSize;
+      idEmpresa = idEmpresa ? idEmpresa : '';
+      idMarca = idMarca ? idMarca : '';
       dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
       dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
 
       try {
 
-        const apiUrl = `${url}/api/financeiro/venda-marca-rob.xsjs?pageSize=500&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-        const response = await axios.get(apiUrl)
+        // const apiUrl = `${url}/api/financeiro/venda-marca-rob.xsjs?pageSize=500&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+        // const response = await axios.get(apiUrl)
+        const response = await getVendasMarcaRob(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-        return res.json(response.data);
+        return res.json(response);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;
@@ -518,24 +606,24 @@ class FinanceiroControllers {
   }
 
   async getListaVendasMarcaMarckup(req, res) {
-    let { idMarca, pageNumber, dataPesquisaInicio, dataPesquisaFim, idLoja, idLojaPesquisa } = req.query;
+    let { idEmpresa, idLoja, idLojaPesquisa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
 
     if (!isNaN(idMarca)) {
-      idMarca = Number(idMarca);
-      const pageSize = 100;
-      const offset = (pageNumber - 1) * pageSize;
+      idEmpresa = idEmpresa ? idEmpresa : 0;
+      idLoja = idLoja ? idLoja : 0;
+      idLojaPesquisa = idLojaPesquisa ? idLojaPesquisa : 0;
+      idMarca = idMarca ? idMarca : '';
       dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
       dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
-      idLoja = idLoja ? idLoja : '';
-      idLojaPesquisa = idLojaPesquisa ? idLojaPesquisa : '';
+      page = page ? page : '';
+      pageSize = pageSize ? pageSize : '';
       try {
-        // ajaxGet('api/financeiro/venda-marca-marckup.xsjs?pageSize=500&idMarca=' + IDMarcaPesqVenda + '&dataPesquisaInicio=' + datapesqinicio + '&dataPesquisaFim=' + datapesqfim + '&idLoja=' + IDLojaPesqVenda + '&idLojasPesq=' + IDLojasPesq)
-        const apiUrl = `${url}/api/financeiro/venda-marca-marckup.xsjs?pageSize=500&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLoja=${idLoja}&idLojasPesq=${idLojaPesquisa}`
-        const response = await axios.get(apiUrl)
+    
+        const response = await getVendasMarcaMarckup(idEmpresa, idLoja, idLojaPesquisa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-        return res.json(response.data);
+        return res.json(response);
       } catch (error) {
-        console.error("Unable to connect to the database:", error);
+        console.error("Erro no FinanceiroControllers getListaVendasMarcaMarckup:", error);
         throw error;
       }
     }
@@ -720,11 +808,11 @@ class FinanceiroControllers {
       pageSize = pageSize ? pageSize : '';
 
       try {
-        const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado-loja.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&lojas=${idLoja}&empresasList=${listaEmpresas}`
-        const response = await axios.get(apiUrl)
-        // const response = await getFaturaPixConsolidadoLoja(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresaLista, page, pageSize)
+        // const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado-loja.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&lojas=${idLoja}&empresasList=${listaEmpresas}`
+        // const response = await axios.get(apiUrl)
+        const response = await getFaturaPixConsolidadoLoja(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresaLista, page, pageSize)
 
-        return res.json(response.data);
+        return res.json(response);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;
@@ -780,25 +868,31 @@ class FinanceiroControllers {
   // }
 
   async getListaConciliarBancoConsolidado(req, res) {
-    let { idConta, pageSize, page, dataPesquisaInicio, dataPesquisaFim, dataCompensacaoInicio, dataCompensacaoFim, dataMovimentoInicio, dataMovimentoFim } = req.query;
-
-    pageSize = pageSize ? pageSize : '';
-    page = page ? page : '';
-    idConta = idConta ? idConta : '';
-    dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-    dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
-    dataCompensacaoInicio = dataFormatada(dataCompensacaoInicio) ? dataFormatada(dataCompensacaoInicio) : '';
-    dataCompensacaoFim = dataFormatada(dataCompensacaoFim) ? dataFormatada(dataCompensacaoFim) : '';
-    dataMovimentoInicio = dataFormatada(dataMovimentoInicio) ? dataFormatada(dataMovimentoInicio) : '';
-    dataMovimentoFim = dataFormatada(dataMovimentoFim) ? dataFormatada(dataMovimentoFim) : '';
-
+    let { idDeposito, pageSize, page, dataPesquisaInicio, dataPesquisaFim, dataCompInicio, dataCompFim, dataMovInicio, dataMovFim } = req.query;
+   
+      idDeposito = idDeposito ? idDeposito : ''; 
+      dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
+      dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+      dataCompInicio = dataFormatada(dataCompInicio) ? dataFormatada(dataCompInicio) : '';
+      dataCompFim = dataFormatada(dataCompFim) ? dataFormatada(dataCompFim) : '';
+      dataMovInicio = dataFormatada(dataMovInicio) ? dataFormatada(dataMovInicio) : '';
+      dataMovFim = dataFormatada(dataMovFim) ? dataFormatada(dataMovFim) : '';
+      pageSize = pageSize ? pageSize : '';
+      page = page ? page : '';
+    console.log(dataMovInicio, 'dataMovInicio')
+    console.log(dataMovFim, 'dataMovFim')
+    console.log(dataCompInicio, 'dataCompInicio')
+    console.log(dataCompFim, 'dataCompFim')
+    console.log(dataPesquisaInicio, 'dataPesquisaInicio')
+    console.log(dataPesquisaFim, 'dataPesquisaFim')
     try {
-      const apiUrl = `${url}/api/financeiro/deposito-loja-consolidado.xsjs?page=${page}&pageSize=${pageSize}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataCompInicio=${dataCompensacaoInicio}&dataCompFim=${dataCompensacaoFim}&datamovinicio=${dataMovimentoInicio}&datamovfim=${dataMovimentoFim}`
-      const response = await axios.get(apiUrl)
+      // const apiUrl = `${url}/api/financeiro/deposito-loja-consolidado.xsjs?page=${page}&pageSize=${pageSize}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataCompInicio=${dataCompensacaoInicio}&dataCompFim=${dataCompensacaoFim}&datamovinicio=${dataMovimentoInicio}&datamovfim=${dataMovimentoFim}`
+      // const response = await axios.get(apiUrl)
+      const response = await getDepositoLojaConsolidado(idDeposito, dataPesquisaInicio, dataPesquisaFim, dataCompInicio, dataCompFim, dataMovInicio, dataMovFim, pageSize, page,)
 
-      return res.json(response.data);
+      return res.json(response);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Erro no FinanceiroController.getListaConciliarBancoConsolidado:", error);
       throw error;
     }
 
@@ -875,7 +969,7 @@ class FinanceiroControllers {
 
   // }
   async getListaDetalheRecebimentosEletronico(req, res) {
-    let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim, nomeTef, nomeAutorizador, numeroParcelas } = req.query;
+    let { idEmpresa, dataPesquisaInicio, dataPesquisaFim, nomeTef, nomeAutorizador, numeroParcelas, page, pageSize } = req.query;
 
 
     idEmpresa = idEmpresa ? idEmpresa : '';
@@ -884,12 +978,15 @@ class FinanceiroControllers {
     nomeTef = nomeTef ? nomeTef : '';
     nomeAutorizador = nomeAutorizador ? nomeAutorizador : '';
     numeroParcelas = numeroParcelas ? numeroParcelas : '';
+    page = page ? page : '';
+    pageSize = pageSize ? pageSize : '';
     try {
       // ajaxGet('api/financeiro/venda-detalhe-recebimento-eletronico.xsjs?idEmpresa=' + IDEmpresaPesqVenda + '&dataPesquisaInicio=' + datapesqinicio +'&dataPesquisaFim=' + datapesqfim +'&nomeTef=' + nomeTef +'&nomeAutorizador=' + nomeAutorizador +'&numeroParcelas=' + numeroParcelas)
-      const apiUrl = `${url}/api/financeiro/venda-detalhe-recebimento-eletronico.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&nomeTef=${nomeTef}&nomeAutorizador=${nomeAutorizador}&numeroParcelas=${numeroParcelas}`
-      const response = await axios.get(apiUrl)
+      // const apiUrl = `${url}/api/financeiro/venda-detalhe-recebimento-eletronico.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&nomeTef=${nomeTef}&nomeAutorizador=${nomeAutorizador}&numeroParcelas=${numeroParcelas}`
+      // const response = await axios.get(apiUrl)
+      const response = await getVendaDetalheRecebimentoEletronico(idEmpresa, dataPesquisaInicio, dataPesquisaFim, nomeTef, nomeAutorizador, numeroParcelas, page, pageSize)
 
-      return res.json(response.data);
+      return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -1190,30 +1287,21 @@ class FinanceiroControllers {
   //   }
   // }
 
-  async updateFaturaFinanceiro(req, res) {
-    let { 
-      IDDETALHEFATURA,
-      NUCODAUTORIZACAO,
-      VRRECEBIDO,
-      NUAUTORIZACAO,
-      STPIX,
-      STCANCELADO } = req.body;
+  async putFaturaFinanceiro(req, res) {
+    let {IDDETALHEFATURA, NUCODAUTORIZACAO, VRRECEBIDO, NUAUTORIZACAO, STPIX, STCANCELADO } = req.body;
 
-    try {
-      const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/atualizar-fatura.xsjs`
-      const response = await axios.put(apiUrl, {
-        NUCODAUTORIZACAO,
-        VRRECEBIDO,
-        STCANCELADO,
-        STPIX,
-        NUAUTORIZACAO,
-        IDDETALHEFATURA,
-      })
+    if(IDDETALHEFATURA == undefined || IDDETALHEFATURA == '') {
+      try {
+        const response = await updateFatura(IDDETALHEFATURA, NUCODAUTORIZACAO, VRRECEBIDO, NUAUTORIZACAO, STPIX, STCANCELADO)
+  
+        return res.json(response);
+      } catch (error) {
+        console.error("Erro no FinanceiroControllers.updateFaturaFinanceiro:", error);
+        throw error;
+      }
 
-      return res.json(response.data);
-    } catch (error) {
-      console.error("Unable to connect to the database:", error);
-      throw error;
+    } else {
+      console.error("Erro no FinanceiroControllers.updateFaturaFinanceiro: Faltando Parametos obrigatórios", error);
     }
   }
 
@@ -1293,6 +1381,36 @@ class FinanceiroControllers {
   //     throw error;
   //   }
   // }
+ 
+  async putMalotesLoja(req, res) {
+        
+    try {
+        let { IDMALOTE, STATUS, OBSERVACAOADMINISTRATIVO, PENDENCIAS, IDUSERULTIMAALTERACAO } = req.body;
+    
+        if(!IDMALOTE || IDUSERULTIMAALTERACAO) {
+          console.error("Erro no FinanceiroControllers.putMalotes: Faltando Parametos obrigatórios", error);
+          return res.status(400).json({ error: "Faltando Parametos obrigatórios" });
+        }
+        const apiUrl = `${url}/api/financeiro/malote-loja.xsjs`;
+        const response = await axios.put(apiUrl, {
+          IDMALOTE,
+          STATUS,
+          OBSERVACAOADMINISTRATIVO,
+          PENDENCIAS,
+          IDUSERULTIMAALTERACAO
+        })
+        // const response = await updateMalote(IDMALOTE, IDUSERULTIMAALTERACAO)
+        console.log(response.data, 'response.data')
+        if (response.status !== 200) {
+          console.error("Erro no FinanceiroControllers.putMalotes: Erro ao atualizar malote", response.data);
+          return res.status(response.status).json({ error: "Erro ao atualizar malote" });
+        }
+        return res.status(200).json(response.data);
+      } catch (error) {
+        console.error("Erro no FinanceiroControllers.putMalotes:", error);
+        return res.status(500).json({ error: "Erro no servidor" });
+    }
+  }
 }
 
 

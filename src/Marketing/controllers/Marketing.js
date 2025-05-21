@@ -17,11 +17,11 @@ class MarketingControllers {
             codeBarsOuNome = codeBarsOuNome ? codeBarsOuNome : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const apiUrl = `${url}/api/produto-promocao.xsjs?codeBarsOuNome=${descricaoProduto}`
-            const response = await axios.get(apiUrl)
-            // const response = await getProdutoPromocao(idProduto, codeBarsOuNome, page, pageSize)
+            // const apiUrl = `${url}/api/produto-promocao.xsjs?codeBarsOuNome=${descricaoProduto}`
+            // const response = await axios.get(apiUrl)
+            const response = await getProdutoPromocao(idProduto, codeBarsOuNome, page, pageSize)
     
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -34,11 +34,11 @@ class MarketingControllers {
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const apiUrl = `${url}/api/promocao/listapromocao.xsjs?idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`  
-            const response = await axios.get(apiUrl)
-            // const response = await getPromocao(idResumoPromocao, page, pageSize)
+            // const apiUrl = `${url}/api/promocao/listapromocao.xsjs`
+            // const response = await axios.get(apiUrl)
+            const response = await getPromocao(idResumoPromocao, page, pageSize)
     
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -51,11 +51,11 @@ class MarketingControllers {
             idCampanha = idCampanha ? idCampanha : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
-            const apiUrl = `${url}/api/campanha/todos.xsjs`
-            const response = await axios.get(apiUrl)
-            // const response = await getCampanhaEmpresa(idCampanha, page, pageSize)
+            // const apiUrl = `${url}/api/campanha/todos.xsjs`
+            // const response = await axios.get(apiUrl)
+            const response = await getCampanhaEmpresa(idCampanha, page, pageSize)
     
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -71,12 +71,9 @@ class MarketingControllers {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
 
-            const apiUrl = `${url}/api/campanha/cliente.xsjs?cpf=${cpf}&telefone=${telefone}&idCampanha=${idCampanha}&page=${page}&pageSize=${pageSize}`
-          
-            const response = await axios.get(apiUrl)
-            // const response = await getCampanhaCliente(cpf,telefone, idCampanha, page, pageSize)
+            const response = await getCampanhaCliente(cpf,telefone, idCampanha, page, pageSize)
     
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -86,12 +83,10 @@ class MarketingControllers {
 
     async putCampanhaCliente(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];  
-
-            const response = await axios.put(`${url}/api/campanha/cliente.xsjs`, dados)
-            // const response = await  updateCampanhaCLiente(dados)
+            const dados = Array.isArray(req.body) ? req.body : [req.body];   
+            const response = await  updateCampanhaCLiente(dados)
         
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -125,10 +120,9 @@ class MarketingControllers {
     async postCampanhaCliente(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.post(`${url}/api/campanha/cliente.xsjs`, dados)
-            // const response = await  createCampanhaCLiente(dados)
+            const response = await  createCampanhaCLiente(dados)
         
-            return res.json(response.adat);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -137,11 +131,9 @@ class MarketingControllers {
     async postCampanhaEmpresa(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-
-            const response = await axios.post(`${url}/api/campanha/todos.xsjs`, dados)
-            
-            // const response = await createCampanhaEmpresa(dados)
-            return res.json(response.data);
+            const response = await createCampanhaEmpresa(dados)
+        
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -151,11 +143,9 @@ class MarketingControllers {
     async postProdutoPromocao(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await axios.post(`${url}/api/produto-promocao.xsjs`, dados)
-
-            // const response = await createProdutoPromocao(dados)
-        
-            return res.json(response.data);
+            const response = await createProdutoPromocao(dados)
+            console.log('response', response)
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

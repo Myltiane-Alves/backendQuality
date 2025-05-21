@@ -8,6 +8,9 @@ const doc = {
     title: 'API SOFQUALITY',
     description: 'Descrição da API SOFQUALITY',
   },
+  host: 'localhost:3000',
+  basePath: '/api',
+  schemes: ['http'],
   definitions: {
     Funcionario: {
       $ID: 22824,
@@ -33,7 +36,7 @@ const doc = {
       $DTFIMDESC: "2050-12-31 12:12:00",
       $PERCDESCUSUAUTORIZADO: "0.00"
     },
-    Loja: {
+    Empresas: {
       $IDEMPRESA: 1,
       $STGRUPOEMPRESARIAL: 1,
       $IDGRUPOEMPRESARIAL: 1,

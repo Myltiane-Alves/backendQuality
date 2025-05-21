@@ -4,11 +4,11 @@ const databaseSchema = process.env.HANA_DATABASE;
 
 export const getVendasPorProdutos = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize) => {
     try {
-        // Definindo valores padrão para paginação
+ 
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
-        // Construção da query
+     
         let query = `
             SELECT DISTINCT 
                 v2.IDVENDA,
@@ -29,7 +29,6 @@ export const getVendasPorProdutos = async (idEmpresa, dataPesquisaInicio, dataPe
 
         const params = [];
 
-        // Filtros opcionais
         if (idEmpresa) {
             query += ` AND v2.IDEMPRESA = ? `;
             params.push(idEmpresa);
@@ -49,7 +48,6 @@ export const getVendasPorProdutos = async (idEmpresa, dataPesquisaInicio, dataPe
         const offset = (page - 1) * pageSize;
         params.push(pageSize, offset);
 
-        // Executando a consulta
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
 

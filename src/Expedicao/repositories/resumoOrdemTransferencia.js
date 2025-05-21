@@ -30,6 +30,7 @@ export const getResumoOrdemTransferencia = async (idEmpresaDestino, idEmpresaOri
                 rot.TPVOLUME,
                 rot.VRTOTALCUSTO,
                 rot.VRTOTALVENDA,
+                rot.ERRORLOGSAP,
                 IFNULL(TO_VARCHAR(rot.DTRECEPCAO, 'YYYY-MM-DD HH24:MI:SS'), '') AS DTRECEPCAO,
                 IFNULL(TO_VARCHAR(rot.DTRECEPCAO, 'DD/MM/YYYY'), 'Não Informado') AS DTRECEPCAOFORMATADA,
                 rot.IDOPERADORRECEPTOR,
@@ -246,8 +247,6 @@ export const createResumoOrdemTransferencia = async (dados) => {
     }
 };
 
-
-
 export const updateResumoOrdemTransferencia = async (bodyJson) => {
     try {
         const { IDSTATUSOT, IDRESUMOOT  } = bodyJson[0] || {};
@@ -322,7 +321,7 @@ export const updateResumoOrdemTransferencia = async (bodyJson) => {
 
         // rotina para atualizar a quantidade recepcionada da OT, bem como incluir produtos nãos listados na origem
 
-        if(idStatusOt === 4) {
+        if (idStatusOt === 4) {
             let query4 = `
                 UPDATE "${databaseSchema}"."RESUMOORDEMTRANSFERENCIA" SET 
                 "QTDTOTALITENSRECEPCIONADO" = ?, "DTRECEPCAO" = NOW(), "IDOPERADORRECEPTOR" = ?, "DTULTALTERACAO" = NOW() 
@@ -332,20 +331,159 @@ export const updateResumoOrdemTransferencia = async (bodyJson) => {
             const params4 = [
                 bodyJson.QTDTOTALITENSRECEPCIONADO,
                 bodyJson.IDOPERADORRECEPTOR,
-                idResumoOT
+                idResumoOT,
             ];
-
             await statement4.exec(params4);
 
-            let querydetupd4 = `
+            for (const detalhe of bodyJson.dadosdetalheot) {
+                let queryCheckProduto = `
+                    SELECT COUNT(1) AS "COUNT" 
+                    FROM "${databaseSchema}"."DETALHEORDEMTRANSFERENCIA" 
+                    WHERE "STATIVO" = 'True' AND "IDRESUMOOT" = ? AND "IDPRODUTO" = ?
+                `;
+                const checkProdutoStmt = await conn.prepare(queryCheckProduto);
+                const checkProdutoParams = [idResumoOT, detalhe.IDPRODUTO];
+                const result = await checkProdutoStmt.exec(checkProdutoParams);
+
+                if (result[0].COUNT > 0) {
+                    let queryUpdateDetalhe = `
+                        UPDATE "${databaseSchema}"."DETALHEORDEMTRANSFERENCIA" SET 
+                        "QTDRECEPCAO" = ?, "STCONFERIDO" = ? 
+                        WHERE "IDRESUMOOT" = ? AND "IDPRODUTO" = ?
+                    `;
+                    const statementUpdateDetalhe = await conn.prepare(queryUpdateDetalhe);
+                    const paramsUpdateDetalhe = [
+                        detalhe.QTDRECEPCAO,
+                        detalhe.STCONFERIDO,
+                        idResumoOT,
+                        detalhe.IDPRODUTO,
+                    ];
+                    await statementUpdateDetalhe.exec(paramsUpdateDetalhe);
+                } else {
+                    let queryInsertDetalhe = `
+                        INSERT INTO "${databaseSchema}"."DETALHEORDEMTRANSFERENCIA" (
+                            "IDDETALHEOT", "IDPRODUTO", "IDRESUMOOT", "QTDEXPEDICAO", 
+                            "QTDRECEPCAO", "QTDDIFERENCA", "QTDAJUSTE", "VLRUNITVENDA", 
+                            "VLRUNITCUSTO", "STCONFERIDO", "IDUSRAJUSTE", "STATIVO", 
+                            "STFALTA", "STSOBRA"
+                        ) VALUES (
+                            "${databaseSchema}".SEQ_DETALHEORDEMTRANSFERENCIA.NEXTVAL, ?, ?, ?, 
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        )
+                    `;
+                    const statementInsertDetalhe = await conn.prepare(queryInsertDetalhe);
+                    const paramsInsertDetalhe = [
+                        detalhe.IDPRODUTO,
+                        idResumoOT,
+                        detalhe.QTDEXPEDICAO,
+                        detalhe.QTDRECEPCAO,
+                        detalhe.QTDDIFERENCA,
+                        detalhe.QTDAJUSTE,
+                        detalhe.VLRUNITVENDA,
+                        detalhe.VLRUNITCUSTO,
+                        detalhe.STCONFERIDO,
+                        detalhe.IDUSRAJUSTE || null,
+                        detalhe.STATIVO,
+                        detalhe.STFALTA,
+                        detalhe.STSOBRA,
+                    ];
+                    await statementInsertDetalhe.exec(paramsInsertDetalhe);
+                }
+            }
+        }
+
+        // rotina para excluir produtos que foram incluídos na recepção
+
+        if (idStatusOt === 5) {
+            const countQuery = `
+                SELECT COUNT(1) AS COUNT 
+                FROM "${databaseSchema}".DETALHEORDEMTRANSFERENCIA 
+                WHERE STATIVO = 'True' AND IDRESUMOOT = ? AND IDPRODUTO = ?
+            `;
+            const countResult = await conn.exec(countQuery, [idResumoOT, bodyJson.IDPRODUTO]);
+
+            if (countResult[0]?.COUNT > 0) {
+                const deleteQuery = `
+                    DELETE FROM "VAR_DB_NAME".DETALHEORDEMTRANSFERENCIA 
+                    WHERE IDRESUMOOT = ? AND IDPRODUTO = ?
+                `;
+                await conn.exec(deleteQuery, [idResumoOT, bodyJson.IDPRODUTO]);
+            }
+        }
+
+
+        // rotina para realizar o fechamento da recepção da OT
+        if(idStatusOt === 6) {
+            const query6 = `CALL "${databaseSchema}".SP_FINALIZAROT(?, ?)`;
+            const statement6 = await conn.prepare(query6);
+            const params6 = [idResumoOT, bodyJson.IDOPERADORRECEPTOR, bodyJson.QTDCONFERENCIA];
+            await statement6.exec(params6);
+        }
+
+        // rotina para atualizar os produtos da OT, bem como incluir produtos nãos listados na origem, no momento do Ajuste (Prevenção e Perdas)
+
+        if(idStatusOt === 7) {
+            const querydetupd7 = `
                 UPDATE "${databaseSchema}"."DETALHEORDEMTRANSFERENCIA" 
-                SET "QTDRECEPCAO" = ?, "STCONFERIDO" = ? 
+                SET "QTDAJUSTE" = ?, "IDUSRAJUSTE" = ? 
                 WHERE "IDRESUMOOT" = ? AND "IDPRODUTO" = ?
             `;
-            const statementdetupd4 = await conn.prepare(querydetupd4);
 
-           
-          
+            for(const detalhe of bodyJson.dadosdetalheot) {
+                let idProduto = detalhe.IDPRODUTO;
+
+                const countQuery = `
+                    SELECT COUNT(1) 
+                    FROM "${databaseSchema}".DETALHEORDEMTRANSFERENCIA
+                    WHERE STATIVO = \'True\' 
+                    AND IDRESUMOOT = ? AND IDPRODUTO = ? 
+                `;
+
+                const countResult = await conn.query(countQuery, [idResumoOT, idProduto]);
+                if(countResult.rows[0].count > 0) {
+                    await conn.query(querydetupd7, [
+                        detalhe.QTDAJUSTE,
+                        detalhe.IDUSRAJUSTE,
+                        idResumoOT,
+                        idProduto,
+                    ]);
+                } else {
+                    const querydetins7 = `
+                        INSERT INTO "${databaseSchema}"."DETALHEORDEMTRANSFERENCIA" (
+                        "IDDETALHEOT", "IDPRODUTO", "IDRESUMOOT", "QTDEXPEDICAO", 
+                        "QTDRECEPCAO", "QTDDIFERENCA", "QTDAJUSTE", "VLRUNITVENDA", 
+                        "VLRUNITCUSTO", "STCONFERIDO", "IDUSRAJUSTE", "STATIVO", 
+                        "STFALTA", "STSOBRA"
+                        ) VALUES (
+                        "${databaseSchema}".SEQ_DETALHEORDEMTRANSFERENCIA.NEXTVAL,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    `;
+                    await conn.query(querydetins7, [
+                        idProduto,
+                        idResumoOT,
+                        detalhe.QTDEXPEDICAO,
+                        detalhe.QTDRECEPCAO,
+                        detalhe.QTDDIFERENCA,
+                        detalhe.QTDAJUSTE,
+                        detalhe.VLRUNITVENDA,
+                        detalhe.VLRUNITCUSTO,
+                        detalhe.STCONFERIDO,
+                        detalhe.IDUSRAJUSTE || null,
+                        detalhe.STATIVO,
+                        detalhe.STFALTA,
+                        detalhe.STSOBRA,
+                    ]);
+                }
+
+            }
+        }
+
+
+        // rotina para realizar o encerramento  OT
+        if(idStatusOt === 8) {
+            const query6 = `CALL "${databaseSchema}".SP_ENCERRAROT (?, ?, ?, ?)`;
+            const statement6 = await conn.prepare(query6);
+            const params6 = [idResumoOT, bodyJson.IDUSRAJUSTE, bodyJson.IDSTDIVERGENCIA, bodyJson.OBSDIVERGENCIA];
+            await statement6.exec(params6);
         }
     } catch (e) {
         throw new Error(`Erro ao atualizar Resumo Ordem de Transferência: ${e.message}`);

@@ -26,3 +26,10 @@ export const dataFormatada = (value) => {
 };
 
 
+export const formatarDataMalote = (data) => {
+    const date = new Date(data); // Converte a string ou timestamp para um objeto Date
+    const ano = date.getFullYear();
+    const mes = String(date.getMonth() + 1).padStart(2, '0'); // Adiciona zero à esquerda, se necessário
+    const dia = String(date.getDate()).padStart(2, '0'); // Adiciona zero à esquerda, se necessário
+    return `${ano}-${mes}-${dia}`;
+}

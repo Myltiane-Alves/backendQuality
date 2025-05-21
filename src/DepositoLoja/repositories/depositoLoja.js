@@ -104,25 +104,6 @@ export const updateDepositoLoja = async (depositos) => {
     }
 };
 
-const ensureCorrectTypes = (deposito) => {
-    return {
-        DTDEPOSITO: new Date(deposito.DTDEPOSITO),  
-        DTMOVIMENTOCAIXA: new Date(deposito.DTMOVIMENTOCAIXA),  
-        IDEMPRESA: parseInt(deposito.IDEMPRESA) ? parseInt(deposito.IDEMPRESA) : null,  
-        IDUSR: parseInt(deposito.IDUSR) ? parseInt(deposito.IDUSR) : null,  
-        IDCONTABANCO: parseInt(deposito.IDCONTABANCO) ? parseInt(deposito.IDCONTABANCO) : null,  
-        VRDEPOSITO: parseFloat(deposito.VRDEPOSITO),  
-        DSHISTORIO: String(deposito.DSHISTORIO || ""),  
-        NUDOCDEPOSITO: String(deposito.NUDOCDEPOSITO || ""),  
-        DSPATHDOCDEPOSITO: String(deposito.DSPATHDOCDEPOSITO || ""),  
-        STATIVO: String(deposito.STATIVO || ""),  
-        STCANCELADO: String(deposito.STCANCELADO || ""),  
-        IDUSRCACELAMENTO: deposito.IDUSRCACELAMENTO ? parseInt(deposito.IDUSRCACELAMENTO) : null,
-        DSMOTIVOCANCELAMENTO: String(deposito.DSMOTIVOCANCELAMENTO || "")  
-    };
-
-};
-
 export const createDepositoLoja = async (depositos) => {
     try {
         const query = `

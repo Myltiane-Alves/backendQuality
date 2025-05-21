@@ -1,5 +1,7 @@
 import conn from "../../../config/dbConnection.js";
+import 'dotenv/config';
 
+const databaseSchema = process.env.HANA_DATABASE;
 
 export const getResumoVoucher = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page) => {
 
@@ -17,9 +19,9 @@ export const getResumoVoucher = async (idEmpresa, dataPesquisaInicio, dataPesqui
             tbf.NOFUNCIONARIO,
             tbf.NOLOGIN
         FROM 
-            "QUALITY_CONC_HML".RESUMOVOUCHER tbrv
-            INNER JOIN "QUALITY_CONC_HML".CAIXA tbc ON tbc.IDCAIXAWEB = tbrv.IDCAIXADESTINO
-            LEFT JOIN "QUALITY_CONC_HML".FUNCIONARIO tbf ON tbf.IDFUNCIONARIO = tbrv.IDUSRINVOUCHER
+            "${databaseSchema}".RESUMOVOUCHER tbrv
+            INNER JOIN "${databaseSchema}".CAIXA tbc ON tbc.IDCAIXAWEB = tbrv.IDCAIXADESTINO
+            LEFT JOIN "${databaseSchema}".FUNCIONARIO tbf ON tbf.IDFUNCIONARIO = tbrv.IDUSRINVOUCHER
         WHERE 
             1 = 1
         AND tbrv.STCANCELADO = 'False'
@@ -44,7 +46,12 @@ export const getResumoVoucher = async (idEmpresa, dataPesquisaInicio, dataPesqui
         const statement = conn.prepare(query);
         const result = statement.exec(params);
 
-        return result;
+        return {
+            page: page,
+            pageSize: pageSize,
+            rows: result.length,
+            data: result,
+        }
     } catch (error) {
         console.error('Error executing query', error);
         throw error;

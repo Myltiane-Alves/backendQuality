@@ -9,7 +9,7 @@ import { getConsolidarBalanco, updateConsolidarBalanco } from "../repositories/c
 import { getPrestacaoContasBalanco } from "../repositories/prestacaoContaBalanco.js";
 import { getNovoPreviaBalanco } from "../repositories/novoPreviaBalanco.js";
 import { createDetalheBalancoAvulso, getDetalheBalancoAvulso, putDetalheBalancoAvulso } from "../repositories/detalheBalancoAvulso.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class AdmBalancoControllers {
     async getListaBalancoLoja(req, res) {
@@ -23,12 +23,10 @@ class AdmBalancoControllers {
         pageSize = pageSize ? Number(pageSize) : '';
         
         try {
-            // http://164.152.245.77:/api/administrativo/balanco-loja.xsjs?page=1&idEmpresa=1&dataInicial=2024-12-07&dataFinal=2024-12-07&DSdesc=
-            const apiUrl = `${url}/api/administrativo/balanco-loja.xsjs?idEmpresa=${idEmpresa}&dsDescricao=${dsDescricao}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getBalancoLoja(idEmpresa, dsDescricao, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
+
+            const response = await getBalancoLoja(idEmpresa, dsDescricao, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
         
-            return res.json(response.data);
+            return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -80,10 +78,9 @@ class AdmBalancoControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            const apiUrl = `${url}/api/administrativo/preparar-primeiro-balanco-loja.xsjs?idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`
-            const response = await axios.get(apiUrl)
-            // const response = await getPrepararPrimeiroBalancoLoja(idEmpresa, page, pageSize)
-            return res.json(response.data); 
+            
+            const response = await getPrepararPrimeiroBalancoLoja(idEmpresa, page, pageSize)
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -137,7 +134,7 @@ class AdmBalancoControllers {
             // const response = await getPrestacaoContasBalanco(idResumoBalanco, page, pageSize)
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no AdministrativoControllers.getListaPrestacaoDeContas:", error);
             throw error;
         }
         
@@ -168,10 +165,10 @@ class AdmBalancoControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            const apiUrl = `${url}/api/administrativo/detalhe-balanco-avulso.xsjs?idfilial=${idFilial}&coletor=${coletor}`;
-            const response = await axios.get(apiUrl)
-            // const response = await getDetalheBalancoAvulso(idFilial, coletor, page, pageSize)
-            return res.json(response.data); 
+            // const apiUrl = `${url}/api/administrativo/detalhe-balanco-avulso.xsjs?idfilial=${idFilial}&coletor=${coletor}`;
+            // const response = await axios.get(apiUrl)
+            const response = await getDetalheBalancoAvulso(idFilial, coletor, page, pageSize)
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -219,7 +216,6 @@ class AdmBalancoControllers {
         try {
             const detalhes = Array.isArray(req.body) ? req.body : [req.body];   
             const response = await putDetalheBalancoAvulso(detalhes)
-        
             return res.json(response);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
@@ -234,7 +230,8 @@ class AdmBalancoControllers {
         
             return res.json(response);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no Controllers.postDetalheBalanco:", error);
+            return res.status(500).json({ error: error.message });
             throw error;
         }
     }

@@ -1,9 +1,71 @@
 import axios from "axios";
 import { createCliente, getCliente,  updateCliente } from "../cliente/index.js";
+import { createMalote, getMalortesPorLoja, updateMalote } from "../Malotes/repositories/malotesPorLoja.js";
+import { getDetalhesMalortesPorLoja } from "../Malotes/repositories/detalhesMalotesPorLoja.js";
+import { dataFormatada, formatarDataMalote } from "../../utils/dataFormatada.js";
 
 let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class GerenciaControllers {
+    async getListaDetalhesMalortesPorLoja(req, res) {
+        let {idEmpresa, idMalote, status, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
+        idEmpresa = idEmpresa ? idEmpresa : ''
+        idMalote = idMalote ? idMalote : ''
+        status = status ? status : ''
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : ''
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : ''
+        page = page ? page : ''
+        pageSize = pageSize ? pageSize : ''
+
+   
+        
+        // if (!idMalote) {
+        //     return res.status(400).json({
+        //         error: "Parâmetros inválidos. É necessário informar 'idMalote' ou 'dataPesquisaInicio' e 'dataPesquisaFim'."
+        //     });
+        // }
+
+        try {
+            // const apiUrl = `${url}/api/gerencia/detalhe-malotes-por-loja.xsjs?idMalote=${idMalote}`;
+            const response = await getDetalhesMalortesPorLoja(idMalote, page, pageSize)
+            // const response = await axios.get(apiUrl);
+            return res.json(response); 
+        } catch (error) {
+            console.error("Erro no GerenciaControllers.getDetalhesMalortesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
+            return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+        }
+    }
+    async getListaMalortesPorLoja(req, res) {
+        let { idEmpresa, idMalote, statusMalote, pendenciaMalote, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
+
+        idEmpresa = idEmpresa ? idEmpresa : ''
+        idMalote = idMalote ? idMalote : ''
+        statusMalote = statusMalote ? statusMalote : ''
+        pendenciaMalote = pendenciaMalote ? pendenciaMalote : ''
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : ''
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : ''
+        page = page ? page : ''
+        pageSize = pageSize ? pageSize : ''
+        
+        if (!idMalote && (!dataPesquisaInicio || !dataPesquisaFim)) {
+            return res.status(400).json({
+                error: "Parâmetros inválidos. É necessário informar 'idMalote' ou 'dataPesquisaInicio' e 'dataPesquisaFim'."
+            });
+        }
+
+        try {
+            // const apiUrl = `${url}/api/gerencia/malotes-por-loja.xsjs?idEmpresa=${idEmpresa}&statusMalote=${statusMalote}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
+            const response = await getMalortesPorLoja(idEmpresa, idMalote, statusMalote, pendenciaMalote, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            // const response = await axios.get(apiUrl);
+            return res.json(response); 
+        } catch (error) {
+            console.error("Erro no GerenciaControllers.getListaMalortesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
+            return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+        }
+    }
+
+
+
     async getListaCliente(req, res) {
         let { idCliente, cpfoucnpj,  page, pageSize } = req.query;
 
@@ -53,6 +115,139 @@ class GerenciaControllers {
             return res.status(500).json({ error: error.message });
         }
     }
+
+    async postMalotesPorLoja(req, res) {      
+        try {
+            const { IDEMPRESA, DATAMOVIMENTOCAIXA } = req.body;
+            const dataFormatada = formatarDataMalote(req.body.DATAMOVIMENTOCAIXA)
+            console.log('DATAMOVIMENTOCAIXA', dataFormatada)
+            // if (!IDEMPRESA || !DATAMOVIMENTOCAIXA) {
+            //     return res.status(400).json({
+            //         error: "Parâmetros inválidos. É necessário informar 'IDEMPRESA' e 'DATAMOVIMENTOCAIXA'."
+            //     });
+            // }
+            const payload = [{
+                ...req.body,
+                DATAMOVIMENTOCAIXA: dataFormatada,
+                IDEMPRESA: req.body.IDEMPRESA,
+                VRDINHEIRO: req.body.VRDINHEIRO,
+                VRCARTAO: req.body.VRCARTAO,
+                VRPOS: req.body.VRPOS,
+                VRPIX: req.body.VRPIX,
+                VRCONVENIO: req.body.VRCONVENIO,
+                VRVOUCHER: req.body.VRVOUCHER,
+                VRFATURA: req.body.VRFATURA,
+                VRFATURAPIX: req.body.VRFATURAPIX,
+                VRDESPESA: req.body.VRDESPESA,
+                VRTOTALRECEBIDO: req.body.VRTOTALRECEBIDO,
+                VRDISPONIVEL: req.body.VRDISPONIVEL,
+                IDUSERCRIACAO: req.body.IDUSERCRIACAO,
+                OBSERVACAOLOJA: req.body.OBSERVACAOLOJA,
+                IDUSERULTIMAALTERACAO: req.body.IDUSERULTIMAALTERACAO,
+                IDUSERENVIO: req.body.IDUSERENVIO,
+            }];
+
+            const response = await createMalote(payload);
+            console.log('response', response)
+            return res.json(response); 
+        } catch (error) {
+            console.error("Erro no GerenciaControllers.postMalotesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
+            return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+        }
+    }
+    // async putMalotesPorLoja(req, res) {      
+    //     try {
+    //         const { IDUSERULTIMAALTERACAO, STATUS} = req.body;
+           
+    //         if (!IDUSERULTIMAALTERACAO || !STATUS) {
+    //             return res.status(400).json({
+    //                 error: "Parâmetros inválidos. É necessário informar 'IDUSERULTIMAALTERACAO' e 'STATUS'."
+    //             });
+    //         }
+    //         console.log('req.body', req.body)
+    //         const response = await updateMalote(req.body);
+    //         return res.json(response); 
+    //     } catch (error) {
+    //         console.error("Erro no GerenciaControllers.putMalotesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
+    //         return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+    //     }
+    // }
+
+    async putMalotesPorLoja(req, res) {      
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
+    
+            for (const item of dados) {
+                const {IDMALOTE, IDUSERULTIMAALTERACAO, STATUS } = item;
+    
+                if (!IDMALOTE|| !STATUS) {
+                    return res.status(400).json({
+                        error: "Parâmetros inválidos. É necessário informar 'IDMALOTE' e 'STATUS' para cada item."
+                    });
+                }
+            }
+
+            const response = await updateMalote(dados); //
+          
+            return res.json(response);
+        } catch (error) {
+            console.error("Erro no GerenciaControllers.putMalotesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
+            return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+        }
+    }
+
+    // async postMalortesPorLoja(req, res) {
+    //     const {
+    //         IDEMPRESA,
+    //         DATAMOVIMENTOCAIXA,
+    //         VRDINHEIRO,
+    //         VRCARTAO,
+    //         VRPOS,
+    //         VRPIX,
+    //         VRCONVENIO,
+    //         VRVOUCHER,
+    //         VRFATURA,
+    //         VRFATURAPIX,
+    //         VRDESPESA,
+    //         VRTOTALRECEBIDO,
+    //         VRDISPONIVEL,
+    //         OBSERVACAOLOJA,
+    //         IDUSERCRIACAO
+    //     } = req.body;
+
+    //     if (!IDEMPRESA || !DATAMOVIMENTOCAIXA) {
+    //         return res.status(400).json({
+    //             error: "Parâmetros inválidos. É necessário informar 'IDEMPRESA' e 'DATAMOVIMENTOCAIXA'."
+    //         });
+    //     }
+
+    //     try {
+    //         const apiUrl = `${url}/api/gerencia/malotes-por-loja.xsjs`;
+    //         const payload = {
+    //             IDEMPRESA,
+    //             DATAMOVIMENTOCAIXA,
+    //             VRDINHEIRO,
+    //             VRCARTAO,
+    //             VRPOS,
+    //             VRPIX,
+    //             VRCONVENIO,
+    //             VRVOUCHER,
+    //             VRFATURA,
+    //             VRFATURAPIX,
+    //             VRDESPESA,
+    //             VRTOTALRECEBIDO,
+    //             VRDISPONIVEL,
+    //             OBSERVACAOLOJA,
+    //             IDUSERCRIACAO
+    //         };
+
+    //         const response = await axios.post(apiUrl, payload);
+    //         return res.json(response.data);
+    //     } catch (error) {
+    //         console.error("Erro no GerenciaControllers.postMalortesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
+    //         return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+    //     }
+    // }
 }
 
 export default new GerenciaControllers();

@@ -94,7 +94,7 @@ export const createDespesaTodos = async (despesas) => {
             "IDUSRCACELAMENTO",
             "DSMOTIVOCANCELAMENTO"
         ) VALUES (
-            QUALITY_CONC.SEQ_DESPESALOJA.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+           ${databaseSchema}.SEQ_DESPESALOJA.NEXTVAL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
         )
           `
 

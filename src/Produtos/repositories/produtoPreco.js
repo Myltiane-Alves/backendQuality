@@ -1,6 +1,7 @@
 import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getProdutoPrecoInformatica = async (idEmpresa, dsProduto, page, pageSize) => {
     try {
@@ -34,8 +35,8 @@ export const getProdutoPrecoInformatica = async (idEmpresa, dsProduto, page, pag
                 A.IDEMPRESA, 
                 A.LOJA 
             FROM 
-                SBO_GTO_PRD.RS_PRECO_VENDA_PDV_X_SAP A 
-            INNER JOIN "SBO_GTO_PRD"."ITM1" B ON B."ItemCode" = A.CODIGO_ITEM AND B."PriceList" = 3 
+                ${databaseSchemaSBO}.RS_PRECO_VENDA_PDV_X_SAP A 
+            INNER JOIN "${databaseSchemaSBO}"."ITM1" B ON B."ItemCode" = A.CODIGO_ITEM AND B."PriceList" = 3 
             INNER JOIN "${databaseSchema}"."VW_PRODUTO_ESTRUTURA_MERCADOLOGICA" C ON C.IDPRODUTO = B."ItemCode" 
             WHERE 1 = 1
             AND A.ID_LISTA_LOJA = ?
@@ -68,7 +69,7 @@ export const getProdutoPrecoInformatica = async (idEmpresa, dsProduto, page, pag
             data: result
         };
     } catch (error) {
-        console.error('Error executing query', error);
+        console.error('Error executar a consulta produto preço informatica', error);
         throw error;
     }
 };

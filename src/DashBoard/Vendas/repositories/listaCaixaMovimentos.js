@@ -4,6 +4,7 @@ const databaseSchema = process.env.HANA_DATABASE;
 
 export const getListaPCJ = async (idMovimento) => {
     try {
+        
         let query = `
             SELECT 
             SUM(tbv.VRRECCARTAO) AS TOTALVENDIDOCARTAO, 
@@ -24,7 +25,7 @@ export const getListaPCJ = async (idMovimento) => {
                 FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
                 INNER JOIN "${databaseSchema}".VENDA tbv1 
                 ON tbvp.IDVENDA = tbv1.IDVENDA 
-                WHERE tbv1.IDMOVIMENTOCAIXAWEB = ? 
+                WHERE tbv1.IDMOVIMENTOCAIXAWEB = ?
                 AND tbv1.STCANCELADO = 'False' 
                 AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
                 AND (tbvp.NOAUTORIZADOR = 'Credsystem' OR tbvp.NOAUTORIZADOR = 'CREDSYSTEM' OR tbvp.NOAUTORIZADOR = 'PL') 
@@ -33,13 +34,15 @@ export const getListaPCJ = async (idMovimento) => {
             FROM 
             "${databaseSchema}".VENDA tbv 
             WHERE 
-            tbv.IDMOVIMENTOCAIXAWEB = ? 
+            tbv.IDMOVIMENTOCAIXAWEB = ?
             AND tbv.STCANCELADO = 'False'
         `;
 
         const params = [idMovimento, idMovimento, idMovimento];
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params);
+
+
         if(!Array.isArray(rows) || rows.length === 0) return [];
         const lines = rows.map((det, index) => ({
             "@nItem": index + 1,
@@ -58,6 +61,7 @@ export const getListaPCJ = async (idMovimento) => {
 
 export const getObterVenda = async (idMovimento) => {
     try {
+        
         let query = `
             SELECT 
                 SUM(tbv.VRRECDINHEIRO) AS TOTALVENDIDODINHEIRO, 
@@ -107,6 +111,7 @@ export const getObterVenda = async (idMovimento) => {
         `;
 
         const params = [idMovimento, idMovimento, idMovimento, idMovimento];
+       
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params);
 
@@ -135,6 +140,7 @@ export const getObterVenda = async (idMovimento) => {
 
 export const getObterFatura = async (idEmpresa, idMovimento) => {
     try {
+        
         let query = `
             SELECT 
                 IFNULL(SUM(tbdf.VRRECEBIDO), 0) AS TOTALRECEBIDO 
@@ -148,8 +154,10 @@ export const getObterFatura = async (idEmpresa, idMovimento) => {
         `;
 
         const params = [idEmpresa, idMovimento];
+        
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params);
+
         if(!Array.isArray(rows) || rows.length === 0) return [];
         const lines = rows.map((det, index) => ({
             "@nItem": index + 1,
@@ -167,7 +175,8 @@ export const getObterFatura = async (idEmpresa, idMovimento) => {
 
 export const getObterFaturaPIX = async (idEmpresa, idMovimento) => {
     try {
-        var query = `
+        
+        let query = `
             SELECT 
              IFNULL(SUM(tbdf.VRRECEBIDO), 0) AS TOTALRECEBIDOPIX 
             FROM 
@@ -179,8 +188,11 @@ export const getObterFaturaPIX = async (idEmpresa, idMovimento) => {
                 AND tbdf.IDMOVIMENTOCAIXAWEB = ?
         `;
         const params = [idEmpresa, idMovimento];
+        
         const statement = await conn.prepare(query);
         const rows = await statement.exec(params);
+
+
         if(!Array.isArray(rows) || rows.length === 0) return [];
      
         const lines = rows.map((det, index) => ({
@@ -202,7 +214,7 @@ export const getCaixasMovimentos = async (byId, idEmpresa, dataFechamento, page,
        
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
-
+        
         let query = `
             SELECT 
                 tbmc.ID, 
@@ -223,6 +235,7 @@ export const getCaixasMovimentos = async (byId, idEmpresa, dataFechamento, page,
             WHERE 
                 1 = ? 
                 AND tbmc.STCANCELADO = 'False'
+                
         `;
             
         const params = [1];
@@ -242,32 +255,50 @@ export const getCaixasMovimentos = async (byId, idEmpresa, dataFechamento, page,
             params.push(`${dataFechamento} 00:00:00`, `${dataFechamento} 23:59:59`);
         }
 
+       
         query += `
             GROUP BY tbmc.ID, tbc.IDCAIXAWEB, tbmc.IDOPERADOR,tbf.NUCPF, tbc.DSCAIXA, tbf.NOFUNCIONARIO, tbc.IDEMPRESA, tbmc.STFECHADO, tbmc.DTABERTURA, tbmc.VRRECDINHEIRO, tbmc.STCONFERIDO
+            
         `;
 
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        params.push(pageSize, offset);
 
         const result = await conn.exec(query, params); 
         const rows = Array.isArray(result) ? result : [];
-       
-        const data = await Promise.all(rows.map(async (registro) => ({
-            caixa: {
-                ID: registro.ID,
-                IDOPERADOR: registro.IDOPERADOR,
-                VRRECDINHEIRO: registro.VRRECDINHEIRO,
-                IDCAIXAWEB: registro.IDCAIXAWEB,
-                DSCAIXA: registro.DSCAIXA,
-                NOFUNCIONARIO: registro.NOFUNCIONARIO,
-                NUCPF: registro.NUCPF,
-                DTABERTURA: registro.DTABERTURA,
-                STFECHADO: registro.STFECHADO,
-                STCONFERIDO: registro.STCONFERIDO
-            },
-            venda: await getObterVenda(registro.ID),
-            fatura: await getObterFatura(idEmpresa, registro.ID),
-            faturapix: await getObterFaturaPIX(idEmpresa, registro.ID),
-            vendapcj: await getListaPCJ(registro.ID)
-        })));
+        
+  
+        const data = await Promise.all(rows.map(async (registro) => {
+            try {
+                const venda = await getObterVenda(registro.ID);
+                const fatura = await getObterFatura(idEmpresa, registro.ID);
+                const faturapix = await getObterFaturaPIX(idEmpresa, registro.ID);
+                const vendapcj = await getListaPCJ(registro.ID);
+        
+                return {
+                    caixa: {
+                        ID: registro.ID,
+                        IDOPERADOR: registro.IDOPERADOR,
+                        VRRECDINHEIRO: registro.VRRECDINHEIRO,
+                        IDCAIXAWEB: registro.IDCAIXAWEB,
+                        DSCAIXA: registro.DSCAIXA,
+                        NOFUNCIONARIO: registro.NOFUNCIONARIO,
+                        NUCPF: registro.NUCPF,
+                        DTABERTURA: registro.DTABERTURA,
+                        STFECHADO: registro.STFECHADO,
+                        STCONFERIDO: registro.STCONFERIDO
+                    },
+                    venda,
+                    fatura,
+                    faturapix,
+                    vendapcj
+                };
+            } catch (error) {
+                console.error(`Error processing registro ID ${registro.ID}:`, error);
+                throw error; // or handle the error as needed
+            }
+        }));
         
         return {
             page: page,  

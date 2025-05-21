@@ -4,6 +4,10 @@ const databaseSchema = process.env.HANA_DATABASE;
 
 export const getDespesaLojaDashBoard = async (idDespesaLoja, idEmpresa, dataPesquisa, page, pageSize) => {
     try {
+        if (!idEmpresa) {
+            throw new Error("O Campo ID da Empresa é obrigatório!");
+        }
+        
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
         let query = `

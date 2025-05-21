@@ -20,7 +20,7 @@ export const getProdutosPedidos = async (
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
         
-        var query = `
+        let query = `
             SELECT 
                 RP.IDRESUMOPEDIDO,
                 tbdp.IDDETALHEPRODUTOPEDIDO,

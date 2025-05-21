@@ -6,7 +6,7 @@ export const getGrupoProduto = async (nome, page, pageSize) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
-        var query = `
+        let query = `
             SELECT 
                 A."IDGRUPOESTRUTURA" AS ID_GRUPO, 
                 A."DSGRUPOESTRUTURA" AS GRUPO 
@@ -19,8 +19,8 @@ export const getGrupoProduto = async (nome, page, pageSize) => {
         const params = [1];
 
         if (nome) {
-            query += ` AND A.DSGRUPOESTRUTURA LIKE ? `;
-            params.push(nome);
+            query += ` AND A.DSGRUPOESTRUTURA LIKE %${nome}% `;   
+            params.push(`%${nome}%`);
         }
 
         const statement = await conn.prepare(query);

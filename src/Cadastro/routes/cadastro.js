@@ -5,7 +5,7 @@ import CadastroControllers from '../controllers/Cadastro.js';
 const cadastroRoutes = new Router();
 
 
-cadastroRoutes.get('/listaProdutoCriadoPedidoCompra', CadastroControllers.getListaProdutoCriadoPedidoCompra)
+cadastroRoutes.get('/cadastrar-produto-Pedido', CadastroControllers.getListaProdutoCriadoPedidoCompra)
 cadastroRoutes.get('/categoriasProdutos', CadastroControllers.getListaCategoriasProduto)
 cadastroRoutes.get('/cadastrarProdutoAvulso', CadastroControllers.getListaProdutosAvulso)
 cadastroRoutes.get('/tipoProduto', CadastroControllers.getListaTipoProdutos)

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
-import { getResumoOrdemTransferencia } from "../repositories/resumoOrdemTransferencia.js";
+import { getResumoOrdemTransferencia, updateResumoOrdemTransferencia } from "../repositories/resumoOrdemTransferencia.js";
 import { getDetalheOrdemTransferencia } from "../repositories/detalheOrdemTransferencia.js";
 import { getProdutos } from "../repositories/produto.js";
 import { getRotinaMovimentacao } from "../repositories/rotinaMovimentacao.js";
@@ -12,20 +12,25 @@ class ExpedicaoControllers {
 
     async getListaProdutos(req, res,) {
         let {idEmpresa, codBarras, dsProduto, page, pageSize, } = req.query;
+    
+        if(idEmpresa != '0') {
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            codBarras = codBarras ? codBarras : '';
+            dsProduto = dsProduto ? dsProduto : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+            try {
+                // const apiUrl = `${url}/api/expedicao/produto.xsjs?idEmpresa=${idEmpresa}&descProduto=${dsProduto}&page=${page}&pageSize=${pageSize}`
+                // const response = await axios.get(apiUrl)
+                const response = await getProdutos(idEmpresa, codBarras, dsProduto, page, pageSize)
+                return res.json(response); 
+            } catch (error) {
+                console.error("Unable to connect to the database:", error);
+                throw error; 
 
-        idEmpresa = idEmpresa ? idEmpresa : '';
-        codBarras = codBarras ? codBarras : '';
-        dsProduto = dsProduto ? dsProduto : '';
-        page = page ? page : '';
-        pageSize = pageSize ? pageSize : '';
-        try {
-            const apiUrl = `${url}/api/expedicao/produto.xsjs?idEmpresa=${idEmpresa}&descProduto=${dsProduto}&page=${page}&pageSize=${pageSize}`
-            const response = await axios.get(apiUrl)
-            // const response = await getProdutos(idEmpresa, codBarras, dsProduto, page, pageSize)
-            return res.json(response.data); 
-        } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error; 
+            }
+        } else {
+            console.log('erro no ExpedicaoControllers.getListaProdutos idEmpresa é obrigatório')
         }
         
     }
@@ -43,12 +48,11 @@ class ExpedicaoControllers {
         page = page ? page : '';
 
         try {
-            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/conferencia-cega/resumo-ordem-transferencia.xsjs?page=1&idtipofiltro=2&idEmpresaOrigem=1&idEmpresaDestino=101&datapesqinicio=2024-12-09&datapesqfim=2024-12-09
             
-            const apiUrl = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=${idTipoFiltro}&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&pageSize=${pageSize}&page=${page}`)
-            const response = await axios.get(apiUrl)
-            // const response = await  getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
-            return res.json(response.data); 
+            // const apiUrl = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=${idTipoFiltro}&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&pageSize=${pageSize}&page=${page}`)
+            // const response = await axios.get(apiUrl)
+            const response = await  getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; 
@@ -108,8 +112,7 @@ class ExpedicaoControllers {
 
         try {
             // ajaxGet('api/expedicao/resumo-ordem-transferencia.xsjs?page=' + numPage + '&idtipofiltro=' + 2 + '&idEmpresaOrigem=' + IDEmpresaLogin + '&idEmpresaDestino=' + idlojadestino + '&datapesqinicio=' + datapesqinicio + '&datapesqfim=' + datapesqfim)
-            const apiUrl = `${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=2&idEmpresaOrigem=${idEmpresaLogin}&idEmpresaDestino=${idLojaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}`
-            const response = await axios.get(apiUrl)
+            const response = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=2&idEmpresaOrigem=${idEmpresaLogin}&idEmpresaDestino=${idLojaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}`)
 
             return res.json(response.data); 
         } catch (error) {
@@ -163,10 +166,10 @@ class ExpedicaoControllers {
         pageSize = pageSize ? pageSize : '';
         page = page ? page : '';
         try {
-            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/expedicao/resumo-ordem-transferencia.xsjs?page=1&idtipofiltro=2&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&idrotina=${idRotina}&dtinient=${dataPesquisaInicio}&dtfiment=${dataPesquisaFim}`)
-            // const response = await getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
+            // const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/expedicao/resumo-ordem-transferencia.xsjs?page=1&idtipofiltro=2&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&idrotina=${idRotina}&dtinient=${dataPesquisaInicio}&dtfiment=${dataPesquisaFim}`)
+            const response = await getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
             
-            return res.json(response.data); 
+            return res.json(response); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; 
@@ -235,6 +238,7 @@ class ExpedicaoControllers {
 
 
     // UPDATE
+    
     async updateOrdemTransferencia(req, res) {
         let {
             IDPRODUTO,
@@ -323,6 +327,18 @@ class ExpedicaoControllers {
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; 
+        }
+    }
+
+     async putResumoOrdemTransferencia(req, res) {
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
+            // const response = await axios.put(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs`, dados);
+            const response = await updateResumoOrdemTransferencia(dados);
+            return res.json(response);
+        } catch (error) {
+            console.error("Unable to connect to the database:", error);
+            return res.status(500).json({ error: error.message });
         }
     }
 }

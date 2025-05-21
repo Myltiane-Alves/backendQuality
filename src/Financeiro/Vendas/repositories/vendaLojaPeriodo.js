@@ -8,87 +8,57 @@ export const getTotaisVenda = async (idEmpresa, dataPesquisa, page, pageSize) =>
     pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
 
-    const query = `
-      SELECT 
-      IFNULL(SUM(tbv.VRRECDINHEIRO), 0) AS VALORTOTALDINHEIRO,
-      IFNULL(SUM(tbv.VRRECCARTAO), 0) AS VALORTOTALCARTAO,
-      IFNULL(SUM(tbv.VRRECCONVENIO), 0) AS VALORTOTALCONVENIO,
-      (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
-       FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
-       INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
-       WHERE (tbv1.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
-         AND tbv1.IDEMPRESA = '${idEmpresa}' 
-         AND tbv1.STCANCELADO = 'False' 
-         AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
-         AND tbvp.NOTEF = 'POS' 
-         AND (tbvp.DSTIPOPAGAMENTO != 'PIX')) AS VALORTOTALPOS,
-      (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
-       FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
-       INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
-       WHERE (tbv1.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
-         AND tbv1.IDEMPRESA = '${idEmpresa}' 
-         AND tbv1.STCANCELADO = 'False' 
-         AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
-         AND tbvp.NOTEF = 'PIX' 
-         AND (tbvp.DSTIPOPAGAMENTO = 'PIX')) AS VALORTOTALPIX,
-      (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
-       FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
-       INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
-       WHERE (tbv1.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
-         AND tbv1.IDEMPRESA = '${idEmpresa}' 
-         AND tbv1.STCANCELADO = 'False' 
-         AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
-         AND tbvp.NOTEF = 'POS' 
-         AND (tbvp.DSTIPOPAGAMENTO = 'MoovPay')) AS VALORTOTALMOOVPAY,
-      IFNULL(SUM(tbv.VRRECVOUCHER), 0) AS VALORTOTALVOUCHER,
-      (SELECT IFNULL(SUM(tbdf.VRRECEBIDO), 0) 
-       FROM "${databaseSchema}".DETALHEFATURA tbdf 
-       WHERE tbdf.DTPROCESSAMENTO = '${dataPesquisa}' 
-         AND tbdf.IDEMPRESA = '${idEmpresa}' 
-         AND tbdf.STCANCELADO = 'False' 
-         AND (tbdf.STPIX = 'False' OR tbdf.STPIX IS NULL)) AS VALORTOTALFATURA,
-      (SELECT IFNULL(SUM(tbdf.VRRECEBIDO), 0) 
-       FROM "${databaseSchema}".DETALHEFATURA tbdf 
-       WHERE tbdf.DTPROCESSAMENTO = '${dataPesquisa}' 
-         AND tbdf.IDEMPRESA = '${idEmpresa}' 
-         AND tbdf.STCANCELADO = 'False' 
-         AND tbdf.STPIX = 'True') AS VALORTOTALFATURAPIX,
-      (SELECT IFNULL(SUM(tbd.VRDESPESA), 0) 
-       FROM "${databaseSchema}".DESPESALOJA tbd 
-       WHERE tbd.DTDESPESA = '${dataPesquisa}' 
-         AND tbd.IDEMPRESA = '${idEmpresa}' 
-         AND tbd.STCANCELADO = 'False') AS VALORTOTALDESPESA,
-      (SELECT IFNULL(SUM(tbas.VRVALORDESCONTO), 0) 
-       FROM "${databaseSchema}".ADIANTAMENTOSALARIAL tbas 
-       WHERE tbas.DTLANCAMENTO = '${dataPesquisa}' 
-         AND tbas.IDEMPRESA = '${idEmpresa}' 
-         AND tbas.STATIVO = 'True') AS VALORTOTALADIANTAMENTOSALARIAL,
-      (SELECT IFNULL(SUM(dl.VRFISICODINHEIRO), 0) 
-       FROM "${databaseSchema}".MOVIMENTOCAIXA dl 
-       WHERE (dl.DTABERTURA BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
-         AND dl.IDEMPRESA = '${idEmpresa}' 
-         AND dl.STCANCELADO = 'False' 
-         AND dl.STFECHADO = 'True') AS VRFISICODINHEIRO,
-      (SELECT IFNULL(SUM(dl.VRAJUSTDINHEIRO), 0) 
-       FROM "${databaseSchema}".MOVIMENTOCAIXA dl 
-       WHERE (dl.DTABERTURA BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
-         AND dl.IDEMPRESA = '${idEmpresa}' 
-         AND dl.STCANCELADO = 'False' 
-         AND dl.STFECHADO = 'True') AS VRAJUSTEDINHEIRO,
-      (SELECT IFNULL(SUM(dl.VRRECDINHEIRO), 0) 
-       FROM "${databaseSchema}".MOVIMENTOCAIXA dl 
-       WHERE (dl.DTABERTURA BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
-         AND dl.IDEMPRESA = '${idEmpresa}' 
-         AND dl.STCANCELADO = 'False' 
-         AND dl.STFECHADO = 'True') AS VRRECDINHEIRO
-      FROM 
-      "${databaseSchema}".VENDA tbv 
-      WHERE 
-      tbv.IDEMPRESA = ?
-      AND tbv.STCANCELADO = 'False'
+    const query = `SELECT 
+		IFNULL(SUM(tbv.VRRECDINHEIRO), 0) AS VALORTOTALDINHEIRO,
+		IFNULL(SUM(tbv.VRRECCARTAO), 0) AS VALORTOTALCARTAO,
+		IFNULL(SUM(tbv.VRRECCONVENIO), 0) AS VALORTOTALCONVENIO,
+		(SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+		 INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
+		 WHERE (tbv1.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
+		 AND tbv1.IDEMPRESA = '${idEmpresa}' AND tbv1.STCANCELADO = 'False' 
+		 AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+		 AND tbvp.NOTEF = 'POS' AND (tbvp.DSTIPOPAGAMENTO != 'PIX')) AS VALORTOTALPOS,
+		(SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+		 INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
+		 WHERE (tbv1.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
+		 AND tbv1.IDEMPRESA = '${idEmpresa}' AND tbv1.STCANCELADO = 'False' 
+		 AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+		 AND tbvp.NOTEF = 'PIX' AND (tbvp.DSTIPOPAGAMENTO = 'PIX')) AS VALORTOTALPIX,
+		(SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+		 INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
+		 WHERE (tbv1.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
+		 AND tbv1.IDEMPRESA = '${idEmpresa}' AND tbv1.STCANCELADO = 'False' 
+		 AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+		 AND tbvp.NOTEF = 'POS' AND (tbvp.DSTIPOPAGAMENTO = 'MoovPay')) AS VALORTOTALMOOVPAY,
+		IFNULL(SUM(tbv.VRRECVOUCHER), 0) AS VALORTOTALVOUCHER,
+		(SELECT IFNULL(SUM(tbdf.VRRECEBIDO), 0) FROM "${databaseSchema}".DETALHEFATURA tbdf 
+		 WHERE tbdf.DTPROCESSAMENTO = '${dataPesquisa}' AND tbdf.IDEMPRESA = '${idEmpresa}' 
+		 AND tbdf.STCANCELADO = 'False' AND (tbdf.STPIX = 'False' OR tbdf.STPIX IS NULL)) AS VALORTOTALFATURA,
+		(SELECT IFNULL(SUM(tbdf.VRRECEBIDO), 0) FROM "${databaseSchema}".DETALHEFATURA tbdf 
+		 WHERE tbdf.DTPROCESSAMENTO = '${dataPesquisa}' AND tbdf.IDEMPRESA = '${idEmpresa}' 
+		 AND tbdf.STCANCELADO = 'False' AND tbdf.STPIX = 'True') AS VALORTOTALFATURAPIX,
+		(SELECT IFNULL(SUM(tbd.VRDESPESA), 0) FROM "${databaseSchema}".DESPESALOJA tbd 
+		 WHERE tbd.DTDESPESA = '${dataPesquisa}' AND tbd.IDEMPRESA = '${idEmpresa}' 
+		 AND tbd.STCANCELADO = 'False') AS VALORTOTALDESPESA,
+		(SELECT IFNULL(SUM(tbas.VRVALORDESCONTO), 0) FROM "${databaseSchema}".ADIANTAMENTOSALARIAL tbas 
+		 WHERE tbas.DTLANCAMENTO = '${dataPesquisa}' AND tbas.IDEMPRESA = '${idEmpresa}' 
+		 AND tbas.STATIVO = 'True') AS VALORTOTALADIANTAMENTOSALARIAL,
+		(SELECT IFNULL(SUM(dl.VRFISICODINHEIRO), 0) FROM "${databaseSchema}".MOVIMENTOCAIXA dl 
+		 WHERE (dl.DTABERTURA BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
+		 AND dl.IDEMPRESA = '${idEmpresa}' AND dl.STCANCELADO = 'False' AND dl.STFECHADO = 'True') AS VRFISICODINHEIRO,
+		(SELECT IFNULL(SUM(dl.VRAJUSTDINHEIRO), 0) FROM "${databaseSchema}".MOVIMENTOCAIXA dl 
+		 WHERE (dl.DTABERTURA BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
+		 AND dl.IDEMPRESA = '${idEmpresa}' AND dl.STCANCELADO = 'False' AND dl.STFECHADO = 'True') AS VRAJUSTEDINHEIRO,
+		(SELECT IFNULL(SUM(dl.VRRECDINHEIRO), 0) FROM "${databaseSchema}".MOVIMENTOCAIXA dl 
+		 WHERE (dl.DTABERTURA BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59') 
+		 AND dl.IDEMPRESA = '${idEmpresa}' AND dl.STCANCELADO = 'False' AND dl.STFECHADO = 'True') AS VRRECDINHEIRO
+		FROM "${databaseSchema}".VENDA tbv 
+		WHERE tbv.IDEMPRESA = '${idEmpresa}' AND tbv.STCANCELADO = 'False'
+		AND (tbv.DTHORAFECHAMENTO BETWEEN '${dataPesquisa} 00:00:00' AND '${dataPesquisa} 23:59:59')
+    
     `;
 
-    const params = [idEmpresa];
+    const params = [];
 
 
     const statement = conn.prepare(query);
@@ -120,7 +90,7 @@ export const getTotaisVenda = async (idEmpresa, dataPesquisa, page, pageSize) =>
   }
 };
 
-export const getVendasTotaisById = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim, byId, page, pageSize) => {
+export const getVendasLojaPeriodo = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim, byId, page, pageSize) => {
   try {
     page = page && !isNaN(page) ? parseInt(page) : 1;
     pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
@@ -135,17 +105,17 @@ export const getVendasTotaisById = async (idEmpresa, dataPesquisaInicio, dataPes
         "${databaseSchema}".VENDA tbv
       INNER JOIN "${databaseSchema}".EMPRESA tbe ON tbe.IDEMPRESA = tbv.IDEMPRESA
       WHERE 
-        tbv.STCANCELADO = 'False'
+       1 = ? AND tbv.STCANCELADO = 'False'
     `;
 
-    const params = [];
+    const params = [1];
 
     if (byId) {
       query += ` AND tbv.IDVENDA = ? `;
       params.push(byId);
     }
 
-    if (idEmpresa) {
+    if (idEmpresa > 0) {
       query += ` AND tbv.IDEMPRESA = ? `;
       params.push(idEmpresa);
     }
@@ -168,13 +138,13 @@ export const getVendasTotaisById = async (idEmpresa, dataPesquisaInicio, dataPes
     }));
 
     return {
-      data,
-      rows: data.length,
       page,
-      pageSize
+      pageSize,
+      data: data,
+      rows: data.length,
     };
   } catch (error) {
-    console.error("Error in getVendasTotaisById:", error);
+    console.error("Error in getVendasLojaPeriodo:", error);
     throw error;
   }
 };

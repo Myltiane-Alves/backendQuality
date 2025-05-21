@@ -70,16 +70,16 @@ export const putMotivoDevolucao = async (devolucao) => {
   try {
 
     const query = `
-          UPDATE
-              "${databaseSchema}".MOTIVODEVOLUCAO
-          SET
-              DSMOTIVO = ?,
-              STATIVO = ?,
-              IDUSERULTALTERACAO = ?,
-              DTULTALTERACAO = NOW()
-          WHERE
-              IDMOTIVODEVOLUCAO = ?
-      `;
+      UPDATE
+          "${databaseSchema}".MOTIVODEVOLUCAO
+      SET
+          DSMOTIVO = ?,
+          STATIVO = ?,
+          IDUSERULTALTERACAO = ?,
+          DTULTALTERACAO = NOW()
+      WHERE
+          IDMOTIVODEVOLUCAO = ?
+    `;
 
     const statement = await conn.prepare(query);
 
@@ -115,17 +115,16 @@ export const postMotivoDevolucao = async (devolucao) => {
 
     const query = `
       INSERT INTO
-          "${databaseSchema}".MOTIVODEVOLUCAO
-          (
-              DSMOTIVO,
-              STATIVO,
-              IDUSERCRIACAO,
-              DTCRIACAO,
-              IDUSERULTALTERACAO,
-              DTULTALTERACAO
-          )
-      VALUES
-          (?, 'True', ?, NOW(), ?, NOW())
+        "${databaseSchema}".MOTIVODEVOLUCAO
+        (
+          DSMOTIVO,
+          STATIVO,
+          IDUSERCRIACAO,
+          DTCRIACAO,
+          IDUSERULTALTERACAO,
+          DTULTALTERACAO
+        )
+      VALUES(?, 'True', ?, NOW(), ?, NOW())
     `;
 
     const statement = await conn.prepare(query);

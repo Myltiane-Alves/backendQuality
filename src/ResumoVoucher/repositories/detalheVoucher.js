@@ -48,7 +48,7 @@ export const getListaDetalhe = async (idVoucher) => {
                 "STCANCELADO": det.STCANCELADO
             }
         }))
-
+    
         return data
 
 
@@ -93,7 +93,7 @@ export const getListaDetalheResumoVenda = async (idResumoVendaDestino) => {
                 "VENDEDOR_NOME": det.VENDEDOR_NOME
             }
         }));
-
+      
         return data
     } catch (error) {
         console.error('Erro ao executar a consulta detalhe resumo venda:', error);
@@ -105,8 +105,9 @@ export const getDetalheVoucher = async (idVoucher, dataPesquisaInicio, dataPesqu
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
+        const offset = (page - 1) * pageSize;
 
-        var query = `
+        let query = `
             SELECT 
                 tbrv.IDVOUCHER,  
                 tbrv.IDRESUMOVENDAWEB,  
@@ -128,6 +129,7 @@ export const getDetalheVoucher = async (idVoucher, dataPesquisaInicio, dataPesqu
                 LEFT JOIN "${databaseSchema}".EMPRESA tbempdestino ON tbrv.IDEMPRESADESTINO = tbempdestino.IDEMPRESA 
             WHERE 
                 1 = ?
+    
         `;
 
         const params = [1];
@@ -142,28 +144,40 @@ export const getDetalheVoucher = async (idVoucher, dataPesquisaInicio, dataPesqu
             params.push(`${dataPesquisaInicio} 00:00:00`, `${dataPesquisaFim} 23:59:59`);
         }
 
+        query += ` LIMIT ? OFFSET ?`;
+        params.push(pageSize, offset);
+      
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
         const rows = Array.isArray(result) ? result : [];
 
-        const data = await Promise.all(rows.map(async (registro) => ({
-            voucher: {
-                "IDVOUCHER": registro.IDVOUCHER,
-                "IDRESUMOVENDAWEB": registro.IDRESUMOVENDAWEB,
-                "DTINVOUCHER": registro.DTINVOUCHER,
-                "DTOUTVOUCHER": registro.DTOUTVOUCHER,
-                "DSCAIXAORIGEM": registro.DSCAIXAORIGEM,
-                "DSCAIXADESTINO": registro.DSCAIXADESTINO,
-                "NUVOUCHER": registro.NUVOUCHER,
-                "VRVOUCHER": registro.VRVOUCHER,
-                "STATIVO": registro.STATIVO,
-                "STCANCELADO": registro.STCANCELADO,
-                "EMPORIGEM": registro.EMPORIGEM,
-                "EMPDESTINO": registro.EMPDESTINO
-            },
-            detalhe: await getListaDetalheResumoVenda(registro.IDRESUMOVENDAWEB),
-            detalhevoucher: await getListaDetalhe(registro.IDVOUCHER)
-        })))
+        const data = await Promise.all(rows.map(async (registro) => {
+            try {
+                const detalhe = await  getListaDetalheResumoVenda(registro.IDRESUMOVENDAWEB)
+                const detalhevoucher =  await getListaDetalhe(registro.IDVOUCHER)
+                return {
+                    voucher: {
+                        "IDVOUCHER": registro.IDVOUCHER,
+                        "IDRESUMOVENDAWEB": registro.IDRESUMOVENDAWEB,
+                        "DTINVOUCHER": registro.DTINVOUCHER,
+                        "DTOUTVOUCHER": registro.DTOUTVOUCHER,
+                        "DSCAIXAORIGEM": registro.DSCAIXAORIGEM,
+                        "DSCAIXADESTINO": registro.DSCAIXADESTINO,
+                        "NUVOUCHER": registro.NUVOUCHER,
+                        "VRVOUCHER": registro.VRVOUCHER,
+                        "STATIVO": registro.STATIVO,
+                        "STCANCELADO": registro.STCANCELADO,
+                        "EMPORIGEM": registro.EMPORIGEM,
+                        "EMPDESTINO": registro.EMPDESTINO
+                    },
+                    detalhe,
+                    detalhevoucher
+
+                }
+            } catch(error) {
+                console.log('erro no getDetalheVoucherDados')
+            }
+        }))
 
         return {
             page,
@@ -176,3 +190,4 @@ export const getDetalheVoucher = async (idVoucher, dataPesquisaInicio, dataPesqu
         throw error;
     }
 }
+

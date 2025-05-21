@@ -1,7 +1,7 @@
 import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
-
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getParceriaCredSystem = async (idEmpresa, dataPesquisaInicio, dataPesquisaFim,  page, pageSize) => {
     try {
@@ -37,13 +37,13 @@ export const getParceriaCredSystem = async (idEmpresa, dataPesquisaInicio, dataP
                 AND CONTAINS(TBVP.DSTIPOPAGAMENTO,'CREDSYSTEM')
             INNER JOIN "${databaseSchema}".PRODUTO TBP ON 
                 TBVD.CPROD = TBP.IDPRODUTO
-            LEFT JOIN "SBO_GTO_PRD"."OITM" TBOM ON 
+            LEFT JOIN "${databaseSchemaSBO}"."OITM" TBOM ON 
                 TBOM."ItemCode" = TBP.IDPRODUTO 
-            LEFT JOIN "SBO_GTO_PRD"."OMRC" TBOC ON 
+            LEFT JOIN "${databaseSchemaSBO}"."OMRC" TBOC ON 
                 TBOC."FirmCode" = TBOM."FirmCode" 
-            LEFT JOIN "SBO_GTO_PRD"."RSD_GRUPO_CLASSIFICACAO" TBRGC ON 
+            LEFT JOIN "${databaseSchemaSBO}"."RSD_GRUPO_CLASSIFICACAO" TBRGC ON 
                 TBRGC."ItemCode" = TBP.IDPRODUTO
-            LEFT JOIN "SBO_GTO_PRD"."OITB" TBOB ON 
+            LEFT JOIN "${databaseSchemaSBO}"."OITB" TBOB ON 
                 TBOB."ItmsGrpCod" = TBOM."ItmsGrpCod"
             INNER JOIN "${databaseSchema}".EMPRESA TBE ON
                 TBV.IDEMPRESA = TBE.IDEMPRESA

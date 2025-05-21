@@ -24,7 +24,7 @@ export const getSubGrupoProduto = async (
         const params = [];
 
         if (idGrupo) {
-            query += `AND A.IDGRUPOESTRUTURA = (${idGrupo}) `;
+            query += `AND A.IDGRUPOESTRUTURA IN (${idGrupo}) `;
         }
 
         query += ` ORDER BY A."IDGRUPOESTRUTURA", A."DSSUBGRUPOESTRUTURA" `;

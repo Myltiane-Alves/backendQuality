@@ -33,7 +33,7 @@ export const getLocalExposicao = async (idLocalExposicao, descricao, page, pageS
         query += ' LIMIT ? OFFSET ?';
         params.push(pageSize, offset);
         
-        query += 'ORDER BY A."DSLOCALEXPOSICAO"';
+        // query += 'ORDER BY A."DSLOCALEXPOSICAO"';
 
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
@@ -47,7 +47,7 @@ export const getLocalExposicao = async (idLocalExposicao, descricao, page, pageS
         }
 
     } catch (error) {
-        console.error('Erro ao consultar Tamanhos:', error);
+        console.error('Erro ao consultar Local Exposição:', error);
         throw error;
     }
 }

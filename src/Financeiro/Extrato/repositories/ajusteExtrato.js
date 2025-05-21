@@ -91,3 +91,46 @@ export const updateAjusteExtrato = async (extratos) => {
         throw new Error(`Erro ao atualizar Ajuste do extrato: ${e.message}`);
     }
 };
+
+export const createAjusteExtrato = async (dados) => {
+    try {
+        var query = `INSERT INTO "${databaseSchema}"."AJUSTEEXTRATO" 
+        ( 
+            "IDAJUSTEEXTRATO", 
+            "IDEMPRESA", 
+            "HISTORICO", 
+            "VRDEBITO", 
+            "VRCREDITO", 
+            "STATIVO", 
+            "STCANCELADO", 
+            "IDOPERADOR", 
+            "DATACADASTRO" 
+        ) 
+        VALUES(${databaseSchema}.SEQ_AJUSTEEXTRATO.NEXTVAL,?,?,?,?,?,?,?,?)`;
+
+        const statement = await conn.prepare(query);
+
+        for (const extrato of dados) {
+            const params = [
+                extrato.IDEMPRESA,
+                extrato.DSHISTORIO,
+                extrato.VRDEBITO,
+                extrato.VRCREDITO,
+                extrato.STATIVO,
+                extrato.STCANCELADO,
+                extrato.IDOPERADOR,
+                extrato.DATACADASTRO,
+            ];
+            
+            await statement.exec(params);
+        }
+
+        conn.commit();
+        return {
+            status: 'success',
+            message: 'Ajuste Extrato criado com sucesso!',
+        };
+    } catch (e) {
+        throw new Error(`Erro ao criar Ajuste do extrato: ${e.message}`);
+    }
+};

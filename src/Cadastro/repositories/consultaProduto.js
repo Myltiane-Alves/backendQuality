@@ -1,6 +1,7 @@
 import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getProduto = async (descricaoProduto, page, pageSize) => {
     try {
@@ -9,7 +10,7 @@ export const getProduto = async (descricaoProduto, page, pageSize) => {
 
         let query = `
             SELECT
-            	(SELECT "ItemCode" FROM SBO_GTO_PRD.OITM WHERE UPPER("ItemName") = '${descricaoProduto}' LIMIT 1)AS IDPRODUTOSAP,
+            	(SELECT "ItemCode" FROM ${databaseSchemaSBO}.OITM WHERE UPPER("ItemName") = '${descricaoProduto}' LIMIT 1)AS IDPRODUTOSAP,
             	(SELECT IDPRODUTO FROM "${databaseSchema}".PRODUTO WHERE UPPER(DSNOME) = '${descricaoProduto}' LIMIT 1)AS IDPRODUTOQUALITY,
             	(SELECT IDPRODCADASTRO FROM "${databaseSchema}".DETALHEPRODUTOPEDIDO WHERE UPPER(DSPRODUTO) = '${descricaoProduto}' AND STCANCELADO = 'False' LIMIT 1) AS IDPRODUTODETALHEPRODPEDIDO
             FROM
@@ -41,7 +42,7 @@ export const getProduto = async (descricaoProduto, page, pageSize) => {
         }
 
     } catch (error) {
-        console.error('Erro ao consultar Categorias :', error);
+        console.error('Erro ao consultar Produtos :', error);
         throw error;
     }
 }

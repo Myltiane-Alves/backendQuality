@@ -1,5 +1,6 @@
 import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
+import { toFloat } from "../../../utils/toFloat.js";
 const databaseSchema = process.env.HANA_DATABASE;
 
 export const getListaPCJ = async (idMovimento, limit, offset) => {
@@ -7,21 +8,31 @@ export const getListaPCJ = async (idMovimento, limit, offset) => {
         const query = `
             SELECT 
                 SUM(tbv.VRRECCARTAO) AS TOTALVENDIDOCARTAO, 
-                SUM(CASE WHEN tbvp.NPARCELAS IN (7, 8) THEN tbvp.VALORRECEBIDO ELSE 0 END) AS TOTALPCJ78,
-                SUM(tbvp.VALORRECEBIDO) AS TOTALPCJ18
-            FROM 
-                "${databaseSchema}".VENDA tbv 
-                LEFT JOIN "${databaseSchema}".VENDAPAGAMENTO tbvp 
-                ON tbv.IDVENDA = tbvp.IDVENDA
-            WHERE 
-                tbv.IDMOVIMENTOCAIXAWEB = ? 
-                AND tbv.STCANCELADO = 'False'
-            LIMIT ? OFFSET ?
+                (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
+                FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+                INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
+                WHERE tbv1.IDMOVIMENTOCAIXAWEB = '${idMovimento}' 
+                AND tbv1.STCANCELADO = 'False' 
+                AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+                AND (tbvp.NOAUTORIZADOR = 'Credsystem' OR tbvp.NOAUTORIZADOR = 'CREDSYSTEM' OR tbvp.NOAUTORIZADOR = 'PL') 
+                AND (tbvp.DSTIPOPAGAMENTO != 'GIRO PREMIADO') 
+                AND (tbvp.NPARCELAS = 7 OR tbvp.NPARCELAS = 8)) AS TOTALPCJ78, 
+                (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
+                FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+                INNER JOIN "${databaseSchema}".VENDA tbv1 ON tbvp.IDVENDA = tbv1.IDVENDA 
+                WHERE tbv1.IDMOVIMENTOCAIXAWEB = '${idMovimento}' 
+                AND tbv1.STCANCELADO = 'False' 
+                AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+                AND (tbvp.NOAUTORIZADOR = 'Credsystem' OR tbvp.NOAUTORIZADOR = 'CREDSYSTEM' OR tbvp.NOAUTORIZADOR = 'PL') 
+                AND (tbvp.DSTIPOPAGAMENTO != 'GIRO PREMIADO')) AS TOTALPCJ18 
+            FROM "${databaseSchema}".VENDA tbv 
+            WHERE tbv.IDMOVIMENTOCAIXAWEB = ? 
+            AND tbv.STCANCELADO = 'False'
         `;
 
         const [rows] = await conn.execute(query, [idMovimento, limit, offset]);
 
-        if(!Array.isArray(rows) || rows.length === 0) return [];
+        if (!Array.isArray(rows) || rows.length === 0) return [];
         const lines = rows.map((row, index) => ({
             "@nItem": index + 1,
             "venda-pcj": {
@@ -39,43 +50,65 @@ export const getListaPCJ = async (idMovimento, limit, offset) => {
 
 export const getVenda = async (idMovimento) => {
     try {
-        
+
         const query = `
             SELECT 
                 SUM(tbv.VRRECDINHEIRO) AS TOTALVENDIDODINHEIRO, 
                 SUM(tbv.VRRECCARTAO) AS TOTALVENDIDOCARTAO, 
-                SUM(CASE WHEN tbvp.NOTEF = 'POS' AND tbvp.DSTIPOPAGAMENTO != 'PIX' THEN tbvp.VALORRECEBIDO ELSE 0 END) AS TOTALVENDIDOPOS,
-                SUM(CASE WHEN tbvp.NOTEF = 'PIX' AND tbvp.DSTIPOPAGAMENTO = 'PIX' THEN tbvp.VALORRECEBIDO ELSE 0 END) AS TOTALVENDIDOPIX,
-                SUM(CASE WHEN tbvp.NOTEF = 'POS' AND tbvp.DSTIPOPAGAMENTO = 'MoovPay' THEN tbvp.VALORRECEBIDO ELSE 0 END) AS TOTALVENDIDOMOOVPAY,
-                SUM(tbv.VRRECVOUCHER) AS TOTALVENDIDOVOUCHER,
-                SUM(tbv.VRTOTALPAGO) AS TOTALVENDIDO,
-                SUM(tbv.VRRECCONVENIO) AS TOTALVENDIDOCONVENIO,
-                SUM(tbv.NFE_INFNFE_TOTAL_ICMSTOT_VNF) AS TOTALNOTA
-            FROM 
-                "${databaseSchema}".VENDA tbv 
-                LEFT JOIN "${databaseSchema}".VENDAPAGAMENTO tbvp 
-                ON tbv.IDVENDA = tbvp.IDVENDA
-            WHERE 
-                tbv.IDMOVIMENTOCAIXAWEB = ? 
-                AND tbv.STCANCELADO = 'False'
+                (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
+                FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+                INNER JOIN "${databaseSchema}".VENDA tbv1 
+                ON tbvp.IDVENDA = tbv1.IDVENDA 
+                WHERE tbv1.IDMOVIMENTOCAIXAWEB = '${idMovimento}' 
+                AND tbv1.STCANCELADO = 'False' 
+                AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+                AND tbvp.NOTEF = 'POS' 
+                AND (tbvp.DSTIPOPAGAMENTO != 'PIX')) AS TOTALVENDIDOPOS, 
+                (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
+                FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+                INNER JOIN "${databaseSchema}".VENDA tbv1 
+                ON tbvp.IDVENDA = tbv1.IDVENDA 
+                WHERE tbv1.IDMOVIMENTOCAIXAWEB = '${idMovimento}' 
+                AND tbv1.STCANCELADO = 'False' 
+                AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+                AND tbvp.NOTEF = 'PIX' 
+                AND (tbvp.DSTIPOPAGAMENTO = 'PIX')) AS TOTALVENDIDOPIX, 
+                (SELECT IFNULL(SUM(tbvp.VALORRECEBIDO), 0) 
+			 FROM "${databaseSchema}".VENDAPAGAMENTO tbvp 
+                INNER JOIN "${databaseSchema}".VENDA tbv1 
+                ON tbvp.IDVENDA = tbv1.IDVENDA 
+                WHERE tbv1.IDMOVIMENTOCAIXAWEB = '${idMovimento}' 
+                AND tbv1.STCANCELADO = 'False' 
+                AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL) 
+                AND tbvp.NOTEF = 'POS' 
+                AND (tbvp.DSTIPOPAGAMENTO = 'MoovPay')) AS TOTALVENDIDOMOOVPAY, 
+                SUM(tbv.VRRECVOUCHER) AS TOTALVENDIDOVOUCHER, 
+                SUM(tbv.VRTOTALPAGO) AS TOTALVENDIDO,  
+                SUM(tbv.VRRECCONVENIO) AS TOTALVENDIDOCONVENIO,  
+                SUM(tbv.NFE_INFNFE_TOTAL_ICMSTOT_VNF) AS TOTALNOTA  
+		    FROM 
+			    "${databaseSchema}".VENDA tbv 
+		    WHERE 
+			    tbv.IDMOVIMENTOCAIXAWEB = '${idMovimento}' 
+			    AND tbv.STCANCELADO = 'False'
         `;
 
         const [rows] = await conn.execute(query, [idMovimento]);
-   
-        if(!Array.isArray(rows) || rows.length === 0) return [];
+
+        if (!Array.isArray(rows) || rows.length === 0) return [];
 
         const lines = rows.map((row, index) => ({
             "@nItem": index + 1,
             "venda-movimento": {
-                "TOTALVENDIDODINHEIRO": row.TOTALVENDIDODINHEIRO || 0,
-                "TOTALVENDIDOCARTAO": row.TOTALVENDIDOCARTAO || 0,
-                "TOTALVENDIDOPOS": row.TOTALVENDIDOPOS || 0,
-                "TOTALVENDIDOPIX": row.TOTALVENDIDOPIX || 0,
-                "TOTALVENDIDOMOOVPAY": row.TOTALVENDIDOMOOVPAY  || 0,
-                "TOTALVENDIDOVOUCHER": row.TOTALVENDIDOVOUCHER || 0,
-                "TOTALVENDIDO": row.TOTALVENDIDO || 0,
-                "TOTALVENDIDOCONVENIO": row.TOTALVENDIDOCONVENIO || 0,
-                "TOTALNOTA": row.TOTALNOTA || 0
+                "TOTALVENDIDODINHEIRO": toFloat(row.TOTALVENDIDODINHEIRO) || 0,
+                "TOTALVENDIDOCARTAO": toFloat(row.TOTALVENDIDOCARTAO) || 0,
+                "TOTALVENDIDOPOS": toFloat(row.TOTALVENDIDOPOS) || 0,
+                "TOTALVENDIDOPIX": toFloat(row.TOTALVENDIDOPIX) || 0,
+                "TOTALVENDIDOMOOVPAY": toFloat(row.TOTALVENDIDOMOOVPAY) || 0,
+                "TOTALVENDIDOVOUCHER": toFloat(row.TOTALVENDIDOVOUCHER)|| 0,
+                "TOTALVENDIDO": toFloat(row.TOTALVENDIDO) || 0,
+                "TOTALVENDIDOCONVENIO": toFloat(row.TOTALVENDIDOCONVENIO) || 0,
+                "TOTALNOTA": toFloat(row.TOTALNOTA) || 0
             }
         }));
 
@@ -101,8 +134,8 @@ export const getFatura = async (idEmpresa, idMovimento) => {
         `;
 
         const [rows] = await conn.execute(query, [idEmpresa, idMovimento]);
-  
-        if(!Array.isArray(rows) || rows.length === 0) return [];
+
+        if (!Array.isArray(rows) || rows.length === 0) return [];
         const lines = rows.map((row, index) => ({
             "@nItem": index + 1,
             "fatura-movimento": {
@@ -135,8 +168,8 @@ export const getFaturaPIX = async (idEmpresa, idMovimento) => {
         const params = [idEmpresa, idMovimento];
 
         const [rows] = await conn.execute(query, params);
-       
-        if(!Array.isArray(rows) || rows.length === 0) return [];
+
+        if (!Array.isArray(rows) || rows.length === 0) return [];
         const lines = rows.map((row, index) => ({
             "@nItem": index + 1,
             "fatura-movimento-pix": {
@@ -152,7 +185,7 @@ export const getFaturaPIX = async (idEmpresa, idMovimento) => {
     }
 };
 
-export const getListaMovimentoCaixa = async (idEmpresa, dataFechamento, page = 1, pageSize = 1000) => {
+export const getListaMovimentoCaixa = async (byId, idEmpresa, dataFechamento, page, pageSize) => {
     try {
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
@@ -168,7 +201,7 @@ export const getListaMovimentoCaixa = async (idEmpresa, dataFechamento, page = 1
                 tbf.NOFUNCIONARIO, 
                 tbf.NUCPF, 
                 tbmc.STFECHADO, 
-                TO_VARCHAR(tbmc.DTABERTURA,'DD-MM-YYYY HH24:MI:SS') AS DTABERTURA 
+                TO_VARCHAR(tbmc.DTABERTURA,'YYYY-MM-DD HH24:MI:SS') AS DTABERTURA
             FROM 
                 "${databaseSchema}".MOVIMENTOCAIXA tbmc 
                 INNER JOIN "${databaseSchema}".CAIXA tbc ON tbmc.IDCAIXA = tbc.IDCAIXAWEB 
@@ -178,13 +211,19 @@ export const getListaMovimentoCaixa = async (idEmpresa, dataFechamento, page = 1
         `;
 
         const params = [];
-
+        
+        if(byId) {
+            query += ` AND tbmc.ID = ?`;
+            params.push(byId);
+        }
+        
         if (idEmpresa) {
-            query += ` AND tbmc.IDEMPRESA IN (${Array.isArray(idEmpresa) ? idEmpresa.map(() => '?').join(',') : '?'})`;
-            params.push(...[].concat(idEmpresa));
+            query += ` AND tbmc.IDEMPRESA = ?`;
+           params.push(idEmpresa);
         }
 
         if (dataFechamento) {
+            // query += ' AND (tbmc.DTABERTURA BETWEEN ? AND ?) AND tbmc.ID > 0';
             query += ' AND (tbmc.DTABERTURA BETWEEN ? AND ?)';
             params.push(`${dataFechamento} 00:00:00`, `${dataFechamento} 23:59:59`);
         }
@@ -193,12 +232,13 @@ export const getListaMovimentoCaixa = async (idEmpresa, dataFechamento, page = 1
         query += ' LIMIT ? OFFSET ?';
         params.push(pageSize, (page - 1) * pageSize);
 
-        const result = await conn.execute(query, params);
+        const statement = await conn.prepare(query);
+        const result = await statement.exec(params);
 
-        const rows = Array.isArray(result) ? result :  [];
-      
+        const rows = Array.isArray(result) ? result : [];
+
         const data = await Promise.all(rows.map(async (registro) => ({
-            
+
             caixa: {
                 ID: registro.ID,
                 IDOPERADOR: registro.IDOPERADOR,

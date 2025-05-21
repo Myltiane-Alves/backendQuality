@@ -40,7 +40,7 @@ export const getObterLinhasDoDetalheGrade = async (idDetalhePedido) => {
   }
 };
 
-export const getDetalhePedido = async (idPedido, idDetalhePedido, dataPesquisaInicio, dataPesquisaFim,  page, pageSize) => {
+export const getDetalhePedidoGrade = async (idPedido, idDetalhePedido, dataPesquisaInicio, dataPesquisaFim,  page, pageSize) => {
   try {
     page = page && !isNaN(page) ? parseInt(page) : 1;
     pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
@@ -120,7 +120,7 @@ export const getDetalhePedido = async (idPedido, idDetalhePedido, dataPesquisaIn
     const result = await statement.exec(params);
 
     const data = await Promise.all(result.map(async (registro) => {
-      const detalheGrade = await getDetalhePedido(registro.IDDETPEDIDO);
+      const detalheGrade = await getObterLinhasDoDetalheGrade(registro.IDDETPEDIDO);
       return {
         "detpedido": {
             "IDDETPEDIDO": registro.IDDETPEDIDO,

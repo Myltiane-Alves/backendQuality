@@ -28,22 +28,27 @@ export const getFaturaPixConsolidadoLoja = async (idMarca, dataPesquisaInicio, d
             query += ` AND tbe.IDGRUPOEMPRESARIAL = ?`;
             params.push(idMarca);
         }
-        if (idLoja) {
-            if (Array.isArray(idLoja) && idLoja.length > 0) {
-            query += ` AND tbe.IDEMPRESA IN (${idLoja.join(",")})`;
-            } else {
-            query += ` AND tbe.IDEMPRESA = ?`;
+
+        if (idLoja > 0) {
+            // if (Array.isArray(idLoja) && idLoja.length > 0) {
+            //     query += ` AND tbe.IDEMPRESA IN (${idLoja.join(",")})`;
+            // } else {
+            //     query += ` AND tbe.IDEMPRESA = ?`;
+            //     params.push(idLoja);
+            // }
+            query += ` AND tbe.IDEMPRESA IN (?)`;
             params.push(idLoja);
-            }
         }
 
         if (empresaLista) {
-            if (Array.isArray(empresaLista) && empresaLista.length > 0) {
-            query += ` AND tbe.IDEMPRESA IN (${empresaLista.join(",")})`;
-            } else {
-            query += ` AND tbe.IDEMPRESA = ?`;
+            // if (Array.isArray(empresaLista) && empresaLista.length > 0) {
+            //     query += ` AND tbe.IDEMPRESA IN (${empresaLista.join(",")})`;
+            // } else {
+            //     query += ` AND tbe.IDEMPRESA = ?`;
+            //     params.push(empresaLista);
+            // }
+            query += ` AND tbe.IDEMPRESA  IN  (?) `;
             params.push(empresaLista);
-            }
         }
 
         if (dataPesquisaInicio && dataPesquisaFim) {

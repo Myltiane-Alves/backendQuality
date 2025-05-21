@@ -3,7 +3,7 @@ import { dataFormatada } from "../../../utils/dataFormatada.js";
 import { getFormaPagamento } from "../repositories/formaPagamento.js";
 import { getPagamentoTef } from "../repositories/pagamento-tef.js";
 import { getPagamentoPos } from "../repositories/pagamento-pos.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class AdmPagamentosControllers {
  
@@ -11,11 +11,11 @@ class AdmPagamentosControllers {
         let {} = req.query; 
         try {
 
-            const apiUrl = `${url}/api/administrativo/formapagamento.xsjs`;
-            const response = await axios.get(apiUrl)
-            // const response = await getFormaPagamento()
+            // const apiUrl = `${url}/api/administrativo/formapagamento.xsjs`;
+            // const response = await axios.get(apiUrl)
+            const response = await getFormaPagamento()
         
-            return res.json(response.data);
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;

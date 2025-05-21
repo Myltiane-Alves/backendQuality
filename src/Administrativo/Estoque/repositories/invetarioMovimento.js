@@ -1,7 +1,7 @@
 import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
-
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getInventarioMovimento = async (
     idEmpresa,
@@ -23,10 +23,10 @@ export const getInventarioMovimento = async (
         let query = `
             SELECT
                 im.IDEMPRESA, e.NOFANTASIA,
-                IFNULL(p.NUCODBARRAS, (SELECT IFNULL("CodeBars", '') FROM "SBO_GTO_PRD"."OITM" WHERE "ItemCode" = im.IDPRODUTO)) AS NUCODBARRAS,
-                IFNULL(p.DSPRODUTO, (SELECT IFNULL("ItemName", '') FROM "SBO_GTO_PRD"."OITM" WHERE "ItemCode" = im.IDPRODUTO)) as DSPRODUTO,
-                IFNULL(p.IDRAZAO_SOCIAL_FORNECEDOR, (SELECT IFNULL(T1."CardCode", '') FROM "SBO_GTO_PRD"."OITM" T0 INNER JOIN "SBO_GTO_PRD"."OCRD" T1 ON T1."CardCode" = T0."CardCode" WHERE T0."ItemCode" = im.IDPRODUTO)) AS IDRAZAO_SOCIAL_FORNECEDOR,
-                IFNULL(p.RAZAO_SOCIAL_FORNECEDOR, (SELECT IFNULL(T1."CardName", '') FROM "SBO_GTO_PRD"."OITM" T0 INNER JOIN "SBO_GTO_PRD"."OCRD" T1 ON T1."CardCode" = T0."CardCode" WHERE T0."ItemCode" = im.IDPRODUTO)) AS RAZAO_SOCIAL_FORNECEDOR,
+                IFNULL(p.NUCODBARRAS, (SELECT IFNULL("CodeBars", '') FROM "${databaseSchemaSBO}"."OITM" WHERE "ItemCode" = im.IDPRODUTO)) AS NUCODBARRAS,
+                IFNULL(p.DSPRODUTO, (SELECT IFNULL("ItemName", '') FROM "${databaseSchemaSBO}"."OITM" WHERE "ItemCode" = im.IDPRODUTO)) as DSPRODUTO,
+                IFNULL(p.IDRAZAO_SOCIAL_FORNECEDOR, (SELECT IFNULL(T1."CardCode", '') FROM "${databaseSchemaSBO}"."OITM" T0 INNER JOIN "${databaseSchemaSBO}"."OCRD" T1 ON T1."CardCode" = T0."CardCode" WHERE T0."ItemCode" = im.IDPRODUTO)) AS IDRAZAO_SOCIAL_FORNECEDOR,
+                IFNULL(p.RAZAO_SOCIAL_FORNECEDOR, (SELECT IFNULL(T1."CardName", '') FROM "${databaseSchemaSBO}"."OITM" T0 INNER JOIN "${databaseSchemaSBO}"."OCRD" T1 ON T1."CardCode" = T0."CardCode" WHERE T0."ItemCode" = im.IDPRODUTO)) AS RAZAO_SOCIAL_FORNECEDOR,
                 IFNULL(pp.PRECOCUSTO, 0) AS PRECOCUSTO,
                 IFNULL(IFNULL(pr.PRECO_VENDA, pp.PRECOVENDA), 0) AS PRECOVENDA,
                 im.IDPRODUTO, im.DTMOVIMENTO, im.QTDINICIO, im.QTDENTRADA, im.QTDENTRADAVOUCHER,

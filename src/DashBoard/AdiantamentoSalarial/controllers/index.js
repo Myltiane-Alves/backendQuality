@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAdiantamentosLojas, putAdiantamentosLojas } from "../repositories/adiantamento-lojas.js";
 import { getAdiantamentosFuncionarios } from "../repositories/funcionarios.js";
 import { createAdiantamentoSalarial, getAdiantamentoSalarialDashBoard, updateAdiantamentoSalarial } from "../repositories/adiantamentoSalarial.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 class DashBoardAdiantamentoSalarialControllers {
@@ -19,12 +19,10 @@ class DashBoardAdiantamentoSalarialControllers {
         page = page ? page : '';
 
         try {
-            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/dashboard/adiantamento-salarial/adiantamentolojas.xsjs?idEmpresa=0&dataPesquisaIni=2024-12-06&dataPesquisaFim=2024-12-06&idMarca=undefined
-            const apiUrl = `${url}/api/dashboard/adiantamento-salarial/adiantamentolojas.xsjs?idEmpresa=${idEmpresa}&dataPesquisaIni=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idMarca}&pageSize=${pageSize}&page=${page}`;
-           const response = await axios.get(apiUrl);
-            // const response = await getAdiantamentosLojas(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+            
+            const response = await getAdiantamentosLojas(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
 
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -41,13 +39,10 @@ class DashBoardAdiantamentoSalarialControllers {
         page = page ? page : '';
 
         try {
-                                //   /api/dashboard/adiantamento-salarial/funcionarios.xsjs?idEmpresa=1&dataPesquisaInicio=2024-12-07&dataPesquisaFim=2024-12-07
-            const apiUrl = `${url}/api/dashboard/adiantamento-salarial/adiantamentofuncionarios.xsjs?idEmpresa=${idEmpresa}&dataPesquisaIni=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&pageSize=${pageSize}&page=${page}`;
-            const response = await axios.get(apiUrl);
+            
+            const response = await getAdiantamentosFuncionarios(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
 
-            // const response = await getAdiantamentosFuncionarios(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
-
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -64,12 +59,10 @@ class DashBoardAdiantamentoSalarialControllers {
         page = page ? page : '';
 
         try {
-            const apiUrl =  `${url}/api/dashboard/adiantamento-salarial.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
-            const response = await axios.get(apiUrl);
+            
+            const response = await getAdiantamentoSalarialDashBoard(idEmpresa, dataPesquisa, pageSize, page)
 
-            // const response = await getAdiantamentoSalarialDashBoard(idEmpresa, dataPesquisa, pageSize, page)
-
-            return res.json(response.data)
+            return res.json(response)
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -80,8 +73,9 @@ class DashBoardAdiantamentoSalarialControllers {
     async updateAdiantamentoStatus(req, res) {
         let { STATIVO,IDADIANTAMENTOSALARIO } = req.body;
         
-        STATIVO = STATIVO ? STATIVO : '';
-        IDADIANTAMENTOSALARIO = IDADIANTAMENTOSALARIO ? IDADIANTAMENTOSALARIO : '';
+        if(!STATIVO || !IDADIANTAMENTOSALARIO) {
+            return res.status(400).json({error: "IDANDIANTAMENTOSALARIO e STATIVO são obrigatórios"})
+        }
         try {
           const response = await putAdiantamentosLojas(STATIVO, IDADIANTAMENTOSALARIO, )
     

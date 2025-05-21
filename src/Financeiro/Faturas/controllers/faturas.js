@@ -6,7 +6,7 @@ import { getVendaFaturaPixPeriodo, getVendaFaturaPixPeriodoCompensada, putVendaP
 import { getDetalheFatura } from "../repositories/detalheFatura.js";
 import { putAtualizarFatura, putAtualizarRecompra } from "../repositories/FaturaLoja/faturaLoja.js";
 import { getFaturaPixPeriodoConsolidado } from "../repositories/faturaPixPeriodoConsolidado.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 class FaturasControllers {
@@ -21,11 +21,10 @@ class FaturasControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/financeiro/fatura-pix-periodo.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idLojaPesquisa=${idLojaPesquisa}&empresaLista=${empresaLista}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl);
-      // const response = await getFaturaPixPeriodo(idMarca, dataPesquisaInicio, dataPesquisaFim, idLojaPesquisa, empresaLista, page, pageSize)
 
-      return res.json(response.data);
+      const response = await getFaturaPixPeriodo(idMarca, dataPesquisaInicio, dataPesquisaFim, idLojaPesquisa, empresaLista, page, pageSize)
+
+      return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -43,9 +42,7 @@ class FaturasControllers {
 
     try {
 
-      const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado.xsjs?idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl);
-      // const response = await getFaturaPixPeriodoConsolidado(idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+      const response = await getFaturaPixPeriodoConsolidado(idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
       return res.json(response);
     } catch (error) {
@@ -68,12 +65,11 @@ class FaturasControllers {
 
     
     try {
-                            // /api/financeiro/detalhe-fatura.xsjs?pageSize=500&page=1&idEmpresa=1&dataPesquisaInicio=2024-12-06&dataPesquisaFim=2024-12-06
-      const apiUrl = `${url}/api/financeiro/detalhe-fatura.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&codigoFatura=${codigoFatura}&idDetalheFatura=${idDetalheFatura}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl);
-      // const response = await getDetalheFatura(idEmpresa, dataPesquisaInicio, dataPesquisaFim, codigoFatura, idDetalheFatura, page, pageSize);
 
-      return res.json(response.data); 
+      
+      const response = await getDetalheFatura(idEmpresa, dataPesquisaInicio, dataPesquisaFim, codigoFatura, idDetalheFatura, page, pageSize);
+
+      return res.json(response); 
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -95,10 +91,10 @@ class FaturasControllers {
     
     try {
                          // api/financeiro/venda-total-fatura-pix-empresa.xsjs?pageSize=1000&page=1&idMarca=1&idEmpresa=0&dataPesquisaInicio=2024-11-04&dataPesquisaFim=2024-11-04
-      const apiUrl = `${url}/api/financeiro/venda-total-fatura-pix-empresa.xsjs?idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataCompInicio=${dataCompInicio}&dataCompFim=${dataCompFim}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl);
-      // const response = await getVendaFaturaPixPeriodo(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, dataCompInicio, dataCompFim, page, pageSize)
-      return res.json(response.data); 
+      // const apiUrl = `${url}/api/financeiro/venda-total-fatura-pix-empresa.xsjs?idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataCompInicio=${dataCompInicio}&dataCompFim=${dataCompFim}&page=${page}&pageSize=${pageSize}`;
+      // const response = await axios.get(apiUrl);
+      const response = await getVendaFaturaPixPeriodo(idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, dataCompInicio, dataCompFim, page, pageSize)
+      return res.json(response); 
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -117,12 +113,9 @@ class FaturasControllers {
     pageSize = pageSize ? pageSize : '';
     
     try {
-      // http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/venda-total-fatura-pix-empresa-compensada.xsjs?pageSize=1000&dataPesquisaInicio=2024-12-06&dataPesquisaFim=2024-12-06&idMarca=0&idEmpresa=&page=1
-      const apiUrl = `${url}/api/financeiro/venda-total-fatura-pix-empresa-compensada.xsjs?idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataCompInicio}&dataPesquisaFim=${dataCompFim}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl);
-      
-      // const response = await getVendaFaturaPixPeriodoCompensada(idMarca, idEmpresa, dataCompInicio, dataCompFim, page, pageSize)
-      return res.json(response.data); 
+
+      const response = await getVendaFaturaPixPeriodoCompensada(idMarca, idEmpresa, dataCompInicio, dataCompFim, page, pageSize)
+      return res.json(response); 
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;

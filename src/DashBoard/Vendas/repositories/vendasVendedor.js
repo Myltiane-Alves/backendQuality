@@ -122,6 +122,10 @@ export const getVendaVendedor = async (idEmpresa, byId, dataPesquisaInicio, data
                 tbvd.VENDEDOR_MATRICULA 
         `;
 
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        params.push(pageSize, offset);
+        
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
 

@@ -1,8 +1,9 @@
 import conn from "../../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
-// Bloco Fecha Balanço
+
 export const getBlocoFecharBalanco = async (alista, pIdResumoBalanco, pDataAbertura) => {
     const connection = await conn.getConnection();
     try {
@@ -10,23 +11,27 @@ export const getBlocoFecharBalanco = async (alista, pIdResumoBalanco, pDataAbert
             const { IDPRODUTO, QTD, IDEMPRESA } = alista[i];
             
             
-            const qryUpdInv = `
+            let qryUpdInv = `
                 UPDATE "${databaseSchema}".INVENTARIOMOVIMENTO
-                SET STATIVO = 'False', DTBALANCO = ?
-                WHERE IDEMPRESA = ? AND IDPRODUTO = ? AND STATIVO = 'True'
+                SET STATIVO = 'False', 
+                DTBALANCO = ?
+                WHERE IDEMPRESA = ? 
+                AND IDPRODUTO = ? 
+                AND STATIVO = 'True'
             `;
             await connection.execute(qryUpdInv, [pDataAbertura, IDEMPRESA, IDPRODUTO]);
 
+      
             
-            const qryInsInv = `
+            let qryInsInv = `
                 INSERT INTO "${databaseSchema}".INVENTARIOMOVIMENTO (
                     IDINVMOVIMENTO, IDEMPRESA, DTMOVIMENTO, IDPRODUTO, QTDINICIO, QTDENTRADA, QTDENTRADAVOUCHER, 
                     QTDSAIDA, QTDSAIDATRANSFERENCIA, QTDRETORNOAJUSTEPEDIDO, QTDFINAL, QTDAJUSTEBALANCO, STATIVO
                 ) VALUES (
-                    QUALITY_CONC.SEQ_INVENTARIOMOVIMENTO.NEXTVAL, ?, CURRENT_TIMESTAMP, ?, ?, 0, 0, 0, 0, 0, ?, ?, 'True'
+                    ${databaseSchema}.SEQ_INVENTARIOMOVIMENTO.NEXTVAL, ?, CURRENT_TIMESTAMP, ?, ?, 0, 0, 0, 0, 0, ?, ?, 'True'
                 )
             `;
-            await connection.execute(qryInsInv, [
+            await connection.exec(qryInsInv, [
                 IDEMPRESA, IDPRODUTO, QTD, QTD, QTD, QTD
             ]);
         }
@@ -61,7 +66,7 @@ export const getFechaBalanco = async (pIdResumoBalanco, pDataAbertura) => {
                 IDRESUMOBALANCO = ?
         `;
 
-        const [listar] = await connection.execute(query, [pIdResumoBalanco]);
+        const [listar] = await connection.exec(query, [pIdResumoBalanco]);
 
         for (let ct = 0; ct < listar.length; ct += ncorte) {
             const chunk = listar.slice(ct, ct + ncorte);
@@ -124,7 +129,7 @@ export const getSaidaDevolucaoMercadoria = async (idEmpresa, dataAbertura, dataE
                 IFNULL(SUM("Saidas" * "PrecoVendaNaData"), 0) AS VLRTOTALDEVOLUCAO,
                 IFNULL(SUM("Saidas"), 0) AS QTDTOTALDEVOLUCAO 
             FROM 
-                "SBO_GTO_PRD".IS_ENT_SAI_DETALHADO 
+                "${databaseSchemaSBO}".IS_ENT_SAI_DETALHADO 
             WHERE 
                 "Cod.Filial" = ? 
                 -- AND "Origem" = 'Dev. Nota de Entrada' 
@@ -163,7 +168,7 @@ export const getSaidaFaltaMercadoria = async (idEmpresa, dataAbertura, dataEstoq
                 -- IFNULL(SUM("Saidas" * "PrecoUnitario"), 0) AS VLRTOTALFALTA 
                 IFNULL(SUM("Saidas" * "PrecoVendaNaData"), 0) AS VLRTOTALFALTA 
             FROM 
-                "SBO_GTO_PRD".IS_ENT_SAI_DETALHADO 
+                "${databaseSchemaSBO}".IS_ENT_SAI_DETALHADO 
             WHERE 
                 "Cod.Filial" = ? 
                 AND "Origem" = 'Nota de Saida' 
@@ -319,7 +324,7 @@ export const getSobraMercadoria = async (idEmpresa, dataAbertura, dataEstoqueAnt
                 -- IFNULL(SUM("Saidas" * "PrecoUnitario"), 0) AS VLRTOTALSOBRA 
                 IFNULL(SUM("Saidas" * "PrecoVendaNaData"), 0) AS VLRTOTALSOBRA 
             FROM 
-                "SBO_GTO_PRD".IS_ENT_SAI_DETALHADO 
+                "${databaseSchemaSBO}".IS_ENT_SAI_DETALHADO 
             WHERE 
                 "Cod.Filial" = ? 
                 AND "Origem" = 'Nota de Entrada' 
@@ -357,7 +362,7 @@ export const getEntradaMercadoriaRecebida = async (idEmpresa, dataAbertura, data
                 IFNULL(SUM("Entradas" * "PrecoVendaNaData"), 0) AS VLRTOTALENTRADA,
                 IFNULL(SUM("Entradas"), 0) AS QTDTOTALENTRADA 
             FROM 
-                "SBO_GTO_PRD".IS_ENT_SAI_DETALHADO 
+                "${databaseSchemaSBO}".IS_ENT_SAI_DETALHADO 
             WHERE 
                 "Cod.Filial" = ? 
                 AND "Origem" = 'Nota de Entrada' 
@@ -410,7 +415,7 @@ export const getPrestacaoContasBalanco = async (
             rb.STCONCLUIDO
             FROM "${databaseSchema}".RESUMOBALANCO rb
             INNER JOIN "${databaseSchema}".EMPRESA e ON e.IDEMPRESA = rb.IDEMPRESA
-            WHERE 1 = ?
+            WHERE 1 = 1
         `;
 
         const params = [];
@@ -421,7 +426,7 @@ export const getPrestacaoContasBalanco = async (
         }
 
         const offset = (page - 1) * pageSize;
-        query += 'LIMIT ? OFFSET ? ';
+        query += 'LIMIT 1 OFFSET ? ';
         params.push(pageSize, offset);
 
       

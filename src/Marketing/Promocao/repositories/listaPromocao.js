@@ -42,7 +42,7 @@ export const getPromocao = async (idResumoPromocao, page, pageSize) => {
             data: result,
         }
     } catch(error) {
-        console.error('Erro ao executar a consulta Lista Caixas', error);
+        console.error('Erro ao executar a consulta Lista Promoções', error);
         throw error;
     }
 }

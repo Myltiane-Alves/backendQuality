@@ -75,14 +75,12 @@ export const getCaixaZerados = async (idEmpresa, idMarca, dataPesquisaInicio, da
         const statement = conn.prepare(query);
         const data = await statement.exec(params);
 
-        // Verifica se data é indefinido ou nulo antes de acessar o total
-        const rows = data ? data.length : 0;
-
+       
         return {
             page,
             pageSize,
-            rows,
-            data
+            rows: data.length,
+            data: data
         };
     } catch (e) {
         throw new Error(e.message);

@@ -7,7 +7,7 @@ export const getAdiantamentoSalarialDashBoard = async (idEmpresa, dataPesquisa, 
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
         
-        var query = `
+        let query = `
             SELECT 
                 ifnull(SUM(tbas.VRVALORDESCONTO), 0) AS VRADIANTAMENTO
             FROM 

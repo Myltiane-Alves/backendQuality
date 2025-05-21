@@ -2,7 +2,7 @@
 import axios from "axios";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
 import {  getPrimeiraVendaSaldoAtual } from "../repositories/extratoLojaPeriodo.js";
-import { getAjusteExtrato, updateAjusteExtrato } from "../repositories/ajusteExtrato.js";
+import { createAjusteExtrato, getAjusteExtrato, updateAjusteExtrato } from "../repositories/ajusteExtrato.js";
 
 let url = `http://164.152.245.77:8000/quality/concentrador`;
 
@@ -67,6 +67,17 @@ class ExtratosControllers {
       return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async postAjusteExtrato(req, res) {
+    try {
+      const extratos = Array.isArray(req.body) ? req.body : [req.body]; 
+      const response = await  createAjusteExtrato(extratos);
+      return res.json(response);
+    } catch (error) {
+      console.error("Erro no ExtratosControllers. postAjusteExtrato:", error);
       return res.status(500).json({ error: error.message });
     }
   }

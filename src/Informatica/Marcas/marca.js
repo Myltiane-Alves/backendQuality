@@ -1,5 +1,6 @@
 import conn from "../../config/dbConnection.js";
-
+import 'dotenv/config';
+const databaseSchema = process.env.HANA_DATABASE;
 
 export const getMarcas = async (idMarca,) => {
     try {
@@ -10,7 +11,7 @@ export const getMarcas = async (idMarca,) => {
             tbg.DSGRUPOEMPRESARIAL,
             tbg.STATIVO
         FROM 
-            "QUALITY_CONC_HML".GRUPOEMPRESARIAL tbg
+            "${databaseSchema}".GRUPOEMPRESARIAL tbg
         WHERE 
             1 = ?
         AND tbg.STATIVO='True'`;

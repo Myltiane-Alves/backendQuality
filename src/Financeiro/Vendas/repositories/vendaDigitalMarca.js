@@ -44,23 +44,22 @@ export const getVendaDigitalMarca = async (idEmpresa, dataPesquisaInicio, dataPe
             `${dataPesquisaFim} 23:59:59`
         ];
 
-        // Condição opcional para `idEmpresa`
+
         if (idEmpresa) {
             query += ' AND tbmc.IDEMPRESA = ?';
             params.push(idEmpresa);
         }
 
-        // Condição opcional para intervalo de datas
+ 
         if (dataPesquisaInicio && dataPesquisaFim) {
             query += ' AND tbmc.DTHORAFECHAMENTO BETWEEN ? AND ?';
             params.push(`${dataPesquisaInicio} 00:00:00`, `${dataPesquisaFim} 23:59:59`);
         }
 
-        // Ordenação e paginação
+
         query += ' ORDER BY tbe.IDGRUPOEMPRESARIAL LIMIT ? OFFSET ?';
         params.push(pageSize, offset);
 
-        // Preparação e execução da query
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
 

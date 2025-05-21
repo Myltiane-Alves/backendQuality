@@ -7,27 +7,28 @@ export const getVendaPixPeriodo = async (byId, idMarca, dataPesquisaInicio, data
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
-        let query = `
+        let query = ` 
             SELECT 
                 tbe.IDEMPRESA,
                 tbe.NOFANTASIA,
                 tbv.IDVENDA,
                 tbvp.DSTIPOPAGAMENTO,
-                IFNULL(tbvp.VALORRECEBIDO, 0) AS PIX,
-                IFNULL(TO_VARCHAR(tbv.DTHORAFECHAMENTO, 'DD/MM/YYYY'), 'NÃO INFORMADO') AS DATAVENDA,
+                IFNULL ((tbvp.VALORRECEBIDO),0) AS PIX,
+                IFNULL (TO_VARCHAR(tbv.DATA_COMPENSACAO, 'DD/mm/YYYY'),'NÃO INFORMADO') AS DATA_COMPENSACAO,
+                IFNULL (TO_VARCHAR(tbv.DTHORAFECHAMENTO,'DD/mm/YYYY'),'NÃO INFORMADO') AS DATAVENDA,
                 tbvp.NUAUTORIZACAO
-            FROM 
+            FROM
                 "${databaseSchema}".VENDA tbv
                 INNER JOIN "${databaseSchema}".VENDAPAGAMENTO tbvp on tbv.IDVENDA = tbvp.IDVENDA
                 INNER JOIN "${databaseSchema}".EMPRESA tbe on tbv.IDEMPRESA = tbe.IDEMPRESA
-            WHERE 
-                1 = 1
+            WHERE
+                1 = ? 
                 AND tbv.STCANCELADO = 'False'
                 AND (tbvp.STCANCELADO = 'False' OR tbvp.STCANCELADO IS NULL)
-                AND tbvp.NOTEF = 'PIX' AND tbvp.DSTIPOPAGAMENTO = 'PIX'
+                AND tbvp.NOTEF = 'PIX' AND tbvp.DSTIPOPAGAMENTO='PIX'
         `;
 
-        const params = [];
+        const params = [1];
 
         if (byId) {
             query += ` AND tbe.IDEMPRESA = ?`;
@@ -53,6 +54,11 @@ export const getVendaPixPeriodo = async (byId, idMarca, dataPesquisaInicio, data
         if (dataPesquisaInicio && dataPesquisaFim) {
             query += ` AND (tbv.DTHORAFECHAMENTO BETWEEN ? AND ?)`;
             params.push(`${dataPesquisaInicio} 00:00:00`, `${dataPesquisaFim} 23:59:59`);
+        }
+
+        if(dataCompInicio && dataCompFim) {
+            query += ` AND (tbv.DATA_COMPENSACAO BETWEEN ? AND ?)`;
+            params.push(`${dataCompInicio} 00:00:00`, `${dataCompFim} 23:59:59`);
         }
 
         query += ` ORDER BY tbe.NOFANTASIA, tbv.DTHORAFECHAMENTO`;

@@ -1,6 +1,7 @@
 import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
+const databaseSchemaSBO = process.env.HANA_DATABASE_SBO;
 
 export const getFornecedores = async (idFornecedor, descFornecedor, CNPJFornecedor,  page, pageSize) => {
     try {
@@ -55,7 +56,7 @@ export const getFornecedores = async (idFornecedor, descFornecedor, CNPJForneced
                 "${databaseSchema}".FORNECEDOR tbf
                 LEFT JOIN "${databaseSchema}".TRANSPORTADORA TP ON tbf.IDTRANSPORTADORAPADRAO = TP.IDTRANSPORTADORA
                 LEFT JOIN "${databaseSchema}".CONDICAOPAGAMENTO CDP ON tbf.IDCONDPAGPADRAO = CDP.IDCONDICAOPAGAMENTO
-                LEFT JOIN SBO_GTO_PRD.OCRD TBO ON TBF.IDFORNECEDORSAP = TBO."CardCode"
+                LEFT JOIN ${databaseSchemaSBO}.OCRD TBO ON TBF.IDFORNECEDORSAP = TBO."CardCode"
             WHERE
                 1 = ?
                 AND tbf.STATIVO = 'True'

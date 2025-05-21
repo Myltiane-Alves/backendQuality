@@ -14,7 +14,7 @@ export const getUnidadeMedida = async (idMarca, page, pageSize) => {
         const params = [1];
 
         if (idMarca) {
-            query += ' And  tbf.IDFORNECEDOR = ? ';
+            query += ' And A."IDUNIDADEMEDIDA" = ? ';
             params.push(idMarca);
         }
     

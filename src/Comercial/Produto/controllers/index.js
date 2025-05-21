@@ -10,7 +10,7 @@ import { getProdutosMaisVendidos } from "../repositories/produtosMaisVendidos.js
 import { getVendasPorEstrutura } from "../repositories/vendasPorEstrutura.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
 
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 class ComercialProdutoControllers {
@@ -20,11 +20,9 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/comercial/grupo-produto.xsjs?nome=${nome}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl)
-      // const response = await getGrupoProduto(nome, page, pageSize)
+      const response = await getGrupoProduto(nome, page, pageSize)
 
-      return res.json(response.data);
+      return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -38,11 +36,9 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/comercial/subgrupo-produto.xsjs`;
-      const response = await axios.get(apiUrl)
-      // const response = await getSubGrupoProduto(idGrupo, page, pageSize)
+      const response = await getSubGrupoProduto(idGrupo, page, pageSize)
 
-      return res.json(response.data);
+      return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -58,11 +54,11 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/comercial/vendas-por-produto.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl)
-      // const response = await getVendasPorProdutos(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+      // const apiUrl = `${url}/api/comercial/vendas-por-produto.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+      // const response = await axios.get(apiUrl)
+      const response = await getVendasPorProdutos(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-      return res.json(response.data);
+      return res.json(response);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -70,13 +66,13 @@ class ComercialProdutoControllers {
   }
 
   async getListaMarcaProduto(req, res) {
-    let { idEstrutura, page, pageSize } = req.query;
+    let { idSubGrupo, page, pageSize } = req.query;
 
-    idEstrutura = idEstrutura ? idEstrutura : '';
+    idSubGrupo = idSubGrupo ? idSubGrupo : '';
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      const apiUrl = `${url}/api/comercial/marca-produto.xsjs?idSubGrupo=${idEstrutura}&page=${page}&pageSize=${pageSize}`;
+      const apiUrl = `${url}/api/comercial/marca-produto.xsjs?idSubGrupo=${idSubGrupo}&page=${page}&pageSize=${pageSize}`;
       const response = await axios.get(apiUrl)
       // const response = await getMarcaProduto(idEstrutura, page, pageSize)
 
@@ -122,12 +118,12 @@ class ComercialProdutoControllers {
     pageSize = pageSize ? pageSize : '';
     try {
      
-      const apiUrl = `${url}/api/comercial/vendas-vendedor-estrutura.xsjs?dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}&idGrupoEmpresarial=${idGrupoEmpresarial}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&uf=${uf}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarca}&uf=${uf}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl)
-      // const response = await getVendasVendedorEstrutura(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize) 
+      // const apiUrl = `${url}/api/comercial/vendas-vendedor-estrutura.xsjs?dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}&idGrupoEmpresarial=${idGrupoEmpresarial}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&uf=${uf}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarca}&uf=${uf}&page=${page}&pageSize=${pageSize}`;
+      // const response = await axios.get(apiUrl)
+      const response = await getVendasVendedorEstrutura(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize) 
 
 
-      return res.json(response.data); // Retorna
+      return res.json(response); // Retorna
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -152,11 +148,11 @@ class ComercialProdutoControllers {
 
     try {
       
-      const apiUrl = `${url}/api/comercial/produtos-mais-vendidos.xsjs?dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarca}&uf=${uf}&page=${page}&pageSize=${pageSize}`;
-      const response = await axios.get(apiUrl)
-      // const response = await getProdutosMaisVendidos(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+      // const apiUrl = `${url}/api/comercial/produtos-mais-vendidos.xsjs?dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarca}&uf=${uf}`;
+      // const response = await axios.get(apiUrl)
+      const response = await getProdutosMaisVendidos(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-      return res.json(response.data); // Retorna
+      return res.json(response); // Retorna
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -182,11 +178,11 @@ class ComercialProdutoControllers {
     try {
       // "http://164.152.245.77:8000/quality/concentrador/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=2024-10-04&dataPesquisaFim=2024-10-04&idMarca=0&idEmpresa=1&descricaoProduto=&uf=&idFornecedor=137&idGrupoGrade=1&idGrade=&idMarcaProduto=&uf=&page=&pageSize="
       //2 http://164.152.245.77:8000/quality/concentrador/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=2024-10-04&dataPesquisaFim=2024-10-04&idMarca=0&idEmpresa=1&descricaoProduto=&uf=0&idFornecedor=&idGrupoGrade=1&idGrade=137&idMarcaProduto=
-      const apiUrl = `${url}/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idGrupoEmpresarial}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarcaProduto}`;
-      const response = await axios.get(apiUrl)
-      // const response = await getVendasPorEstrutura(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+      // const apiUrl = `${url}/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idGrupoEmpresarial}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarcaProduto}`;
+      // const response = await axios.get(apiUrl)
+      const response = await getVendasPorEstrutura(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-      return res.json(response.data); // Retorna
+      return res.json(response); // Retorna
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;

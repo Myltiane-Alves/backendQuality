@@ -4,6 +4,10 @@ const databaseSchema = process.env.HANA_DATABASE;
 
 export const getQuebraCaixaLoja = async (idEmpresa, dataPesquisa, page, pageSize) => {
     try {
+        if (!idEmpresa) {
+            throw new Error("O Campo ID da Empresa é obrigatório!");
+        }
+        
         page = page && !isNaN(page) ? parseInt(page) : 1;
         pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
         
@@ -17,13 +21,13 @@ export const getQuebraCaixaLoja = async (idEmpresa, dataPesquisa, page, pageSize
             FROM
                 "${databaseSchema}".MOVIMENTOCAIXA dl
             WHERE
-                1 = 1
+                1 = ?
                 AND dl.STCANCELADO = 'False'
                 AND dl.STFECHADO = 'True'
-                AND dl.IDEMPRESA = ?
+                
         `;
         
-        const params = [];
+        const params = [1];
         
         if (idEmpresa) {
             query = query + ' AND dl.IDEMPRESA = ? ';
