@@ -464,7 +464,7 @@ export const createPromocao = async (dados) => {
 
             await incluirDetalheEmpresaPromocaoMarketing(
                 id, 
-                registro.IDEMPRESA, 
+                Array.isArray(registro.IDEMPRESA) ? registro.IDEMPRESA : [registro.IDEMPRESA],
                 registro.STEMPRESAPROMO
             );
 
