@@ -230,12 +230,12 @@ class ComprasControllers {
     }
 
     async getListaFornecedorProduto(req, res) {
-        let { idMarca, idFornecedor, page, pageSize } = req.query;
+        let { idMarca, idFornecedor, idProduto, page, pageSize } = req.query;
         idFornecedor = idFornecedor ? idFornecedor : '';
         idMarca = idMarca ? idMarca : '';
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
-        // idProduto = idProduto ? idProduto : '';
+        idProduto = idProduto ? idProduto : '';
 
         try {
             const apiUrl = `${url}/api/compras/fornecedor-produto.xsjs?idFornecedor=${idFornecedor}&idProduto=${idProduto}`
