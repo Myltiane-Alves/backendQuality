@@ -18,7 +18,7 @@ class App {
     }
     middlewares() {
         this.server.use(cors({
-            origin: ['https://backend-quality.vercel.app'],
+            origin: ['https://backend-quality.vercel.app', 'http://localhost:6001' ],
             credentials: true,
             timeout: 20000,
             methods: ["GET", "POST", "PUT", "DELETE"],
