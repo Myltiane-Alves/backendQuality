@@ -12,8 +12,7 @@
     "start": "nodemon src/server.js ",
     "server": "nodemon src/server.js",
     "start-gendoc": "node ./src/swagger.js",
-    "clean": "rimraf dist",
-    "build": "npm run clean && babel src --out-dir dist"
+    "build": "js"
   },
   "keywords": [],
   "author": "",
