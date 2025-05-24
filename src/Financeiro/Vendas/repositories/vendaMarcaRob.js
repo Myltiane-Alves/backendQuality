@@ -1,4 +1,4 @@
-import { toFloat } from '../../../../../web/src/utils/toFloat.js';
+import { toFloat } from '../../../utils/toFloat.js';
 import conn from '../../../config/dbConnection.js';
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
