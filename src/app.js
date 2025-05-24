@@ -27,7 +27,6 @@ class App {
                 'Authorization'
             ],
             credentials: true,
-            // preflightContinue: true,
         }));
 
         this.server.use(express.json());
