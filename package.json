@@ -9,10 +9,10 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "nodemon src/server.js ",
+    "start": "nodemon src/server.js",
     "server": "nodemon src/server.js",
     "start-gendoc": "node ./src/swagger.js",
-    "build": "js"
+    "build": "echo"
   },
   "keywords": [],
   "author": "",
