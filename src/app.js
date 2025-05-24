@@ -24,17 +24,10 @@ class App {
             methods: ["GET", "POST", "PUT", "DELETE"],
             allowedHeaders: [
                 'Content-Type',
-                'Authorization',
-                'Access-Control-Allow-Origin *',
-                'Access-Control-Allow-Headers',
-                'X-Requested-With',
-                'Access-Control-Allow-Methods',
-                'Access-Control-Allow-Credentials',
-                'Origin',
-                'Accept'
+                'Authorization'
             ],
             credentials: true,
-            preflightContinue: true,
+            // preflightContinue: true,
         }));
 
         this.server.use(express.json());
@@ -50,3 +43,15 @@ class App {
 }
 
 export default new App().server;
+
+    // allowedHeaders: [
+    //             'Content-Type',
+    //             'Authorization',
+    //             'Access-Control-Allow-Origin *',
+    //             'Access-Control-Allow-Headers',
+    //             'X-Requested-With',
+    //             'Access-Control-Allow-Methods',
+    //             'Access-Control-Allow-Credentials',
+    //             'Origin',
+    //             'Accept'
+    //         ],
