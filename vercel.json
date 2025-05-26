@@ -14,10 +14,5 @@
       "src": "/(.*)",
       "dest": "/src/server.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "PORT": "6001"
-  },
-  "regions": ["all"]
+  ]
 }
