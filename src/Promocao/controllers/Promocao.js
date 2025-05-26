@@ -19,6 +19,8 @@ class PromocaoControllers  {
         } 
     }
 
+
+    
     async putPromocao(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
