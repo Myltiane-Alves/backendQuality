@@ -1,29 +1,22 @@
-
-{ 
-  "version": 2, 
+{
+  "version": 2,
   "functions": {
-    "api": {
-      "src/server.js": {
-        "includeFiles": [
-          "src/**/*",
-          "node_modules/**/*",
-          "package.json",
-          "package-lock.json",
-          "vercel.json"
-        ],
-        "maxDuration": 10,
-        "memory": 512,
-        "runtime": "nodejs18.x"
-      },
-      "maxDuration": 10,
+    "src/server.js": {
+      "memory": 5120,
+      "maxDuration": 1000,
+      "runtime": "nodejs18.x"
+    },
+    "src/*.js": {
+      "memory": 5120,
+      "maxDuration": 1000,
       "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
-      { 
-        "source": "/(.*)", 
-        "destination": "/src/server.js",
-        "use": "@vercel/node"
-      }
-    ]
-  }
+    {
+      "source": "/(.*)",
+      "destination": "/src/server.js",
+      "use": "@vercel/node"
+    }
+  ]
+}
