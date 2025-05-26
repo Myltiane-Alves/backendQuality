@@ -19,7 +19,6 @@ class App {
     middlewares() {
         this.server.use(cors({
             // origin: ['http://164.152.245.77:8000', 'http://localhost:5173'],
-            // origin: ['https://confidencial-api.vercel.app', 'https://web-six-wine-66.vercel.app'],
             origin: ['http://localhost:5173'],
             credentials: true,
             timeout: 20000,
