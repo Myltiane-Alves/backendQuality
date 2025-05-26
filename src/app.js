@@ -24,7 +24,9 @@ class App {
             methods: ["GET", "POST", "PUT", "DELETE"],
             allowedHeaders: [
                 'Content-Type',
-                'Authorization'
+                'Authorization',
+                'Access-Control-Allow-Origin',
+                'Access-Control-Allow-Headers',
             ],
             credentials: true,
         }));
@@ -55,4 +57,3 @@ export default new App().server;
     //             'Accept'
     //         ],
 
-    
