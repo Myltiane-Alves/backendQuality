@@ -16,7 +16,7 @@
     "build": "npm run clean && babel src --out-dir dist"
   },
   "keywords": [],
-  "author": "",
+  "author": "Myltiane",
   "license": "ISC",
   "dependencies": {
     "@fajarkim/node-openssl-enc": "^0.0.7",
