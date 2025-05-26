@@ -4,13 +4,13 @@
   "rewrites": [
       { 
         "source": "/(.*)", 
-        "destination": "src/server.js" 
+        "destination": "./src/server.js" 
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "src/server.js"
+        "dest": "./src/server.js"
       }
     ]
   }
