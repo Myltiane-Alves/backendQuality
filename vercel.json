@@ -6,11 +6,5 @@
         "source": "/backend/(.*)", 
         "destination": "./src/server.js" 
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "./src/server.js"
-      }
     ]
   }
