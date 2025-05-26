@@ -3,8 +3,8 @@
   "version": 2, 
   "rewrites": [
       { 
-        "source": "/backend/(.*)", 
-        "destination": "./src/server.js" 
+        "source": "/(.*)", 
+        "destination": "/src/server.js" 
       }
     ]
   }
