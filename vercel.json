@@ -1,17 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "src/server.js": {
-      "memory": 5120,
-      "maxDuration": 1000,
-      "runtime": "nodejs18.x"
-    },
-    "src/*.js": {
-      "memory": 5120,
-      "maxDuration": 1000,
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
