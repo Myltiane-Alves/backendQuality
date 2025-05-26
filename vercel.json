@@ -11,12 +11,6 @@
       "maxDuration": 1000,
       "runtime": "nodejs18.x"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/src/server.js",
-      "use": "@vercel/node"
-    }
-  ]
+  }
+  
 }
