@@ -780,7 +780,4 @@ routes.post('/incluir-atualizar-produto-pedido', ServiceLayerControllers.postMig
 routes.post('/log-web', LogsControllers.createLogsUsuario)
 
 
- 
-export default routes;
-
-    
+export default routes;    

@@ -3,7 +3,6 @@ let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class PromocaoControllers  {
 
-
     async getListaPromocoesAtivas(req, res) {
         let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query; 
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
@@ -20,6 +19,8 @@ class PromocaoControllers  {
         } 
     }
 
+
+    
     async putPromocao(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   

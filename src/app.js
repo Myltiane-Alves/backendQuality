@@ -2,8 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import corsMiddleware from './middlewares/cors.js'
 import routes from './routes.js'
-// import routes from './Routes/routes.js';
-// import './config/ormConfig.js';
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 
@@ -18,24 +16,17 @@ class App {
     }
     middlewares() {
         this.server.use(cors({
-            // origin: ['http://164.152.245.77:8000', 'http://localhost:5173'],
-            origin: ['http://localhost:5173'],
+            origin: ['http://localhost:6001' ],
             credentials: true,
-            timeout: 20000,
+            timeout: 60000,
             methods: ["GET", "POST", "PUT", "DELETE"],
             allowedHeaders: [
                 'Content-Type',
                 'Authorization',
-                'Access-Control-Allow-Origin *',
+                'Access-Control-Allow-Origin',
                 'Access-Control-Allow-Headers',
-                'X-Requested-With',
-                'Access-Control-Allow-Methods',
-                'Access-Control-Allow-Credentials',
-                'Origin',
-                'Accept'
             ],
             credentials: true,
-            preflightContinue: true,
         }));
 
         this.server.use(express.json());
@@ -51,3 +42,16 @@ class App {
 }
 
 export default new App().server;
+
+    // allowedHeaders: [
+    //             'Content-Type',
+    //             'Authorization',
+    //             'Access-Control-Allow-Origin *',
+    //             'Access-Control-Allow-Headers',
+    //             'X-Requested-With',
+    //             'Access-Control-Allow-Methods',
+    //             'Access-Control-Allow-Credentials',
+    //             'Origin',
+    //             'Accept'
+    //         ],
+
