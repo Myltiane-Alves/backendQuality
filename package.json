@@ -12,7 +12,7 @@
     "start": "nodemon src/server.js",
     "server": "nodemon src/server.js",
     "start-gendoc": "node ./src/swagger.js",
-    "vercel-build": "npm run start && npm run build",
+    "vercel-build": "npm run start && npm run build"
   },
   "keywords": [],
   "author": "",
