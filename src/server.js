@@ -4,13 +4,13 @@ const PORT = process.env.PORT || 6001;
 // const PORT =  'https://confidencial-api.vercel.app';
 
 
-// app.listen(PORT, () => {
-//   console.log(`Servidor rodando na porta `, PORT);
-// });
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta `, PORT);
+});
 
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 6001;
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-  });
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   const PORT = process.env.PORT || 6001;
+//   app.listen(PORT, () => {
+//     console.log(`Servidor rodando na porta ${PORT}`);
+//   });
+// }
