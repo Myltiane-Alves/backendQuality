@@ -18,7 +18,7 @@ class App {
         this.server.use(cors({
             origin: ['http://localhost:6001' ],
             credentials: true,
-            timeout: 20000,
+            timeout: 60000,
             methods: ["GET", "POST", "PUT", "DELETE"],
             allowedHeaders: [
                 'Content-Type',
