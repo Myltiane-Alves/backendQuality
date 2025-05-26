@@ -228,6 +228,7 @@ class ProdutoControllers  {
             throw error;
         }
     }
+    
 
     async ListaProdutosEtiquetagem(req, res) {
         let { idLista, idProduto, descricao, codBarras } = req.query;
