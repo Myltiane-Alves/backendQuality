@@ -6,5 +6,12 @@
         "source": "/(.*)", 
         "destination": "/api/index.js" 
       }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/api/index.js",
+        "status": 200
+      }
     ]
   }
