@@ -531,7 +531,7 @@ routes.get('/tipoTecidos', ComprasControllers.getListaTipoTecidos)
 routes.get('/categoriaPedidos', ComprasControllers.getListaCategoriaPedidos)
 routes.get('/tamanhosPedidos', ComprasControllers.getListaTamanhosPedidos)
 routes.get('/vinculoTamanhoCategoria', ComprasControllers.getListaTamanhosCategoriaPedidos)
-routes.get('/fornecedorProduto', ComprasControllers.getListaFornecedorProduto)
+routes.get('/fornecedor-produto', ComprasControllers.getListaFornecedorProduto)
 routes.get('/listaDetalhePedidos', ComprasControllers.getListaDetalhePedidos)
 routes.get('/unidadeMedida', ComprasControllers.getListaUnidadeMedida)
 
