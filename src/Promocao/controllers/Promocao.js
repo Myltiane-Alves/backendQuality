@@ -30,7 +30,7 @@ class PromocaoControllers  {
             const apiUrl = `${url}/api/detalhe-promocao-ativa.xsjs?idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            return res.json(response);
+            return res.json(response.data);
         } catch(error) {
             console.error("erro no PromocaoControllers  getListaPromocoesAtivas:", error);
             throw error; 

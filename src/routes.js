@@ -679,6 +679,7 @@ routes.get('/listaPreco', ListaPrecoControllers.getListaPrecoPorMarca)
 
 
 routes.get('/promocoes-ativas', PromocaoControllers.getListaPromocoesAtivas)
+routes.get('/detalhe-promocoes-ativas', PromocaoControllers.getListaDetalhesPromocoesAtivas)
 routes.post('/criar-promocoes-ativas', PromocaoControllers.postPromocao)
 
 // // Logs
