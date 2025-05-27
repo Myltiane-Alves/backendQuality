@@ -28,7 +28,7 @@ import ConfiguracaoPixPDVControllers from './ConfiguracaoPIX/controllers/Configu
 import ConferenciaCegaControllers from './ConferenciaCega/controllers/ConferenciaCega.js';
 import ListaPrecoControllers from './controllers/ListaPreco.js';
 import LogsControllers from './LogsUsuario/controllers/log.js';
-
+import PromocaoControllers from './Promocao/controllers/Promocao.js'
 
 
 // Financeiro Início
@@ -676,6 +676,10 @@ routes.post('/inserir-status-divergencia', ConferenciaCegaControllers.postStatus
 
 // Lista de Preço
 routes.get('/listaPreco', ListaPrecoControllers.getListaPrecoPorMarca)
+
+
+routes.get('/promocoes-ativas', PromocaoControllers.getListaPromocoesAtivas)
+routes.post('/criar-promocoes-ativas', PromocaoControllers.postPromocao)
 
 // // Logs
 // routes.get('/log-web', LogsControllers.getListaLogsUsuario)
