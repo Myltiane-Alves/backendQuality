@@ -84,6 +84,7 @@ routes.post('/login', AuthentiCationController.login);
 
 // routes.use(authMiddleware)
 
+
 //  Funcionarios 
 
 routes.get('/autorizarVoucher', FuncionariosControllers.getAutorizacaoVoucherFuncionarios)
