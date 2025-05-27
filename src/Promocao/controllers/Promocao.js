@@ -4,7 +4,7 @@ import axios from "axios";
 class PromocaoControllers  {
 
 
-    async getListaPromocoesAtivas(req, res) {
+   async getListaPromocoesAtivas(req, res) {
         let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query; 
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
             dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
@@ -12,11 +12,28 @@ class PromocaoControllers  {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {   
-            const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-            return res.json(response);
+            const apiUrl = `${url}/api/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            return res.json(response.data);
         } catch(error) {
             console.error("erro no PromocaoControllers  getListaPromocoesAtivas:", error);
             throw error;
+        } 
+    }
+    async getListaDetalhesPromocoesAtivas(req, res) {
+        let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize} = req.query; 
+            idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';    
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+        try {   
+            const apiUrl = `${url}/api/detalhe-promocao-ativa.xsjs?idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl)
+            // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+            return res.json(response);
+        } catch(error) {
+            console.error("erro no PromocaoControllers  getListaPromocoesAtivas:", error);
+            throw error; 
         } 
     }
 
