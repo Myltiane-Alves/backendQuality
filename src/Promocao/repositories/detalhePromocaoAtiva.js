@@ -26,7 +26,7 @@ export const getDetalhePromocaoAtiva = async (idResumoPromocao,  page, pageSize)
         }
 
 
-        query += ` ORDER BY IDRESUMOPROMOCAOMARKETING`;
+        query += ` ORDER BY IDDETALHEPROMO DESC`;
       
 
         const offset = (page - 1) * pageSize;
