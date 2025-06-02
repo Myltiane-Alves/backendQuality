@@ -25,10 +25,6 @@ export const getDetalhePromocaoAtiva = async (idResumoPromocao,  page, pageSize)
             params.push(idResumoPromocao);
         }
 
-        if (dataPesquisaInicio && dataPesquisaFim) {
-            query += ` AND DTHORAINICIO BETWEEN ? AND ?`;
-            params.push(dataPesquisaInicio + ' 00:00:00', dataPesquisaFim + ' 23:59:59');
-        }
 
         query += ` ORDER BY IDRESUMOPROMOCAOMARKETING`;
       
