@@ -2,17 +2,17 @@ import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
 
-export const getDetalhePromocaoAtiva = async (idResumoPromocao) =>  {
+export const getDetalheEmpresaPromocaoAtiva = async (idResumoPromocao) =>  {
     try {
 
         let query = `
             SELECT 
-                IDDETALHEPROMO,
-                IDRESUMOPROMO, 
-                IDPRODUTO 
-            FROM ${databaseSchema}.DETALHEPROMOCAO
-            WHERE 
-                1 = 1
+            IDEMPRESAPROMOCAOMARKETING, 
+            IDRESUMOPROMOCAOMARKETING, 
+            IDEMPRESA, 
+            STATIVO
+        FROM "VAR_DB_NAME".EMPRESAPROMOCAOMARKETING
+        WHERE IDRESUMOPROMOCAOMARKETING = ?
 
         `;
 
