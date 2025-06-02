@@ -2,11 +2,9 @@ import conn from "../../config/dbConnection.js";
 import 'dotenv/config';
 const databaseSchema = process.env.HANA_DATABASE;
 
-export const getDetalhePromocaoAtiva = async (idResumoPromocao,  page, pageSize) =>  {
+export const getDetalhePromocaoAtiva = async (idResumoPromocao) =>  {
     try {
-        page = page && !isNaN(page) ? parseInt(page) : 1;
-        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
-        // Quais os parametros pra saber se a promoção é ativa ou não?
+
         let query = `
             SELECT 
                 IDDETALHEPROMO,
