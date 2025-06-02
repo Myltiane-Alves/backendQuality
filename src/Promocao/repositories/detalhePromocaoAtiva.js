@@ -9,22 +9,10 @@ export const getDetalhePromocaoAtiva = async (idResumoPromocao,  page, pageSize)
         // Quais os parametros pra saber se a promoção é ativa ou não?
         let query = `
             SELECT 
-                IDRESUMOPROMOCAOMARKETING, 
-                DSPROMOCAOMARKETING, 
-                DTHORAINICIO, 
-                DTHORAFIM, 
-                TPAPLICADOA,
-                APARTIRDEQTD, 
-                APARTIRDOVLR, 
-                TPFATORPROMO, 
-                FATORPROMOVLR, 
-                FATORPROMOPERC, 
-                TPAPARTIRDE, 
-                VLPRECOPRODUTO, 
-                STEMPRESAPROMO, 
-                STDETPROMOORIGEM, 
-                STDETPROMODESTINO    
-            FROM ${databaseSchema}.RESUMOPROMOCAOMARKETING
+                IDDETALHEPROMO,
+                IDRESUMOPROMO, 
+                IDPRODUTO 
+            FROM ${databaseSchema}.DETALHEPROMOCAO
             WHERE 
                 1 = 1
 
