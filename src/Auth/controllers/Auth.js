@@ -29,7 +29,7 @@ class AuthentiCationController {
 
       const token = loginResponse.data;
  
-
+      console.log(loginResponse.data, 'loginResponse.data');
 
       if (!token) {
         return res
