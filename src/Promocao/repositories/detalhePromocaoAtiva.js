@@ -11,7 +11,7 @@ export const getDetalheEmpresaPromocaoAtiva = async (idResumoPromocao) =>  {
             IDRESUMOPROMOCAOMARKETING, 
             IDEMPRESA, 
             STATIVO
-        FROM "VAR_DB_NAME".EMPRESAPROMOCAOMARKETING
+        FROM ${databaseSchema}.EMPRESAPROMOCAOMARKETING
         WHERE IDRESUMOPROMOCAOMARKETING = ?
 
         `;
