@@ -13,7 +13,7 @@ class AuthentiCationController {
           usuario: usuario,
           senha: senha,
           modulo: modulo,
-          empusuario: empusuario,
+          empusuario: 1,
         }
       );
       // const loginResponse = await autenticacaoUsuario(
