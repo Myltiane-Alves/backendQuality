@@ -16,21 +16,10 @@ export const getDetalheEmpresaPromocaoAtiva = async (idResumoPromocao) =>  {
 
         `;
 
-        const params = [];
+        const params = [idResumoPromocao];
 
-        if (idResumoPromocao) {
-            query += ` AND IDRESUMOPROMO = ?`;
-            params.push(idResumoPromocao);
-        }
-
-
-        query += ` ORDER BY IDDETALHEPROMO DESC`;
-      
-
-        const offset = (page - 1) * pageSize;
-        query += ' LIMIT ? OFFSET ?';
-        params.push(pageSize, offset);
-        
+        query += ` ORDER BY  IDRESUMOPROMOCAOMARKETING`;
+    
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
 
