@@ -21,7 +21,7 @@ export const getDetalhePromocaoAtiva = async (idResumoPromocao,  page, pageSize)
         const params = [];
 
         if (idResumoPromocao) {
-            query += ` AND IDRESUMOPROMOCAOMARKETING = ?`;
+            query += ` AND IDRESUMOPROMO = ?`;
             params.push(idResumoPromocao);
         }
 
