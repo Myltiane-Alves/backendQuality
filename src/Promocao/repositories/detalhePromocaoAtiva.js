@@ -22,13 +22,17 @@ export const getDetalheEmpresaPromocaoAtiva = async (idResumoPromocao) =>  {
     
         const statement = await conn.prepare(query);
         const result = await statement.exec(params);
+        if(!Array.isArray(result) || result.length === 0) {
+            return [];
+        }
 
-        return {
-            page,
-            pageSize,
-            rows: result.length,
-            data: result
-        };
+        const data = result.map(row => ({
+            idEmpresaPromocaoMarketing: row.IDEMPRESAPROMOCAOMARKETING,
+            idResumoPromocaoMarketing: row.IDRESUMOPROMOCAOMARKETING,
+            idEmpresa: row.IDEMPRESA,
+            statusAtivo: row.STATIVO
+        }));
+        return data;
         
     } catch (error) {
         console.log('Erro ao consultar Promoções Ativas', error);
