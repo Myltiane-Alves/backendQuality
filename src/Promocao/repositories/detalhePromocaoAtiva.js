@@ -39,10 +39,8 @@ export const getDetalheEmpresaPromocaoAtiva = async (idResumoPromocao) =>  {
     }
 }
 
-export const getDetalhePromocaoAtiva = async (idResumoPromocao, page, pageSize) =>  {
+export const getDetalhePromocao = async (idResumoPromocao) =>  {
     try {
-        page = page && !isNaN(page) ? parseInt(page) : 1;
-        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
 
         let query = `
             SELECT 
@@ -71,7 +69,78 @@ export const getDetalhePromocaoAtiva = async (idResumoPromocao, page, pageSize) 
                 idDetalhePromocao: row.IDDETALHEPROMO,
                 idProduto: row.IDPRODUTO
             },
-            empresaspromocaoAtiva: await getDetalheEmpresaPromocaoAtiva(row.IDRESUMOPROMO)
+        })));
+        return {
+            page,
+            pageSize,
+            rows: data.length,
+            data: data
+        }
+        
+    } catch (error) {
+        console.log('Erro ao consultar Detalhe Promoções ', error);
+    }
+}
+
+export const getDetalhePromocaoAtiva = async (idResumoPromocao, dataPesquisaFim, page, pageSize) =>  {
+    try {
+        page = page && !isNaN(page) ? parseInt(page) : 1;
+        pageSize = pageSize && !isNaN(pageSize) ? parseInt(pageSize) : 1000;
+
+        let query = `
+            SELECT 
+                IDRESUMOPROMOCAOMARKETING, 
+                DSPROMOCAOMARKETING, 
+                DTHORAINICIO, 
+                DTHORAFIM, 
+                TPAPLICADOA, 
+                APARTIRDEQTD, 
+                APARTIRDOVLR, 
+                TPFATORPROMO, 
+                FATORPROMOVLR, 
+                FATORPROMOPERC, 
+                TPAPARTIRDE, 
+                VLPRECOPRODUTO, 
+                IDMECANICARESUMOPROMOCAOMARKETING
+            FROM "${databaseSchema}".RESUMOPROMOCAOMARKETING
+            WHERE 
+                1 = ?
+
+        `;
+
+        const params = [];
+
+        if(idResumoPromocao) {
+            query += ` AND IDRESUMOPROMOCAOMARKETING = ?`;
+            params.push(idResumoPromocao);
+        }
+
+        if(dataPesquisaFim) {
+            query += ` AND DTHORAFIM >= ?`;
+            params.push(dataPesquisaFim + ' 23:59:59');
+        }
+
+        // if (dataPesquisaInicio && dataPesquisaFim) {
+        //     query += ` AND DTHORAINICIO BETWEEN ? AND ?`;
+        //     params.push(dataPesquisaInicio + ' 00:00:00', dataPesquisaFim + ' 23:59:59');
+        // }
+
+        query += ` ORDER BY  IDRESUMOPROMOCAOMARKETING`;
+    
+        const statement = await conn.prepare(query);
+        const result = await statement.exec(params);
+        if(!Array.isArray(result) || result.length === 0) {
+            return [];
+        }
+
+        const data =  await Promise.all(result.map(async (row) => ({
+            detalhe: {
+                idResumoPromocao: row.IDRESUMOPROMO,
+                idDetalhePromocao: row.IDDETALHEPROMO,
+                idProduto: row.IDPRODUTO
+            },
+            empresaspromocaoAtiva: await getDetalheEmpresaPromocaoAtiva(row.IDRESUMOPROMO),
+            detalhePromocao: await getDetalhePromocao(row.IDRESUMOPROMO),
 
         })));
         return {
