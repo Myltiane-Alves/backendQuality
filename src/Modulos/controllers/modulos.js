@@ -15,7 +15,7 @@ class ModulosControllers  {
             const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_react_node/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&idModulo=${idModulo}`)
             // const response = await getPerfilUsuarioMenu(idUsuario, idModulo)
            
-            return res.json(response); // Retorna
+            return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
