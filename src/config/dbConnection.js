@@ -3,8 +3,8 @@ import hana from '@sap/hana-client';
 
 export const connParams = {
     serverNode: '10.117.165.43:30015',
-    uid: 'GTO_MYLTIANE',
-    pwd: '9532Game@',
+    uid: 'GTO_DEV',
+    pwd: 'Gto@1234',
     dbname: 'QUALITY_CONC_HML',
     encrypt: false
 };
