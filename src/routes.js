@@ -79,8 +79,8 @@ routes.get('/', (req, res) => {
 
 routes.get('/ping', ApiPing.index);
 
-routes.post('/login', AuthentiCationController.login);
-// routes.post('/login2', AuthentiCationController.login2);
+// routes.post('/login', AuthentiCationController.login);
+routes.post('/login2', AuthentiCationController.login);
 
 // routes.use(authMiddleware)
 
