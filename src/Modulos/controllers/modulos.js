@@ -5,6 +5,22 @@ import {  getSubMenuUsuario } from "../Menus/repositories/subMenu.js";
 let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class ModulosControllers  {
+     
+    async getListaPerfilUsuario(req, res) {
+        let { idUsuario, idModulo } = req.query;
+        idUsuario = idUsuario ? idUsuario : '';
+        idModulo = idModulo ? idModulo : '';
+        try {
+           
+            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_react_node/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&idModulo=${idModulo}`)
+            // const response = await getPerfilUsuarioMenu(idUsuario, idModulo)
+           
+            return res.json(response); // Retorna
+        } catch (error) {
+            console.error("Unable to connect to the database:", error);
+            throw error;
+        }
+    }
 
     async getListaModulos(req, res) {
         let { idPerfil } = req.query;
@@ -29,9 +45,10 @@ class ModulosControllers  {
         idModulo = idModulo ? idModulo : '';
         dsModulo = dsModulo ? dsModulo : '';
         try {   
+            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/perfilUsuario/perfilUsuarioMenu.xsjs?idMenu=${idMenu}&idModulo=${idModulo}&dsModulo=${dsModulo}`)
 
-            const response = await getMenuUsuario(idMenu, idModulo, dsModulo);
-            return res.json(response); // Retorna
+            // const response = await getMenuUsuario(idMenu, idModulo, dsModulo);
+            return res.json(response.data); // Retorna
         } catch(error) {
             console.error("Unable to connect to the database:", error);
             throw error;
