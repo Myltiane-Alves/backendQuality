@@ -6,21 +6,22 @@ let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
 class ModulosControllers  {
      
-    async getListaPerfilUsuario(req, res) {
+     async getListaPerfilUsuario(req, res) {
         let { idUsuario, idModulo } = req.query;
         idUsuario = idUsuario ? idUsuario : '';
         idModulo = idModulo ? idModulo : '';
         try {
-           
-            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_react_node/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&idModulo=${idModulo}`)
             // const response = await getPerfilUsuarioMenu(idUsuario, idModulo)
-           
+   
+            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}`);
+            //  console.log(response.data); // Retorna
             return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
         }
     }
+
 
     async getListaModulos(req, res) {
         let { idPerfil } = req.query;
