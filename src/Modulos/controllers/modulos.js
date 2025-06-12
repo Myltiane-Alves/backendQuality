@@ -7,12 +7,13 @@ let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 class ModulosControllers  {
      
      async getListaPerfilUsuario(req, res) {
-        let { idUsuario, idModulo } = req.query;
-        idUsuario = idUsuario ? idUsuario : '';
-        idModulo = idModulo ? idModulo : '';
+        let { idUsuario, page, pageSize } = req.query;
+            idUsuario = idUsuario ? idUsuario : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
         try {
             // const response = await getPerfilUsuarioMenu(idUsuario, idModulo)
-            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}`;
+            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl);
             //  console.log(response.data); // Retorna
             return res.json(response.data); // Retorna
