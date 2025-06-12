@@ -12,8 +12,8 @@ class ModulosControllers  {
         idModulo = idModulo ? idModulo : '';
         try {
             // const response = await getPerfilUsuarioMenu(idUsuario, idModulo)
-   
-            const response = await axios.get(`http://164.152.245.77:8000/quality/concentrador_homologacao/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}`);
+            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&idModulo=${idModulo}`;
+            const response = await axios.get(apiUrl);
             //  console.log(response.data); // Retorna
             return res.json(response.data); // Retorna
         } catch (error) {
