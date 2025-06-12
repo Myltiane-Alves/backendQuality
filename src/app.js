@@ -22,7 +22,7 @@ class App {
             // origin: ['http://localhost:5173'],
             origin: ['https://confidencial-api.vercel.app', 'https://web-six-wine-66.vercel.app'],
             credentials: true,
-            timeout: 20000,
+            timeout: 50000,
             methods: ["GET", "POST", "PUT", "DELETE"],
             allowedHeaders: [
                 'Content-Type',
