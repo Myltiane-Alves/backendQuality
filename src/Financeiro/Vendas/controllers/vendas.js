@@ -107,7 +107,7 @@ class FinanceiroVendasControllers {
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
-          const apiUrl = await `${url}/api/financeiro/venda-conciliacao.xsjs?page=${page}&idGrupo=${idGrupo}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&idLoja=${idLoja}`
+          const apiUrl = `${url}/api/financeiro/venda-conciliacao.xsjs?page=${page}&idGrupo=${idGrupo}&dtInicio=${dataPesquisaInicio}&dtFim=${dataPesquisaFim}&idLoja=${idLoja}`
           const response = await axios.get(apiUrl)
         // const response = await getVendaConciliacao(idGrupo, idLoja, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
   
