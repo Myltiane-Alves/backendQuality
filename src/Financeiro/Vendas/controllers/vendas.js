@@ -15,9 +15,9 @@ import { getVendaTotalRecebidoEleteronico } from "../repositories/vendaTotalRece
 import { getVendaTotalRecebidoPeriodo } from "../repositories/vendaTotalRecebidoPeriodo.js";
 import { getVendaMarcaPeriodo } from "../repositories/vendaMarcaPeriodo.js";
 import { getVendaDigitalMarca } from "../repositories/vendaDigitalMarca.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
-
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 class FinanceiroVendasControllers {
 
