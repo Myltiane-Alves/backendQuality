@@ -33,7 +33,7 @@ import { getExtratoLojaPeriodo } from "../Extrato/repositories/extratoLojaPeriod
 // import { getPedidosCompras } from "../Financeiro/Pedidos/repositories/pedidosCompra.js";
 // import { getMotivoDevolucao, putMotivoDevolucao } from "../Financeiro/Devolucao/repositories/motivoDevolucao.js";
 // import { getVendas } from "../repositories/repositoriesVendaTotal.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+let url = `http://164.152.245.77:8000/quality/concentrador_node`;
 
 class FinanceiroControllers {
 
@@ -185,11 +185,11 @@ class FinanceiroControllers {
     pageSize = pageSize ? pageSize : '';
 
     try {
-      // const apiUrl = `${url}/api/financeiro/detalhe-fechamento.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`
-      // const response = await axios.get(apiUrl)
-      const response = await getDetalheFechamento(idEmpresa, dataPesquisa);
+      const apiUrl = `${url}/api/financeiro/detalhe-fechamento.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`
+      const response = await axios.get(apiUrl)
+      // const response = await getDetalheFechamento(idEmpresa, dataPesquisa);
 
-      return res.json(response); 
+      return res.json(response.data); 
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -574,11 +574,11 @@ class FinanceiroControllers {
 
     try {
 
-      // const apiUrl = `${url}/api/financeiro/despesa-loja.xsjs?idCategoria=${idCategoria}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
-      // const response = await axios.get(apiUrl)
-      const response = await getDespesaLoja(idEmpresa, idCategoria, dataPesquisaInicio, dataPesquisaFim)
+      const apiUrl = `${url}/api/financeiro/despesa-loja.xsjs?idCategoria=${idCategoria}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+      const response = await axios.get(apiUrl)
+      // const response = await getDespesaLoja(idEmpresa, idCategoria, dataPesquisaInicio, dataPesquisaFim)
      
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
