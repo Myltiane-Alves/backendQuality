@@ -6,8 +6,9 @@ import { getVendaFaturaPixPeriodo, getVendaFaturaPixPeriodoCompensada, putVendaP
 import { getDetalheFatura } from "../repositories/detalheFatura.js";
 import { putAtualizarFatura, putAtualizarRecompra } from "../repositories/FaturaLoja/faturaLoja.js";
 import { getFaturaPixPeriodoConsolidado } from "../repositories/faturaPixPeriodoConsolidado.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
 
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 class FaturasControllers {
   async getListaFaturasPixPeriodo(req, res) {
