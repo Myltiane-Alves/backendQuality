@@ -33,7 +33,9 @@ import { getExtratoLojaPeriodo } from "../Extrato/repositories/extratoLojaPeriod
 // import { getPedidosCompras } from "../Financeiro/Pedidos/repositories/pedidosCompra.js";
 // import { getMotivoDevolucao, putMotivoDevolucao } from "../Financeiro/Devolucao/repositories/motivoDevolucao.js";
 // import { getVendas } from "../repositories/repositoriesVendaTotal.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_node`;
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
+
 
 class FinanceiroControllers {
 
