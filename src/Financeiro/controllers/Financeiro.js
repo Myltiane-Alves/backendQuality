@@ -34,7 +34,7 @@ import { getExtratoLojaPeriodo } from "../Extrato/repositories/extratoLojaPeriod
 // import { getMotivoDevolucao, putMotivoDevolucao } from "../Financeiro/Devolucao/repositories/motivoDevolucao.js";
 // import { getVendas } from "../repositories/repositoriesVendaTotal.js";
 import 'dotenv/config';
-const url = process.env.API_URL|| 'localhost:6001'
+const url = process.env.API_URL;
 
 
 class FinanceiroControllers {
@@ -688,18 +688,17 @@ class FinanceiroControllers {
   }
 
   async getListaFaturasPixConsolidado(req, res) {
-    let { idMarca, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
+    let { idMarca, page, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
 
     if (!isNaN(idMarca)) {
       idMarca = Number(idMarca);
-      const pageSize = 100;
-      const offset = (pageNumber - 1) * pageSize;
-      dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-      dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
-
+      dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+      dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+      pageSize = pageSize ? pageSize : '';
+      page = page ? page : '';
       try {
-        // ajaxGet('api/financeiro/venda-pix-consolidado.xsjs?pageSize=1000&page=' + numPage + '&idMarca=' + IDPesqVendaPixConsolid + '&dataPesquisaInicio=' + datapesqinicioConsolid + '&dataPesquisaFim=' + datapesqfimConsolid)
-        const apiUrl = `${url}/api/financeiro/fatura-pix-periodo-consolidado.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+        
+        const apiUrl = `${url}/api/financeiro/fatura-pix-periodo-consolidado.xsjs?page=${page}&pageSize=${pageSize}&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
         const response = await axios.get(apiUrl)
 
         return res.json(response.data);
@@ -711,18 +710,19 @@ class FinanceiroControllers {
   }
 
   async getListaFaturaPixConsolidadoLoja(req, res) {
-    let { idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresaLista, page, pageSize } = req.query;
+    let { idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresa, page, pageSize } = req.query;
 
       idMarca = Number(idMarca) ? Number(idMarca) : '';
-      dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-      dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+      dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+      dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
       idLoja = idLoja ? idLoja : '';
-      empresaLista = empresaLista ? empresaLista : '';
+      empresa = empresa ? empresa : '';
       page = page ? page : '';
       pageSize = pageSize ? pageSize : '';
 
       try {
-        const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado-loja.xsjs?pageSize=1000&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&lojas=${idLoja}&empresasList=${listaEmpresas}`
+                               
+        const apiUrl = `${url}/api/financeiro/fatura-pix-consolidado-loja.xsjs?page=${page}&pageSize=${pageSize}&idMarca=${idMarca}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&lojas=${idLoja}&empresa=${empresa}`
         const response = await axios.get(apiUrl)
         // const response = await getFaturaPixConsolidadoLoja(idMarca, dataPesquisaInicio, dataPesquisaFim, idLoja, empresaLista, page, pageSize)
 

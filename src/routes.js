@@ -287,7 +287,7 @@ routes.get('/pedido-compras', PedidosControllers.getListaPedidosCompras)
 
 
 // Faturas
-routes.get('/fatura-pix-periodo-consolidado', FaturasControllers.getListaFaturasPixConsolidado2)
+routes.get('/fatura-pix-periodo-consolidado', FinanceiroControllers.getListaFaturasPixConsolidado)
 routes.get('/fatura-pix-periodo', FaturasControllers.getListaFaturasPixPeriodo)
 routes.get('/detalhe-faturas', FaturasControllers.getDetalheFaturaFinanceiro)
 // routes.get('/faturaPixPeriodo', FaturasControllers.getListaVendaFaturaPixPeriodo)
