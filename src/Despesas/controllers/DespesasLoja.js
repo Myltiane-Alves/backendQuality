@@ -103,7 +103,7 @@ class DespesasLojaControllers  {
         try {
             const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
             // const response = await  createDespesaTodos(despesas);
-            const response = await  await axios.post(`${url}/api/despesa-loja/todos.xsjs`, despesas)
+            const response = await axios.post(`${url}/api/despesa-loja/todos.xsjs`, despesas)
             return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
