@@ -23,6 +23,23 @@ class ModulosControllers  {
         }
     }
 
+    async getListaMenusPorUsuario(req, res) {
+        let { idUsuario, idMenuFilho } = req.query;
+    
+        idUsuario = idUsuario ? idUsuario : '';
+        idMenuFilho = idMenuFilho ? idMenuFilho : '';
+        try {
+            // const response = await getPerfilMenuFilho(idUsuario, idMenuFilho)
+            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&page=${page}&pageSize=${pageSize}`;
+            
+            const response = await axios.get(apiUrl);
+            
+            return res.json(response.data); // Retorna
+        } catch (error) {
+            console.error("Unable to connect to the database:", error);
+            throw error;
+        }
+    }
 
     async getListaModulos(req, res) {
         let { idPerfil } = req.query;
