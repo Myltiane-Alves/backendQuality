@@ -328,6 +328,7 @@ export const getMenuFilho = async (idMenuPai, idMenuFilho) => {
     return data;
 }
 
+
 export const getModuloPrincipal = async (idModulo) => {
     const query = `SELECT * FROM ${databaseSchema}.MODULOPRINCIPAL WHERE ID = ?`;
     const params = [idModulo];
