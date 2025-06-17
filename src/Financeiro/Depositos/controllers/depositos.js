@@ -1,8 +1,8 @@
 
 import axios from "axios";
 import { getDepositoLoja, putDepositoLoja } from "../repositories/depositoLoja.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
-
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class DepositosControllers {
     async getListaConciliarBanco(req, res) {

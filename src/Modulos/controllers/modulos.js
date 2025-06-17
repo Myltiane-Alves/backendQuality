@@ -2,7 +2,8 @@ import axios from "axios";
 import { createModulo, getModulos, updateModulo } from "../repositories/modulos.js";
 import { getMenuUsuario } from "../Menus/repositories/menu.js";
 import {  getSubMenuUsuario } from "../Menus/repositories/subMenu.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class ModulosControllers  {
      
@@ -30,9 +31,9 @@ class ModulosControllers  {
         idMenuFilho = idMenuFilho ? idMenuFilho : '';
         try {
             // const response = await getPerfilMenuFilho(idUsuario, idMenuFilho)
-            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&page=${page}&pageSize=${pageSize}`;
-            
+            const apiUrl = `${url}/api/perfilUsuario/menus-usuario-exececao.xsjs?idUsuario=${idUsuario}&idMenuFilho=${idMenuFilho}`;
             const response = await axios.get(apiUrl);
+        //    return console.log(response.data);
             
             return res.json(response.data); // Retorna
         } catch (error) {
