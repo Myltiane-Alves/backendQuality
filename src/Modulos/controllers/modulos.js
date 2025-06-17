@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createModulo, getModulos, updateModulo } from "../repositories/modulos.js";
+import { createModulo, getModulos, getPerfilMenuFilho, updateModulo } from "../repositories/modulos.js";
 import { getMenuUsuario } from "../Menus/repositories/menu.js";
 import {  getSubMenuUsuario } from "../Menus/repositories/subMenu.js";
 import 'dotenv/config';
@@ -30,12 +30,12 @@ class ModulosControllers  {
         idUsuario = idUsuario ? idUsuario : '';
         idMenuFilho = idMenuFilho ? idMenuFilho : '';
         try {
-            // const response = await getPerfilMenuFilho(idUsuario, idMenuFilho)
-            const apiUrl = `${url}/api/perfilUsuario/menus-usuario-exececao.xsjs?idUsuario=${idUsuario}&idMenuFilho=${idMenuFilho}`;
-            const response = await axios.get(apiUrl);
+            const response = await getPerfilMenuFilho(idUsuario, idMenuFilho)
+            // const apiUrl = `${url}/api/perfilUsuario/menus-usuario-exececao.xsjs?idUsuario=${idUsuario}&idMenuFilho=${idMenuFilho}`;
+            // const response = await axios.get(apiUrl);
         //    return console.log(response.data);
             
-            return res.json(response.data); // Retorna
+            return res.json(response); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
