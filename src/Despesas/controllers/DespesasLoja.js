@@ -4,7 +4,8 @@ import { getDespesasEmpresa } from "../repositories/empresa.js";
 import { createDespesaTodos, getDespesasTodos } from "../repositories/todos.js";
 import { getDespesaLojaDashBoard } from "../../DashBoard/DespesaLoja/repositories/despesaLoja.js";
 import { updateDespesasLoja } from "../../Financeiro/Despesas/repositories/despesaLoja.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class DespesasLojaControllers  {
 
@@ -53,10 +54,10 @@ class DespesasLojaControllers  {
             pageSize = pageSize ? pageSize : '';
             page = page ? page : '';
 
-            const apiUrl = `${url}/api/despesa-loja/todos.xsjs?id=${idEmpresa}`;
+            const apiUrl = `${url}/api/despesa-loja/todos.xsjs?id=${idDespesas}`;
             const response = await axios.get(apiUrl)
             // const response = await getDespesasTodos(idDespesas, pageSize, page)
-            return res.json(response);
+            return res.json(response.data);
         } catch(error) {
             console.error("Unable to connect to the database:", error);
                 throw error;

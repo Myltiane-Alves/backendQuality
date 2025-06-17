@@ -3,7 +3,8 @@ import axios from "axios";
 import { getDespesaLoja, updateDespesasLoja, updateStatusDespesasLoja } from "../repositories/despesaLoja.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
 import { getDespesaLojaDashBoard } from "../../../DashBoard/DespesaLoja/repositories/despesaLoja.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 
 class DespesasControllers {

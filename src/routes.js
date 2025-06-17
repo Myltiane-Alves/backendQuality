@@ -107,7 +107,6 @@ routes.get('/menus-usuario-excecao', ModulosControllers.getListaMenusPorUsuario)
 // routes.get('/menus-usuario', ModulosControllers.getListaMenusUsuario)
 routes.get('/menus', ModulosControllers.getListaSubMenusUsuario)
 
-
 // routes.get('/listaCaixasMovimento', AdministrativoControllers.getListaCaixasMovimento);
 //Início Administrativo
 routes.get('/listaCaixasMovimento', AdministrativoControllers.retornoListaCaixasMovimento);
