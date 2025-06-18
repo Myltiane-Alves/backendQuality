@@ -1,8 +1,8 @@
 // import { getAdiantamentosLojas } from "../DashBoard/AdiantamentoSalarial/adiantamento-lojas.js";
 import { getQuebraCaixa } from "../QuebraCaixa/repositories/listaQuebraCaixa.js";
 import { dataFormatada } from "../../utils/dataFormatada.js";
-// let url = `http://164.152.245.77:8000/quality/concentrador_react_node`;
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 import axios from 'axios';
 
 class DashBoardControllers {
