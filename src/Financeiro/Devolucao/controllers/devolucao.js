@@ -1,7 +1,8 @@
 
 import axios from "axios";
 import { getMotivoDevolucao, postMotivoDevolucao, putMotivoDevolucao } from "../repositories/motivoDevolucao.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 
 
@@ -28,10 +29,11 @@ class DevolucaoControllers {
 
   async updateMotivoDevolucao(req, res) {
     try {
-      const devolucoes = Array.isArray(req.body) ? req.body : [req.body];
-      const response = await putMotivoDevolucao(devolucoes)
+      const dados = Array.isArray(req.body) ? req.body : [req.body];
+      // const response = await putMotivoDevolucao(devolucoes)
+      const response = await axios.post(`${url}/api/financeiro/motivo-devolucao.xsjs`, dados);
 
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -40,14 +42,13 @@ class DevolucaoControllers {
 
 
   async createMotivoDevolucao(req, res) {
-    const devolucao  = Array.isArray(req.body) ? req.body : [req.body];
-
+    
     try {
+      const dados  = Array.isArray(req.body) ? req.body : [req.body];
+      // const response = await postMotivoDevolucao(devolucao)
+      const response = await axios.post(`${url}/api/financeiro/motivo-devolucao.xsjs`, dados);
 
-      const response = await postMotivoDevolucao(devolucao)
-
-
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getEmpresasLista, updateEmpresa } from "../repositories/empresas.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 class EmpresaControllers {
-
 
     async getAllEmpresas(req, res) {
         let {idEmpresa, idSubGrupoEmpresa,  page, pageSize} = req.query;
