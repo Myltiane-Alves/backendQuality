@@ -4,7 +4,9 @@ import { getFornecedores } from "../repositories/fornecedor.js";
 import { getPedidos } from "../repositories/listaPedidos.js";
 import { getDetalhePedido } from "../repositories/listaDetalhePedidosGrade.js";
 import { createEstilo, getEstilos, updateEstilo } from "../repositories/estilos.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+import 'dotenv/config';
+const url = process.env.API_URL;
+
 class ComprasControllers {
 
     async getListaTodosPedidos(req, res) {
