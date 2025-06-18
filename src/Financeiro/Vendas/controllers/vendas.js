@@ -30,7 +30,7 @@ class FinanceiroVendasControllers {
       dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
       page = page ? page : '';
       pageSize = pageSize ? pageSize : '';
-      // http://164.152.245.77:8000/quality/concentrador/api/financeiro/venda-loja-periodo.xsjs?pageSize=500&page=1&idEmpresa=&dataPesquisaInicio=2025-06-18&dataPesquisaFim=2025-06-18
+      
       const apiUrl = `${url}/api/financeiro/venda-loja-periodo.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`
       const response = await axios.get(apiUrl)
       return res.json(response.data);
