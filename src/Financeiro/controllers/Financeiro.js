@@ -877,7 +877,7 @@ class FinanceiroControllers {
 
   // }
   async getListaDetalheRecebimentosEletronico(req, res) {
-    let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim, nomeTef, nomeAutorizador, numeroParcelas } = req.query;
+    let { idEmpresa, page, pageSize, dataPesquisaInicio, dataPesquisaFim, nomeTef, nomeAutorizador, numeroParcelas } = req.query;
 
 
     idEmpresa = idEmpresa ? idEmpresa : '';
@@ -886,9 +886,11 @@ class FinanceiroControllers {
     nomeTef = nomeTef ? nomeTef : '';
     nomeAutorizador = nomeAutorizador ? nomeAutorizador : '';
     numeroParcelas = numeroParcelas ? numeroParcelas : '';
+    page = page ? page : '';
+    pageSize = pageSize ? pageSize : '';
     try {
       // ajaxGet('api/financeiro/venda-detalhe-recebimento-eletronico.xsjs?idEmpresa=' + IDEmpresaPesqVenda + '&dataPesquisaInicio=' + datapesqinicio +'&dataPesquisaFim=' + datapesqfim +'&nomeTef=' + nomeTef +'&nomeAutorizador=' + nomeAutorizador +'&numeroParcelas=' + numeroParcelas)
-      const apiUrl = `${url}/api/financeiro/venda-detalhe-recebimento-eletronico.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&nomeTef=${nomeTef}&nomeAutorizador=${nomeAutorizador}&numeroParcelas=${numeroParcelas}`
+      const apiUrl = `${url}/api/financeiro/venda-detalhe-recebimento-eletronico.xsjs?page=${page}&pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&nomeTef=${nomeTef}&nomeAutorizador=${nomeAutorizador}&numeroParcelas=${numeroParcelas}`
       const response = await axios.get(apiUrl)
 
       return res.json(response.data);
