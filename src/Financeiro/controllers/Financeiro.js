@@ -787,12 +787,12 @@ class FinanceiroControllers {
     pageSize = pageSize ? pageSize : '';
     page = page ? page : '';
     idConta = idConta ? idConta : '';
-    dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-    dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
-    dataCompensacaoInicio = dataFormatada(dataCompensacaoInicio) ? dataFormatada(dataCompensacaoInicio) : '';
-    dataCompensacaoFim = dataFormatada(dataCompensacaoFim) ? dataFormatada(dataCompensacaoFim) : '';
-    dataMovimentoInicio = dataFormatada(dataMovimentoInicio) ? dataFormatada(dataMovimentoInicio) : '';
-    dataMovimentoFim = dataFormatada(dataMovimentoFim) ? dataFormatada(dataMovimentoFim) : '';
+    dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+    dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+    dataCompensacaoInicio = dataCompensacaoInicio ? dataCompensacaoInicio : '';
+    dataCompensacaoFim = dataCompensacaoFim ? dataCompensacaoFim : '';
+    dataMovimentoInicio = dataMovimentoInicio ? dataMovimentoInicio : '';
+    dataMovimentoFim = dataMovimentoFim ? dataMovimentoFim : '';
 
     try {
       const apiUrl = `${url}/api/financeiro/deposito-loja-consolidado.xsjs?page=${page}&pageSize=${pageSize}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dataCompInicio=${dataCompensacaoInicio}&dataCompFim=${dataCompensacaoFim}&datamovinicio=${dataMovimentoInicio}&datamovfim=${dataMovimentoFim}`
