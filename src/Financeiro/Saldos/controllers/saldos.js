@@ -44,13 +44,15 @@ class SaldosControllers {
 
 
     async createMovimentoSaldoBonificacao(req, res) {
-        let { IDFUNCIONARIO, TIPOMOVIMENTO, VRMOVIMENTO, OBSERVACAO, IDFUNCIONARIORESP } = req.body;
+        // let { IDFUNCIONARIO, TIPOMOVIMENTO, VRMOVIMENTO, OBSERVACAO, IDFUNCIONARIORESP } = req.body;
     
+      
         try {
-          
-          const response = await postMovimentoSaldoBonificacao(IDFUNCIONARIO, TIPOMOVIMENTO, VRMOVIMENTO, OBSERVACAO, IDFUNCIONARIORESP)
-    
-          return res.json(response); 
+          const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
+  
+          const response = await axios.post(`${url}/api/financeiro/movimento-saldo-bonificacao.xsjs`, despesas);
+          // const response = await postMovimentoSaldoBonificacao(IDFUNCIONARIO, TIPOMOVIMENTO, VRMOVIMENTO, OBSERVACAO, IDFUNCIONARIORESP)
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
