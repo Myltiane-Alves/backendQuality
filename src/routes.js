@@ -330,7 +330,7 @@ routes.put('/fechar-caixas-zerados', CaixasControllers.updateFecharCaixaZerado)
 
 
 // Depositos
-routes.put('/atualizar-deposito-loja', DepositosControllers.updateDepositoLoja)
+routes.put('/atualizar-deposito-loja/:id', DepositosControllers.updateDepositoLoja)
 routes.get('/deposito-loja', DepositosControllers.getListaDepositosLoja)
 
 
