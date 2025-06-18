@@ -421,16 +421,17 @@ class DashBoardControllers {
     }
 
     async getListaExtratoDaLojaPeriodoADM(req, res) {
-        let { idEmpresa, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
+        let { idEmpresa, page, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
 
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
+            idEmpresa = Number(idEmpresa) ? idEmpresa : '';
+            dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
             pageSize = pageSize ? pageSize : '';
-            dataPesquisaInicio = dataFormatada(dataPesquisaInicio)
-            dataPesquisaFim = dataFormatada(dataPesquisaFim)
+            page = page ? page : '';
             // ajaxGet('api/dashboard/extrato-loja-periodo.xsjs?pageSize=500&page=1&idEmpresa=' + idemp + '&dataPesquisaInicio=' + datapesq + '&dataPesquisaFim=' + datapesq)
             try {
-                const apiUrl = `${url}/api/dashboard/extrato-loja-periodo.xsjs?pageSize=500&page=1&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+                const apiUrl = `${url}/api/dashboard/extrato-loja-periodo.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
                 const response = await axios.get(apiUrl)
 
                 return res.json(response.data); // Retorna

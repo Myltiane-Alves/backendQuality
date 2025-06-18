@@ -352,7 +352,7 @@ routes.get('/adiantamentoSalarialFuncionarios', DashBoardControllers.getListAdia
 routes.get('/adiantamentoSalarialFuncionariosGerencia', DashBoardControllers.getAdiantamentoSalarialFuncionario)
 // routes.get('/vendasResumoLojaGerencia', DashBoardControllers.getListaVendasLojaResumidoGerencia)
 // routes.get('/vendasVendedorPeriodoLojaGerencia', DashBoardControllers.getListaVendasVendedorPeriodoGerencia)
-routes.get('/extratoLojaPeriodoGerencia', DashBoardControllers.getListaExtratoDaLojaPeriodoADM)
+routes.get('/extrato-loja-periodo', DashBoardControllers.getListaExtratoDaLojaPeriodoADM)
 routes.get('/relatorioBI', DashBoardControllers.getListaRelatorioBIGerencia)
 routes.get('/listaVendasGerencia', DashBoardControllers.getListaVendasGerencia)
 // routes.get('/extratoLojaPeriodo', DashBoardControllers.getListaExtratoDaLojaPeriodo)
