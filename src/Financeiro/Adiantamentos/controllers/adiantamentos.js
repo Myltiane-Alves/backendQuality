@@ -1,16 +1,16 @@
 
 import axios from "axios";
 import { getAdiantamentoSalarial } from "../repositories/adiantamentoSalarial.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
-
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class AdiantamentosControllers {
     async getListaAdiantamentoSalarialFinanceiro(req, res) {
         let { idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page } = req.query;
     
-        // idEmpresa = idEmpresa ? idEmpresa : '';
-        // dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        // dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+          idEmpresa = idEmpresa ? idEmpresa : '';
+          dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+          dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
         try {
           const apiUrl = `${url}/api/financeiro/adiantamento-salarial.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
           const response = await axios.get(apiUrl);
