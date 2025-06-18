@@ -144,7 +144,7 @@ class DashBoardVendasControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-                                ///api/dashboard/venda/lista-caixas-movimento.xsjs?idEmpresa=1&dataFechamento=2024-12-07
+
             const apiUrl = `${url}/api/dashboard/venda/lista-caixas-movimento.xsjs?idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}&page=${page}&pageSize=${pageSize}`
             const response = await axios.get(apiUrl)
             

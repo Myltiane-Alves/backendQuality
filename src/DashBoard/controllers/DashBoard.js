@@ -9,19 +9,17 @@ class DashBoardControllers {
 
     async getResumoVendaGerencia(req, res) {
 
-        let { idEmpresa, pageNumber, dataPesquisa } = req.query;
+        let { idEmpresa, page, pageSize, dataPesquisa } = req.query;
 
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            dataPesquisa = dataFormatada(dataPesquisa)
+            idEmpresa = Number(idEmpresa) ? idEmpresa : '';
+            dataPesquisa = dataPesquisa ? dataPesquisa : '';
+            pageSize = pageSize ? pageSize : '';
+            page = page ? page : '';
 
             try {
                 const apiUrl = `${url}/api/dashboard/resumo-venda.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}`;
-
                 const response = await axios.get(apiUrl);
-
 
                 return res.json(response.data);
             } catch (error) {
