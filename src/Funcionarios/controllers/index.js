@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getFuncionarios  } from "../repositories/funcionario.js";
 import { getTodosFuncionarios } from "../repositories/todos.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 
 
