@@ -40,11 +40,11 @@ class DashBoardVendasControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            // const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa-detalhado.xsjs?idEmpresa=${idEmpresa}&idVenda=${idVenda}`
-            // const response = await axios.get(apiUrl)
-            const response = await getResumoVendaCaixaDetalhado(statusCancelado, idVenda, idEmpresa, dataFechamento, page, pageSize)
+            const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa-detalhado.xsjs?idEmpresa=${idEmpresa}&idVenda=${idVenda}`
+            const response = await axios.get(apiUrl)
+            // const response = await getResumoVendaCaixaDetalhado(statusCancelado, idVenda, idEmpresa, dataFechamento, page, pageSize)
 
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
