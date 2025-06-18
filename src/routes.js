@@ -292,8 +292,8 @@ routes.get('/fatura-pix-periodo-consolidado', FinanceiroControllers.getListaFatu
 routes.get('/fatura-pix-periodo', FaturasControllers.getListaFaturasPixPeriodo)
 routes.get('/detalhe-faturas', FaturasControllers.getDetalheFaturaFinanceiro)
 // routes.get('/faturaPixPeriodo', FaturasControllers.getListaVendaFaturaPixPeriodo)
-routes.get('/fatura-pix-empresa', FaturasControllers.getListaVendaFaturaPixPeriodo)
-routes.get('/fatura-pix-empresa-compensacao', FaturasControllers.getListaVendaFaturaPixPeriodoCompensacao)
+routes.get('/venda-total-fatura-pix-empresa', FaturasControllers.getListaVendaFaturaPixPeriodo)
+routes.get('/venda-total-fatura-pix-empresa-compensada', FaturasControllers.getListaVendaFaturaPixPeriodoCompensacao)
 
 routes.put('/atualizar-status-fatura-pix', FaturasControllers.putListaFaturaVendaPixStatusConferido)
 routes.put('/atualizar-recompra', FaturasControllers.putListaAtualizarRecompra) 
