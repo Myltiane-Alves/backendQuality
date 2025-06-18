@@ -77,18 +77,20 @@ class DashBoardAdiantamentoSalarialControllers {
 
     }
 
+
     async updateAdiantamentoStatus(req, res) {
-        let { STATIVO,IDADIANTAMENTOSALARIO } = req.body;
+        // let { STATIVO,IDADIANTAMENTOSALARIO } = req.body;
         
         STATIVO = STATIVO ? STATIVO : '';
         IDADIANTAMENTOSALARIO = IDADIANTAMENTOSALARIO ? IDADIANTAMENTOSALARIO : '';
         try {
-          const response = await putAdiantamentosLojas(STATIVO, IDADIANTAMENTOSALARIO, )
-    
+            const dados = Array.isArray(req.body) ? req.body : [req.body];
+            // const response = await putAdiantamentosLojas(STATIVO, IDADIANTAMENTOSALARIO, )
+            const response = await axios.put(`${url}/api/financeiro/atualizacao-adiantamento-status.xsjs`, dados);
 
-          return res.json(response);
+            return res.json(response.data);
         } catch (error) {
-          console.error("Unable to connect to the database:", error);
+          console.error("Erro no DashBoardAdiantamentoSalarialControllers.updateAdiantamentoStatus :", error);
           throw error;
         }
     }
