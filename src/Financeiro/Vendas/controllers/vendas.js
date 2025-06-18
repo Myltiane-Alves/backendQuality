@@ -140,18 +140,18 @@ class FinanceiroVendasControllers {
     async getListaRemessaVendas(req, res) {
         let { idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page } = req.query;
     
-        // pageSize = pageSize ? pageSize : '';
-        // page = page ? page : '';
-        // idEmpresa = idEmpresa ? idEmpresa : '';
-        // idGrupo = idGrupo ? idGrupo : '';
-        // dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        // dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        idEmpresa = idEmpresa ? idEmpresa : '';
+        idGrupo = idGrupo ? idGrupo : '';
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+        pageSize = pageSize ? pageSize : '';
+        page = page ? page : '';
         try {
-          // const apiUrl = `${url}/api/financeiro/remessa-venda.xsjs?page=${page}&idGrupoEmpresa=${idGrupo}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesuisaFim=${dataPesquisaFim}&idLojaEmpresa=${idEmpresa}`
-          // const response = await axios.get(apiUrl)
-          const response = await getRemessaVendas(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
+          const apiUrl = `${url}/api/financeiro/remessa-venda.xsjs?page=${page}&pageSize=${pageSize}&idGrupoEmpresa=${idGrupo}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesuisaFim=${dataPesquisaFim}&idLojaEmpresa=${idEmpresa}`
+          const response = await axios.get(apiUrl)
+          // const response = await getRemessaVendas(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
     
-          return res.json(response);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;

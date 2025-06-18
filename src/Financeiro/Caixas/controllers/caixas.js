@@ -37,14 +37,14 @@ class CaixasControllers {
     async getListaCaixaStatus(req, res) {
         let { idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
     
-        page = page ? page : '';
-        pageSize = pageSize ? pageSize : ''
         idEmpresa = idEmpresa ? idEmpresa : '';
         idMarca = idMarca ? idMarca : '';
-        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : ''
         try {
-          const apiUrl = `${url}/api/financeiro/lista-caixas-status.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+          const apiUrl = `${url}/api/financeiro/lista-caixas-status.xsjs?page=${page}&pageSize=${pageSize}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
           const response = await axios.get(apiUrl)
           // const response = await getCaixaStatus(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
     
@@ -67,11 +67,11 @@ class CaixasControllers {
         pageSize = pageSize ? pageSize : ''
       try {
           
-        const apiUrl = `${url}/api/financeiro/lista-caixas-zerados.xsjs?page=${page}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
+        const apiUrl = `${url}/api/financeiro/lista-caixas-zerados.xsjs?page=${page}&pageSize=${pageSize}&idMarca=${idMarca}&idEmpresa=${idEmpresa}&dataInicial=${dataPesquisaInicio}&dataFinal=${dataPesquisaFim}`
         const response = await axios.get(apiUrl)
         // const response = await getCaixaZerados(idEmpresa, idMarca, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
   
-        return res.json(response);
+        return res.json(response.data);
       } catch (error) {
         console.error("Unable to connect to the database:", error);
         throw error;
