@@ -10,9 +10,11 @@ class VoucherControllers {
     async getListaResumoVoucherFinanceiro(req, res) {
         let { idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page } = req.query;
     
-        idEmpresa = idEmpresa ? idEmpresa : '';
-        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
-        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+          idEmpresa = idEmpresa ? idEmpresa : '';
+          dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+          dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+          pageSize = pageSize ? pageSize : '';
+          page = page ? page : '';
         try {
           const apiUrl = `${url}/api/financeiro/resumo-voucher.xsjs?page=${page}&pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
           
