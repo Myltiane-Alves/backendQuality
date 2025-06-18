@@ -1,7 +1,9 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getEmpresas } from "../../Informatica/Empresas/empresas.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
+
 class CormercialControllers {
 
     async getListaFornecedorProduto(req, res) {
