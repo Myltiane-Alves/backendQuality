@@ -376,6 +376,7 @@ routes.put('/adiantamento-salarial/:id', DashBoardAdiantamentoSalarialController
 routes.get('/resumo-venda-convenio-desconto', DashBoardVendasControllers.getVendasConvenioDescontoFuncionario)
 routes.get('/detalhe-venda', DashBoardVendasControllers.getRetornoVendasAtivasDetalheProduto)
 routes.get('/resumo-venda-caixa-detalhado', DashBoardVendasControllers.getListaVendaDetalhe)
+routes.get('/resumo-venda-caixa', DashBoardVendasControllers.getListaResumoVendasCaixas)
 routes.get('/venda-resumido', DashBoardVendasControllers.getListaVendasLojaResumidoGerencia)
 routes.get('/vendasVendedorPeriodoLojaGerencia', DashBoardVendasControllers.getListaVendasVendedorPeriodoGerencia)
 routes.get('/vendas-recebimentos', DashBoardVendasControllers.getListaRecebimento)

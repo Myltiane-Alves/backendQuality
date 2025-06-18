@@ -8,7 +8,8 @@ import { getVendasResumida } from "../repositories/vendaResumida.js";
 import { getVendaVendedor } from "../repositories/vendasVendedor.js";
 import { getRecebimento } from "../repositories/recebimentos.js";
 import { getCaixasMovimentos } from "../repositories/listaCaixaMovimentos.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 
 class DashBoardVendasControllers {
@@ -154,6 +155,28 @@ class DashBoardVendasControllers {
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
+        }
+    }
+
+        async getListaResumoVendasCaixas(req, res) {
+        let { idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize } = req.query;
+        if (!isNaN(idEmpresa)) {
+            idVenda = idVenda ? idVenda : '';
+            idEmpresa = idEmpresa ? idVenda : '';
+            dataFechamento = dataFechamento ? dataFechamento : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+
+            try {
+                const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa.xsjs?page=${page}&pagesize=${pageSize}&status=${statusCancelado}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+                const response = await axios.get(apiUrl)
+                // const response = await getResumoVendaCaixa(idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize)
+
+                return res.json(response.data); // Retorna
+            } catch (error) {
+                console.error("erro no  DashBoardVendasControllers.getListaResumoVendasCaixas")
+                throw error;
+            }
         }
     }
 }
