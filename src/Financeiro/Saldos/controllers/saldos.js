@@ -4,7 +4,8 @@ import { dataFormatada } from "../../../utils/dataFormatada.js";
 
 import { getMovimentoSaldoBonificacaoById, postMovimentoSaldoBonificacao } from "../repositories/movimentoSaldoBonificacao.js";
 import { getLojaSaldoPorGrupo } from "../repositories/saldoLojaPorGrupo.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 
 class SaldosControllers {
@@ -14,7 +15,7 @@ class SaldosControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-          const apiUrl = `${url}/api/financeiro/movimento-saldo-bonificacao.xsjs?pageSize=500&idFuncionario=${idFuncionario}`
+          const apiUrl = `${url}/api/financeiro/movimento-saldo-bonificacao.xsjs?page=${page}&pageSize=${pageSize}&idFuncionario=${idFuncionario}`
           const response = await axios.get(apiUrl)
           // const response = await getMovimentoSaldoBonificacaoById(idFuncionario,  page, pageSize)
     
