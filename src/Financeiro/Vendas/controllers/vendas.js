@@ -30,10 +30,10 @@ class FinanceiroVendasControllers {
       dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
       page = page ? page : '';
       pageSize = pageSize ? pageSize : '';
-      const result = await getVendasTotaisById(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
-      // const apiUrl = await `http://localhost:6001/venda-pagamentos?dataPesquisa= ${dataPesquisa}&idEmpresa=${idEmpresa}`
-      // const response = await axios.get(apiUrl)
-      return res.json(result);
+      // http://164.152.245.77:8000/quality/concentrador/api/financeiro/venda-loja-periodo.xsjs?pageSize=500&page=1&idEmpresa=&dataPesquisaInicio=2025-06-18&dataPesquisaFim=2025-06-18
+      const apiUrl = `${url}/api/financeiro/venda-loja-periodo.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`
+      const response = await axios.get(apiUrl)
+      return res.json(response.data);
     } catch (err) {
       console.error('Erro ao buscar Vendas Loja Por Periodo:', err);
       return res.status(500).json({ message: 'Erro ao buscar Vendas Loja Por Periodo' });
