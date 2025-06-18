@@ -4,7 +4,8 @@ import { dataFormatada } from "../../../utils/dataFormatada.js";
 import {  getPrimeiraVendaSaldoAtual } from "../repositories/extratoLojaPeriodo.js";
 import { getAjusteExtrato, updateAjusteExtrato } from "../repositories/ajusteExtrato.js";
 
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 
 class ExtratosControllers {
@@ -19,7 +20,7 @@ class ExtratosControllers {
       pageSize = pageSize ? pageSize : '';
       
       try {
-        const apiUrl = `${url}/api/financeiro/extrato-loja-periodo.xsjs?pageSize=500&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
+        const apiUrl = `${url}/api/financeiro/extrato-loja-periodo.xsjs?page=${page}&pageSize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
         // const response = await getListaTotal(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
         const response = await axios.get(apiUrl)
         return res.json(response.data);

@@ -69,7 +69,7 @@ class FaturasControllers {
 
     
     try {
-                            // /api/financeiro/detalhe-fatura.xsjs?pageSize=500&page=1&idEmpresa=1&dataPesquisaInicio=2024-12-06&dataPesquisaFim=2024-12-06
+                      
       const apiUrl = `${url}/api/detalhe-fatura.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&codigoFatura=${codigoFatura}&idDetalheFatura=${idDetalheFatura}&page=${page}&pageSize=${pageSize}`;
       const response = await axios.get(apiUrl);
       // const response = await getDetalheFatura(idEmpresa, dataPesquisaInicio, dataPesquisaFim, codigoFatura, idDetalheFatura, page, pageSize);
