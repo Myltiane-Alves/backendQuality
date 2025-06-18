@@ -35,8 +35,10 @@ class DespesasControllers {
   async putDespesasLoja(req, res) {
     try {
       const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
-      const response = await  updateDespesasLoja(despesas);
-      return res.json(response);
+      // const response = await  updateDespesasLoja(despesas);
+      
+      const response = await axios.put(`${url}/api/despesa-loja/editar-despesa.xsjs`, despesas);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       return res.status(500).json({ error: error.message });

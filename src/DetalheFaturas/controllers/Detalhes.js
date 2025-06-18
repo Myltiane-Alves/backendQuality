@@ -1,7 +1,8 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { createDetalheFatura, getDetalheFaturaId, putDetalheFatura } from "../../Financeiro/Faturas/repositories/detalheFatura.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 class DetalheFaturasControllers {
 
@@ -54,11 +55,11 @@ class DetalheFaturasControllers {
     let { idFatura } = req.query;
 
     try {
-      // const apiUrl = `${url}/api/detalhe-fatura.xsjs?id=${idFatura}`
-      // const response = await axios.get(apiUrl)
-      const response = await getDetalheFaturaId(idFatura)
+      const apiUrl = `${url}/api/detalhe-fatura.xsjs?id=${idFatura}`
+      const response = await axios.get(apiUrl)
+      // const response = await getDetalheFaturaId(idFatura)
 
-      return res.json(response);
+      return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
       throw error;
@@ -67,25 +68,10 @@ class DetalheFaturasControllers {
   }
 
   async updateFatura(req, res) {
-    let {
-      IDDETALHEFATURA,
-      NUCODAUTORIZACAO,
-      VRRECEBIDO,
-      NUAUTORIZACAO,
-      STPIX,
-      STCANCELADO } = req.body;
-
     try {
+      const despesas = Array.isArray(req.body) ? req.body : [req.body];
       //   const apiUrl = `${url}/api/financeiro/atualizar-fatura.xsjs`
-      const response = await putDetalheFatura(apiUrl,
-        IDDETALHEFATURA,
-        NUCODAUTORIZACAO,
-        VRRECEBIDO,
-        NUAUTORIZACAO,
-        STPIX,
-        STCANCELADO,
-      )
-
+      const response = await axios.put(`${url}/api/financeiro/atualizar-fatura.xsjs`, despesas);
       return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);
