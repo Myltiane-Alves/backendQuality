@@ -80,15 +80,17 @@ class CaixasControllers {
     }
 
 
-    //  UPDATE
+    
+
     async updateFecharCaixaZerado(req, res) {
         let { ID } = req.body;
     
         try {
-          // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/fecha-caixas-zerados.xsjs`
-          const response = await putFecharCaixaZerados(ID)
-    
-          return res.json(response);
+          const despesas = Array.isArray(req.body) ? req.body : [req.body];
+
+          // const response = await putFecharCaixaZerados(ID)
+          const response = await axios.put(`${url}/api/financeiro/fecha-caixas-zerados.xsjs`, despesas);
+          return res.json(response.data);
         } catch (error) {
           console.error("Unable to connect to the database:", error);
           throw error;
