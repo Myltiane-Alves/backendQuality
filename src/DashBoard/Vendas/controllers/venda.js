@@ -75,6 +75,26 @@ class DashBoardVendasControllers {
         }
     }
 
+    async getListaResumoVendasConvenio(req, res) {
+        let { statusCancelado, idVenda, idEmpresa, dataFechamento, page, pageSize } = req.query;
+            statusCancelado = statusCancelado ? statusCancelado : '';
+            idVenda = idVenda ? idVenda : '';
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataFechamento = dataFechamento ? dataFechamento : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+        try {
+            const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio-desconto.xsjs?page=${page}&pagesize=${pageSize}&status=${statusCancelado}&idEmpresa=${idEmpresa}&dataInicio=${dataFechamento}&dataFechamento=${dataFechamento}`
+            // const response = await getResumoVendaConvenio(statusCancelado, idVenda, idEmpresa, dataFechamento, page, pageSize)
+            const response = await axios.get(apiUrl)
+
+            return res.json(response.data);
+        } catch (error) {
+            console.error("Erro no DashBoardVendasControllers.getListaResumoVendasConvenio:", error);
+            throw error;
+        }
+    }
+
     async getListaVendasLojaResumidoGerencia(req, res) {
         let { idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query;
 
