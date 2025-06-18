@@ -3,7 +3,9 @@ import { getQuebraCaixaLoja } from "../repositories/quebraCaixaLoja.js";
 import { getQuebraCaixa, updateStatusQuebraCaixa } from "../repositories/listaQuebraCaixa.js";
 import { createQuebraCaixa, updateQuebraCaixa, } from "../repositories/todos.js";
 import { getQuebraCaixaID } from "../repositories/quebraCaixa.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
+
 
 class QuebraCaixaControllers {
     async getListaQuebraCaixaResumoADM(req, res) {
@@ -16,7 +18,7 @@ class QuebraCaixaControllers {
         
         try {
             
-            //                   /api/administrativo/quebra-caixa-loja.xsjs?idEmpresa=1&dataPesquisa=2024-12-07
+        
             const apiUrl = `${url}/api/administrativo/quebra-caixa-loja.xsjs?idEmpresa=${idEmpresa}&dataPesquisa=${dataPesquisa}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl);
             // const response = await getQuebraCaixaLoja(idEmpresa, dataPesquisa, page, pageSize)
@@ -72,11 +74,13 @@ class QuebraCaixaControllers {
             throw error;
         }
     }
+
     async putListaStatusQuebraCaixa(req, res) {
         try {
             const quebras = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await  updateStatusQuebraCaixa(quebras);
-            return res.json(response);
+            // const response = await  updateStatusQuebraCaixa(quebras);
+            const response = await axios.put(`${url}/api/dashboard/quebra-caixa/atualizacao-status.xsjs`, quebras);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             return res.status(500).json({ error: error.message });
