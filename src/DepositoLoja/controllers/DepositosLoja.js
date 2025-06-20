@@ -6,7 +6,7 @@ let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 class DepositosLojaControllers  {
 
-    async getListaDepositosLoja(req,res) {
+    async getListaDepositosLojaEmpresa(req,res) {
         let {idEmpresa, dataPesquisaInicio, dataPesquisaFim    } = req.query;
         idEmpresa = idEmpresa ? idEmpresa : '';
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
@@ -21,19 +21,19 @@ class DepositosLojaControllers  {
                 throw error;
         }
     }
-    async getListaDepositosLojaEmpresa(req,res) {
-        let {idEmpresa, dataPesquisaInicio, dataPesquisaFim,  pageSize, page   } = req.query;
-            idEmpresa = idEmpresa ? idEmpresa : '';
-            dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
-            dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
-        try {
-            const response = await getDepositosEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
-            return res.json(response); 
-        } catch(error) {
-            console.error("Unable to connect to the database:", error);
-                throw error;
-        }
-    }
+    // async getListaDepositosLojaEmpresa(req,res) {
+    //     let {idEmpresa, dataPesquisaInicio, dataPesquisaFim,  pageSize, page   } = req.query;
+    //         idEmpresa = idEmpresa ? idEmpresa : '';
+    //         dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+    //         dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
+    //     try {
+    //         const response = await getDepositosEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
+    //         return res.json(response); 
+    //     } catch(error) {
+    //         console.error("Unable to connect to the database:", error);
+    //             throw error;
+    //     }
+    // }
 
     async getListaProdutosLojaSap(req, res) {
         let { descricaoProduto, idEmpresa, idListaEmpresa, pageNumber } = req.query;
