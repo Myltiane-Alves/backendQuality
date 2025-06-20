@@ -52,7 +52,7 @@ class FuncionariosControllers {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
 
-            const apiUrl = `${url}/api/funcionario/todos.xsjs?byId=${byId}&page=${page}&pageSize=${pageSize}`
+            const apiUrl = `${url}/api/funcionario/todos.xsjs?idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`
             const response = await axios.get(apiUrl);
             // const response = await getTodosFuncionarios(byId, idEmpresa, cpf, matricula, senha, page, pageSize);
 
