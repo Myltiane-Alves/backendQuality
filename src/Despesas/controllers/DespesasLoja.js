@@ -18,7 +18,7 @@ class DespesasLojaControllers  {
             page = page ? page : '';
       
         try {
-                                // api/despesa-loja/empresa.xsjs?idEmpresa=1&dataPesquisa=2024-12-09
+                              
             const apiUrl = `${url}/api/despesa-loja/empresa.xsjs?idEmpresa=${idEmpresa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`;
             const response = await axios.get(apiUrl)
             // const response = await getDespesasEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page);
