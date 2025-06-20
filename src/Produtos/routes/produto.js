@@ -12,8 +12,8 @@ routes.get('/grupoProdutoSap', ProdutoControllers.getListaGrupoProdutoSap)
 routes.get('/produtoInformatica', ProdutoControllers.getListaProdutosInformaticaQuality)
 routes.get('/listaProdutos', ProdutoControllers.getListaProdutos)
 routes.get('/listaGrade', ProdutoControllers.getListaGrade)
-routes.get('/listasDePrecosSAP', ProdutoControllers.ListaProdutosEtiqueta)
+routes.get('/listas-de-precos-sap', ProdutoControllers.ListaProdutosEtiqueta)
 routes.get('/responsaveisAlteracaoPrecos', ProdutoControllers.getListaResponsavelAlteracaoPreco)
-routes.get('/listaProdutosEtiquetaSAP', ProdutoControllers.ListaProdutosEtiquetagem)
+routes.get('/lista-produtos-etiqueta-sap', ProdutoControllers.ListaProdutosEtiquetagem)
 
 export default routes;
