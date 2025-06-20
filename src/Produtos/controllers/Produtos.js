@@ -230,7 +230,7 @@ class ProdutoControllers  {
     }
 
     async ListaProdutosEtiquetagem(req, res) {
-        let { idLista, idProduto, descricao, codBarras } = req.query;
+        let { idLista, idProduto, descricao, codBarras, page, pageSize } = req.query;
 
         idLista = idLista ? idLista : '';
         idProduto = idProduto ? idProduto : '';
@@ -239,7 +239,7 @@ class ProdutoControllers  {
         
         try {
 
-            const apiUrl = `${url}/api/produtos/lista-produtos-etiqueta-SAP.xsjs?idLista=${idLista}&id=${idProduto}&descProd=${descricao}&codeBars=${codBarras}`;
+            const apiUrl = `${url}/api/produtos/lista-produtos-etiqueta-SAP.xsjs?idLista=${idLista}&id=${idProduto}&descProd=${descricao}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
 
             return res.json(response.data); // Retorna
