@@ -349,7 +349,7 @@ routes.get('/venda-vendedor', DashBoardControllers.getListaVendasVendedorGerenci
 routes.get('/vendasAtivasResumoGerencia', DashBoardControllers.getListaResumoVendasAtivaGerencia)
 routes.get('/vendasCanceladasResumoGerencia', DashBoardControllers.getListaResumoVendasCanceladasGerencia)
 routes.get('/adiantamentoSalarialFuncionarios', DashBoardControllers.getListAdiantamentoLoja)
-routes.get('/adiantamentoSalarialFuncionariosGerencia', DashBoardControllers.getAdiantamentoSalarialFuncionario)
+routes.get('/adiantamento-salarial-gerencia', DashBoardControllers.getAdiantamentoSalarialFuncionario)
 // routes.get('/vendasResumoLojaGerencia', DashBoardControllers.getListaVendasLojaResumidoGerencia)
 // routes.get('/vendasVendedorPeriodoLojaGerencia', DashBoardControllers.getListaVendasVendedorPeriodoGerencia)
 routes.get('/extrato-loja-periodo', DashBoardControllers.getListaExtratoDaLojaPeriodoADM)
