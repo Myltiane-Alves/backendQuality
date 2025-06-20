@@ -1,7 +1,8 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getProdutoQuality } from "../repositories/produtoQuality.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class ProdutoControllers  {
 
@@ -35,9 +36,11 @@ class ProdutoControllers  {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/produto-sap/produto-quality.xsjs?codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresa}&IdListaLoja=${idListaLoja}`;
+
+            const apiUrl = `${url}/api/produto-sap/produto-quality.xsjs?page=${page}&pageSize${pageSize}&codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresa}&IdListaLoja=${idListaLoja}`;
             const response = await axios.get(apiUrl)
             // const response = await getProdutoQuality(idEmpresa, codBarrasOuNome, page, pageSize);
+
             return res.json(response.data); // Retorna
         } catch(error) {
             console.error("Unable to connect to the database:", error);
@@ -87,21 +90,18 @@ class ProdutoControllers  {
     }
     
     async getListaProdutosLojaSap(req, res) {
-        let { descricaoProduto, idEmpresaLogin, idListaLoja, pageNumber  } = req.query;
+        let { descricaoProduto, idEmpresaLogin, idListaLoja, page, pageSize  } = req.query;
     
     
         descricaoProduto = descricaoProduto ? descricaoProduto : ''; 
         idEmpresaLogin = idEmpresaLogin ? idEmpresaLogin : ''; 
         idListaLoja = idListaLoja ? idListaLoja : '';         
-        pageNumber = pageNumber ? pageNumber : 1; 
-
-    
-        const pageSize = 100;
-        const offset = (pageNumber - 1) * pageSize;
+        pageSize = pageSize ? pageSize : '';
+        page = page ? page : '';
     
         try {   
             // api/produto-sap/produto-sap.xsjs?page=' + numPage + '&codeBarsOuNome=' + DSdesc + '&IdEmpresaLoja=' + IDEmpresaLogin + '&IdListaLoja=' + IDListaEmp
-            const apiUrl = `${url}/api/produto-sap/produto-sap.xsjs?codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresaLogin}&IdListaLoja=${idListaLoja}`;
+            const apiUrl = `${url}/api/produto-sap/produto-sap.xsjs?page=${page}&pageSize=${pageSize}&codeBarsOuNome=${descricaoProduto}&IdEmpresaLoja=${idEmpresaLogin}&IdListaLoja=${idListaLoja}`;
             const response = await axios.get(apiUrl)
             return res.json(response.data); // Retorna
         } catch(error) {
