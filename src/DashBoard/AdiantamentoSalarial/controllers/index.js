@@ -47,7 +47,7 @@ class DashBoardAdiantamentoSalarialControllers {
 
             // const response = await getAdiantamentosFuncionarios(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page)
 
-            return res.json(response.data); // Retorna
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
@@ -110,9 +110,10 @@ class DashBoardAdiantamentoSalarialControllers {
     async postAdiantamentoSalarial(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await createAdiantamentoSalarial(dados)
+            // const response = await createAdiantamentoSalarial(dados)
+            const response = await axios.post(`${url}/api/dashboard/adiantamento-salarial.xsjs`, dados);
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
