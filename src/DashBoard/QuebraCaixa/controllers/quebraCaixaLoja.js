@@ -102,10 +102,11 @@ class QuebraCaixaControllers {
     async postQuebraCaixa(req, res) {
         try {
             const quebras = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await  createQuebraCaixa(quebras);
-            return res.json(response);
+            // const response = await createQuebraCaixa(quebras);
+            const response = await axios.post(`${url}/api/dashboard/quebra-caixa/todos.xsjs`, quebras);
+            return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no QuebraCaixaControllers.postQuebraCaixa:", error);
             return res.status(500).json({ error: error.message });
         }
        
