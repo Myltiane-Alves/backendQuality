@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getAlteracaoPreco } from "../repositories/alteracao.js";
+import 'dotenv/config';
+const url = process.env.API_URL;
 
-let url = `http://164.152.245.77:8000/quality/concentrador`;
 
 
 

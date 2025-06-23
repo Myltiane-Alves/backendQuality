@@ -9,8 +9,8 @@ import { getVendasVendedorEstrutura } from "../repositories/vendasVendedorEstrut
 import { getProdutosMaisVendidos } from "../repositories/produtosMaisVendidos.js";
 import { getVendasPorEstrutura } from "../repositories/vendasPorEstrutura.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
-
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 
 class ComercialProdutoControllers {
