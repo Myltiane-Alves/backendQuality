@@ -82,10 +82,11 @@ class DetalheFaturasControllers {
   async postDetalheFaturaLoja(req, res) {
     try {
       const detalhes = Array.isArray(req.body) ? req.body : [req.body];
-      const response = await createDetalheFatura(detalhes);
-      return res.json(response);
+      // const response = await createDetalheFatura(detalhes);
+      const response = await axios.post(`${url}/api/detalhe-fatura.xsjs`, detalhes);
+      return res.json(response.data);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Erro no DetalheFaturasControllers.postDetalheFatura:", error);
       return res.status(500).json({ error: error.message });
     }
   }
