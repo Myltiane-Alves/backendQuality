@@ -202,9 +202,10 @@ routes.get('/pagamento-pos', AdmPagamentosControllers.getListaPagamentoPos)
 
 // Início GERENCIA
 routes.get('/clientes', GerenciaControllers.getListaCliente)
-
+routes.get('/malotes-por-loja', GerenciaControllers.getListaMalortesPorLoja)
 routes.get('/alteracaoPreco', GERAlteracaoPrecoControllers.getListaAlteracaoPreco)
-
+routes.post('/criar-malotes-por-loja', GerenciaControllers.postMalotesPorLoja)
+routes.put('/malotes-por-loja/:id', GerenciaControllers.putMalotesPorLoja)
 
 // FIM GERENCIA
 
