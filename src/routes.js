@@ -220,6 +220,12 @@ routes.post('/quebra-caixa-todos', QuebraCaixaControllers.postQuebraCaixa)
 // Início Financeiro
 
 routes.get('/listaExtratoDaLojaPeriodo', FinanceiroControllers.getListaExtratoDaLojaPeriodoFinan)
+routes.get('/historicos-malotes', FinanceiroControllers.getListasHistoricosMalotes)
+routes.get('/malotes-loja', FinanceiroControllers.getListasMalotesLojas)
+routes.get('/pendencias-malotes', FinanceiroControllers.getListaPendenciasMalotes)
+
+routes.put('/malotes-loja/:id', FinanceiroControllers.putMalotesLoja)
+
 // routes.get('/listaVendasMarca', FinanceiroControllers.getListaVendasMarca)
 routes.get('/resumoVendaFinanceiro', FinanceiroControllers.getListaVendasResumidaFinanceiro)
 
