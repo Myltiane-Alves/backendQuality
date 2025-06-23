@@ -66,9 +66,11 @@ class QuebraCaixaControllers {
         
         try {
             
-            const response = await getQuebraCaixaID(idQuebraCaixa, page, pageSize)
+            // const response = await getQuebraCaixaID(idQuebraCaixa, page, pageSize)
+            const apiUrl = `${url}/api/dashboard/quebra-caixa/quebra-caixa.xsjs?id=${idQuebraCaixa}`;
+            const response = await axios.get(apiUrl);
             
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error;
