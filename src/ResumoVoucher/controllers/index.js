@@ -6,7 +6,9 @@ import { createAuthFuncionarioCreateVoucher } from '../repositories/authFunciona
 import { getEmpresasVoucher } from '../repositories/empresa.js';
 import { createAuthFuncionarioPrintVoucher } from '../repositories/authFuncionarioPrintVoucher.js';
 import { createAuthFuncionarioUpdateVoucher } from '../repositories/authFuncionarioUpdateVoucher.js';
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
+
 
 class ResumoVoucherControllers {
 
@@ -48,7 +50,7 @@ class ResumoVoucherControllers {
         
                 return res.json(response.data);
             } catch (error) {
-                console.error("Unable to connect to the database:", error);
+                console.error("Erro no ResumoVoucherControllers.getListaVoucherGerencia:", error);
                 throw error;
             }
         }
