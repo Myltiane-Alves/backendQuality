@@ -145,10 +145,11 @@ class FaturasControllers {
   async putListaAtualizarRecompra(req, res) {
     try {
         const detalhes = Array.isArray(req.body) ? req.body : [req.body]; 
-        const response = await putAtualizarRecompra(detalhes);
-        return res.json(response);
+        // const response = await putAtualizarRecompra(detalhes);
+        const response = await axios.put(`${url}/api/fatura-loja/atualizar-recompra.xsjs`, detalhes);
+        return res.json(response.data);
     } catch (error) {
-        console.error("Unable to connect to the database:", error);
+        console.error("Erro no FaturasControllers.putListaAtualizarRecompra:", error);
         return res.status(500).json({ error: error.message });
     }
   }
@@ -156,10 +157,11 @@ class FaturasControllers {
   async putListaAtualizarFatura(req, res) {
     try {
         const detalhes = Array.isArray(req.body) ? req.body : [req.body]; 
-        const response = await putAtualizarFatura(detalhes);
-        return res.json(response);
+        // const response = await putAtualizarFatura(detalhes);
+        const response = await axios.put(`${url}/api/fatura-loja/atualizar.xsjs`, detalhes);
+        return res.json(response.data);
     } catch (error) {
-        console.error("Unable to connect to the database:", error);
+        console.error("Erro no FaturasControllers.putListaAtualizarFatura:", error);
         return res.status(500).json({ error: error.message });
     }
   }

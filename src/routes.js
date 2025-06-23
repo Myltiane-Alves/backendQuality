@@ -638,7 +638,7 @@ routes.get('/detalheFaturaGerencia', DetalheFaturasControllers.getDetalheFatura)
 routes.get('/detalhe-Fatura-id', DetalheFaturasControllers.getDetalheFaturaById)
 routes.put('/atualizar-fatura', DetalheFaturasControllers.updateFatura) 
 
-// routes.put('/atualizar-detalhe-fatura-loja', FaturasControllers.putListaDetalheFaturaLoja) 
+routes.put('/atualizar-detalhe-fatura-loja', DetalheFaturasControllers.putDetalheFaturaLoja) 
 routes.post('/criar-detalhe-fatura', DetalheFaturasControllers.postDetalheFaturaLoja) 
 
 

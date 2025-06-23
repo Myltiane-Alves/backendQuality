@@ -90,6 +90,17 @@ class DetalheFaturasControllers {
       return res.status(500).json({ error: error.message });
     }
   }
+  async putDetalheFaturaLoja(req, res) {
+    try {
+      const detalhes = Array.isArray(req.body) ? req.body : [req.body];
+      // const response = await createDetalheFatura(detalhes);
+      const response = await axios.put(`${url}/api/fatura-loja/detalhe-fatura.xsjs`, detalhes);
+      return res.json(response.data);
+    } catch (error) {
+      console.error("Erro no DetalheFaturasControllers.putDetalheFatura:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  }
 
 }
 
