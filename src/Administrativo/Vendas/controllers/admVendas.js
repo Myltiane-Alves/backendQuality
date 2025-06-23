@@ -172,7 +172,7 @@ class AdmVendasControllers {
             const response = await axios.get(apiUrl)
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error no AdmVendasControllers.getListaVendaCliente:", error);
             throw error;
         }
         

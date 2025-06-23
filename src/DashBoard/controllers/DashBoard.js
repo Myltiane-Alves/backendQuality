@@ -74,7 +74,7 @@ class DashBoardControllers {
 
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no DashBoardControllers.getListaQuebraCaixa:", error);
             throw error;
         }
 

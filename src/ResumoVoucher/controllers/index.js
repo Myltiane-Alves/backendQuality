@@ -93,12 +93,12 @@ class ResumoVoucherControllers {
         try {
             const apiUrl = `${url}/api/resumo-voucher/empresa.xsjs?idEmpresa=${idEmpresa}&idSubGrupoEmpresa=${idSubGrupoEmpresa}&page=${page}&pageSize=${pageSize}`;
 
-            // const response = await axios.get(apiUrl);
-            const response = await getEmpresasVoucher(idEmpresa, idSubGrupoEmpresa, page, pageSize);
+            const response = await axios.get(apiUrl);
+            // const response = await getEmpresasVoucher(idEmpresa, idSubGrupoEmpresa, page, pageSize);
             
-            return res.json(response); // Retorna
+            return res.json(response.data); // Retorna
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error in ResumoVoucherControllers.getListaEmpresasVoucher:", error);
             throw error;    
         
         }
