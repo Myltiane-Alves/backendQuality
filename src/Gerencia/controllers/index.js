@@ -126,16 +126,17 @@ class GerenciaControllers {
                 }
             }
 
-            const response = await updateMalote(dados); //
+            // const response = await updateMalote(dados)
+            const response = await axios.put(`${url}/api/gerencia/malotes-por-loja.xsjs`, dados);
           
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Erro no GerenciaControllers.putMalotesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
             return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
         }
     }
 
-        async postMalotesPorLoja(req, res) {      
+    async postMalotesPorLoja(req, res) {      
         try {
             const { IDEMPRESA, DATAMOVIMENTOCAIXA } = req.body;
             const dataFormatada = formatarDataMalote(req.body.DATAMOVIMENTOCAIXA)
