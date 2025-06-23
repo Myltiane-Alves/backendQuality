@@ -109,7 +109,7 @@ class MovimentoCaixaControllers {
             // const response = await putAjusteRecebimento(dados);
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no MovimentoCaixaControllers.putListaAjusteRecebimento:", error);
             return res.status(500).json({ error: error.message });
         }
     }
