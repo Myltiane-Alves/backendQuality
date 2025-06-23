@@ -4,7 +4,9 @@ import { getMovimentoCaixaGerencia } from "../repositories/gerencia.js";
 import { putAtualizacaoStatus } from "../repositories/atualizacaoStatus.js";
 import { putAjusteRecebimento } from "../repositories/ajusteRecebimento.js";
 import { getFechamentoCaixa } from "../repositories/fechamentoCaixa.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
+
 class MovimentoCaixaControllers {
 
     async listaCaixasMovimentojuste(req, res) {
@@ -51,8 +53,8 @@ class MovimentoCaixaControllers {
 
         idEmpresa = Number(idEmpresa) ? idEmpresa : '';
         idMovimentoCaixa = idMovimentoCaixa ? idMovimentoCaixa : '';
-        dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataFormatada(dataPesquisaInicio) : '';
-        dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataFormatada(dataPesquisaFim) : '';
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
 
         try {
             // http://164.152.245.77:8000/quality/concentrador_homologacao/api/movimento-caixa/gerencia.xsjs?idEmpresa=1&dataPesquisaInic=2023-12-09&dataPesquisaFim=2024-12-09
