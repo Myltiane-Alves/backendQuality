@@ -294,13 +294,12 @@ class DashBoardControllers {
     // }
 
     async getListaResumoVendasAtivaGerencia(req, res) {
-        let { idEmpresa, pageNumber, dataFechamento } = req.query;
+        let { idEmpresa, page, pageSize, dataFechamento, status } = req.query;
         if (!isNaN(idEmpresa)) {
-            idEmpresa = Number(idEmpresa);
-
-            const pageSize = 100;
-            const offset = (pageNumber - 1) * pageSize;
-            dataFechamento = dataFormatada(dataFechamento)
+            idEmpresa = idEmpresa ? idEmpresa : '';
+            dataFechamento = dataFechamento ? dataFechamento : '';
+            pageSize = pageSize ? pageSize : '';
+            page = page ? page : '';
             try {
                 const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa.xsjs?pagesize=100&status=False&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
                 const response = await axios.get(apiUrl)

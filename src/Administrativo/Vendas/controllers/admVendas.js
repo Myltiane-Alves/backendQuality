@@ -9,7 +9,9 @@ import { createAlterarVendaPagamento, getAlterarVendaPagamento, updateAlterarVen
 import { getListaVenda } from "../repositories/listaVenda.js";
 import { getVendaCliente, getVendaDetalhe } from "../repositories/listaVendaCliente.js";
 import { updateAlterarVendaRecebimento } from "../repositories/atualizaRecebimentoVenda.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
+
 class AdmVendasControllers {
     async getRecebimentosFormaPagamento(req, res) {
         let { idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize } = req.query; 
@@ -102,7 +104,7 @@ class AdmVendasControllers {
         try {
             // http://164.152.245.77:8000/quality/concentrador/api/administrativo/venda-ativa.xsjs?idMarca=0&idEmpresa=&dataFechamento=2024-12-07&dataFechamentoFim=2024-12-07&status=True&stCanceladoWeb=&stCanceladoPDVEmitida=&stCanceladoApos30Min=&stCanceladoPDVEmTela=&page=1
            
-            const apiUrl = `${url}/api/administrativo/venda-ativa.xsjs?idMarca=${idGrupo}&idEmpresa=${idEmpresa}&dataFechamento=${dataPesquisaInicio}&dataFechamentoFim=${dataPesquisaFim}&status=${statusCancelado}&stCanceladoWeb=${statusCanceladoWeb}&stCanceladoPDVEmitida=${stCanceladoPDVEmitida}&stCanceladoApos30Min=${statusCanceladoDepois30Minutos}&stCanceladoPDVEmTela=${stCanceladoPDVEmTela}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/administrativo/venda-ativa.xsjs?cpfCliente=${cpfCliente}&idMarca=${idGrupo}&idEmpresa=${idEmpresa}&dataFechamento=${dataPesquisaInicio}&dataFechamentoFim=${dataPesquisaFim}&status=${statusCancelado}&stCanceladoWeb=${statusCanceladoWeb}&stCanceladoPDVEmitida=${stCanceladoPDVEmitida}&stCanceladoApos30Min=${statusCanceladoDepois30Minutos}&stCanceladoPDVEmTela=${stCanceladoPDVEmTela}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl) 
             // const response = await getVendaAtiva(statusCancelado, statusContingencia, statusCanceladoWeb, stCanceladoPDVEmitida, stCanceladoPDVEmTela, statusCanceladoDepois30Minutos, cpfCliente, idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             return res.json(response.data); 
