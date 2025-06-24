@@ -112,7 +112,7 @@ class DashBoardVendasControllers {
             // const response = await getVendasResumida(idEmpresa, dataPesquisaInicio, dataPesquisaFim, page, pageSize);
             return res.json(response.data);
         } catch (error) {
-            console.error("Erro ao conectar ao servidor:", error);
+            console.error("Error in DashBoardVendasControllers.getListaVendasLojaResumidoGerencia:", error);
 
             throw error;
         }
