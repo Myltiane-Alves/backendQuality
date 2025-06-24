@@ -14,13 +14,13 @@ class EmpresaControllers {
         pageSize = pageSize ? pageSize : '';
        
         try {
-            const response = await axios.get(`${url}/api/empresa.xsjs`)
+            const response = await axios.get(`${url}/api/empresa.xsjs?idEmpesa=${idEmpresa}`)
             // const response = await getEmpresasLista(idEmpresa, idSubGrupoEmpresa,  page, pageSize)
             
-            return res.json(response.data); // Retorna
+            return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error; // Lança o erro para tratamento posterior, se necessário
+            console.error("Erro no EmpresaControllers.getAllEmpresas:", error);
+            throw error; 
         }
     }
     async getListaEmpresas(req, res,) {
@@ -80,20 +80,15 @@ class EmpresaControllers {
     async putListaEmpresas(req, res) {
         try {
             const empresas = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updateEmpresa(empresas)
+            // const response = await updateEmpresa(empresas)
+            const response = await axios.put(`${url}/api/empresa.xsjs`, empresas);
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no EmpresaControllers.putListaEmpresas:", error);
             throw error;
         }
     }
-
-    async deleteFuncionarios(req, res) {
-
-    }
-
-
 }
 
 export default new EmpresaControllers();

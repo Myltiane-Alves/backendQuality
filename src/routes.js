@@ -96,7 +96,7 @@ routes.get('/empresas', EmpresaControllers.getAllEmpresas);
 routes.get('/grupoEmpresarial', EmpresaControllers.getAllGrupoEmpresarial);
 routes.get('/subGrupoEmpresarial', EmpresaControllers.getSelectLojaVouchers);
 routes.get('/listaEmpresas', EmpresaControllers.getListaEmpresas)
-routes.put('/empresas', EmpresaControllers.putListaEmpresas)
+routes.put('/empresas/:id', EmpresaControllers.putListaEmpresas)
 
 routes.get('/modulos', ModulosControllers.getListaModulos)
 routes.put('/modulos/:id', ModulosControllers.putModulo)
