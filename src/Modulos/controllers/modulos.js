@@ -8,9 +8,9 @@ const url = process.env.API_URL;
 class ModulosControllers  {
      
      async getListaPerfilUsuario(req, res) {
-        let { idUsuario, page, pageSize, idModulo } = req.query;
+        let { idUsuario, page, pageSize, idMenuPai } = req.query;
             idUsuario = idUsuario ? idUsuario : '';
-            idModulo = idModulo ? idModulo : '';
+            idMenuPai = idMenuPai ? idMenuPai : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {
