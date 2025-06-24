@@ -2,7 +2,8 @@ import axios from "axios";
 import { getInventarioMovimento } from "../repositories/invetarioMovimento.js";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
 import { getUltimaPosicaoEstoque } from "../repositories/ultimaPosicaoEstoque.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class EstoqueControllers {
     async getListaEstoqueAtual(req, res) {
@@ -28,7 +29,7 @@ class EstoqueControllers {
          
                 return res.json(response.data);
             } catch (error) {
-                console.error("Unable to connect to the database:", error);
+                console.error("Erro no EstoqueControllers.getListaEstoqueAtual:", error);
                 throw error;
             }
         
