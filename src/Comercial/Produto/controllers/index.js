@@ -180,15 +180,14 @@ class ComercialProdutoControllers {
     page = page ? page : '';
     pageSize = pageSize ? pageSize : '';
     try {
-      // "http://164.152.245.77:8000/quality/concentrador/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=2024-10-04&dataPesquisaFim=2024-10-04&idMarca=0&idEmpresa=1&descricaoProduto=&uf=&idFornecedor=137&idGrupoGrade=1&idGrade=&idMarcaProduto=&uf=&page=&pageSize="
-      //2 http://164.152.245.77:8000/quality/concentrador/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=2024-10-04&dataPesquisaFim=2024-10-04&idMarca=0&idEmpresa=1&descricaoProduto=&uf=0&idFornecedor=&idGrupoGrade=1&idGrade=137&idMarcaProduto=
+
       const apiUrl = `${url}/api/comercial/vendas-por-estrutura.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idMarca=${idGrupoEmpresarial}&idEmpresa=${idEmpresa}&descricaoProduto=${descricaoProduto}&idFornecedor=${idFornecedor}&idGrupoGrade=${idGrupo}&idGrade=${idSubGrupo}&idMarcaProduto=${idMarcaProduto}`;
       const response = await axios.get(apiUrl)
       // const response = await getVendasPorEstrutura(idEmpresa, idGrupoEmpresarial, idGrupo, idSubGrupo, idMarca, idFornecedor, descricaoProduto, uf, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
-      return res.json(response.data); // Retorna
+      return res.json(response.data); 
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Error in ComercialProdutoControllers.getListaVendasIndicadoresEstrutura:", error);
       throw error;
     }
 
