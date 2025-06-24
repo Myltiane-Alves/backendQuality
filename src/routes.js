@@ -133,7 +133,7 @@ routes.get('/pagamentoPos', AdministrativoControllers.getRetornoListaPagamentoPO
 routes.get('/listaAlteracaoPreco', AdministrativoControllers.getListaAlteracaoPreco)
 routes.get('/vendaAtivaCliente', AdministrativoControllers.getListaClientesVendas)
 routes.get('/prestacaoContasBalanco', AdministrativoControllers.getListaPrestacaoDeContas)
-routes.get('/novoPreviaBalanco', AdministrativoControllers.getListaPreviaBalanco)
+routes.get('/novo-previa-balanco', AdministrativoControllers.getListaPreviaBalanco)
 routes.get('/vendaCanceladaEmpresa', AdministrativoControllers.getVendaCancelada30Minutos)
 routes.get('/vendaCanceladaWeb', AdministrativoControllers.getVendaCanceladaWeb)
 routes.get('/vendaCanceladaEmitidaPDV', AdministrativoControllers.getVendaCanceladaEmitidaPDV)

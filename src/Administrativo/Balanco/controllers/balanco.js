@@ -67,10 +67,12 @@ class AdmBalancoControllers {
         pageSize = pageSize ? pageSize : '';
         try {
             
-            const response = await getColetorBalanco(idEmpresa, idResumo, descricaoProduto, page, pageSize)
-            return res.json(response); 
+            // const response = await getColetorBalanco(idEmpresa, idResumo, descricaoProduto, page, pageSize)
+            const apiUrl = `${url}/api/administrativo/coletor-balanco.xsjs?idresumo=${idResumo}&idempresa=${idEmpresa}`
+            const response = await axios.get(apiUrl)
+            return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no ADM Balanco Controllers getListaColetorBalanco:", error);
             throw error;
         }
         
