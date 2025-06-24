@@ -254,14 +254,16 @@ class DashBoardControllers {
     // }
 
     async getListaVendasVendedorGerencia(req, res) {
-        let { idEmpresa, page, pageSize, dataFechamento } = req.query;
+        let { idEmpresa, page, pageSize, dataFechamento, dataPesquisaInicio, dataPesquisaFim } = req.query;
         if (!isNaN(idEmpresa)) {
             idEmpresa = Number(idEmpresa) ? idEmpresa : '';
-            dataFechamento = dataFechamento ? dataFechamento : '';
             pageSize = pageSize ? pageSize : '';
             page = page ? page : '';
+            dataFechamento = dataFechamento ? dataFechamento : '';
+            dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';
             try {
-                const apiUrl = `${url}/api/dashboard/venda/vendedor.xsjs?page=${page}&pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+                const apiUrl = `${url}/api/dashboard/venda/vendedor.xsjs?page=${page}&pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
                 const response = await axios.get(apiUrl)
 
                 return res.json(response.data); // Retorna
