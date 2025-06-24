@@ -178,26 +178,26 @@ class DashBoardVendasControllers {
         }
     }
 
-        async getListaResumoVendasCaixas(req, res) {
+    async getListaResumoVendasCaixas(req, res) {
         let { idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize } = req.query;
-        if (!isNaN(idEmpresa)) {
-            idVenda = idVenda ? idVenda : '';
-            idEmpresa = idEmpresa ? idVenda : '';
-            dataFechamento = dataFechamento ? dataFechamento : '';
-            page = page ? page : '';
-            pageSize = pageSize ? pageSize : '';
+   
+        idVenda = idVenda ? idVenda : '';
+        idEmpresa = idEmpresa ? idVenda : '';
+        dataFechamento = dataFechamento ? dataFechamento : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
 
-            try {
-                const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa.xsjs?page=${page}&pagesize=${pageSize}&status=${statusCancelado}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
-                const response = await axios.get(apiUrl)
-                // const response = await getResumoVendaCaixa(idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize)
+        try {
+            const apiUrl = `${url}/api/dashboard/venda/resumo-venda-caixa.xsjs?page=${page}&pageSize=${pageSize}&idVenda=${idVenda}&statusCancelado=${statusCancelado}&idEmpresa=${idEmpresa}&dataFechamento=${dataFechamento}`
+            const response = await axios.get(apiUrl)
+            // const response = await getResumoVendaCaixa(idVenda, idEmpresa, dataFechamento, statusCancelado, page, pageSize)
 
-                return res.json(response.data); // Retorna
-            } catch (error) {
-                console.error("erro no  DashBoardVendasControllers.getListaResumoVendasCaixas")
-                throw error;
-            }
+            return res.json(response.data); // Retorna
+        } catch (error) {
+            console.error("erro no  DashBoardVendasControllers.getListaResumoVendasCaixas")
+            throw error;
         }
+        
     }
 }
 
