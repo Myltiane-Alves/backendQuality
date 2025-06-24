@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getFuncionariosDescontos } from "../repositories/funcionarioDesconto.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 
 class DashBoardFuncionariosControllers {
