@@ -142,7 +142,7 @@ class AdmBalancoControllers {
             // const response = await getPrestacaoContasBalanco(idResumoBalanco, page, pageSize)
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no ADMBalancoControllers getListaPrestacaoContasBalanco:", error);
             throw error;
         }
         
