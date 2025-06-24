@@ -129,7 +129,7 @@ class ComercialProdutoControllers {
 
       return res.json(response.data); // Retorna
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Error in ComercialProdutoControllers.getListaVendasVendedorEstrutura:", error);
       throw error;
     }
   }
