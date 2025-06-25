@@ -1272,17 +1272,16 @@ class FinanceiroControllers {
   //   }
   // }
 
-  async updateFaturaFinanceiro(req, res) {
-    let {
-      IDDETALHEFATURA,
-      NUCODAUTORIZACAO,
-      VRRECEBIDO,
-      NUAUTORIZACAO,
-      STPIX,
-      STCANCELADO } = req.body;
+  async putFaturaFinanceiro(req, res) {
+    let { IDDETALHEFATURA, NUCODAUTORIZACAO, VRRECEBIDO, NUAUTORIZACAO, STPIX, STCANCELADO } = req.body;
+
+    if(!IDDETALHEFATURA) {
+      console.error("Erro no FinanceiroControllers.putFaturaFinanceiro: Faltando Parametos obrigatórios");
+      return res.status(400).json({ error: "Faltando Parametos obrigatórios" });
+    }
 
     try {
-      const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/atualizar-fatura.xsjs`
+      const apiUrl = `${url}/api/financeiro/atualizar-fatura.xsjs`
       const response = await axios.put(apiUrl, {
         NUCODAUTORIZACAO,
         VRRECEBIDO,
@@ -1294,7 +1293,7 @@ class FinanceiroControllers {
 
       return res.json(response.data);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Erro no FinanceiroControllers.putFaturaFinanceiro:", error);
       throw error;
     }
   }
