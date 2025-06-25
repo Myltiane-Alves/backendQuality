@@ -79,9 +79,12 @@ class QuebraCaixaControllers {
 
     async putListaStatusQuebraCaixa(req, res) {
         try {
-            const quebras = Array.isArray(req.body) ? req.body : [req.body]; 
+            let { IDQUEBRACAIXA, STATIVO } = req.body 
             // const response = await  updateStatusQuebraCaixa(quebras);
-            const response = await axios.put(`${url}/api/dashboard/quebra-caixa/atualizacao-status.xsjs`, quebras);
+            if(!IDQUEBRACAIXA || !STATIVO)  {
+                return res.status(400).json({ error: "IDQUEBRACAIXA and STATIVO are required." });
+            }
+            const response = await axios.put(`${url}/api/dashboard/quebra-caixa/atualizacao-status.xsjs`, { IDQUEBRACAIXA, STATIVO });
             return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
