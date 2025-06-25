@@ -14,6 +14,7 @@ export const getVendaPixPeriodo = async (byId, idMarca, dataPesquisaInicio, data
                 tbv.IDVENDA,
                 tbvp.DSTIPOPAGAMENTO,
                 IFNULL(tbvp.VALORRECEBIDO, 0) AS PIX,
+                IFNULL (TO_VARCHAR(tbv.DATA_COMPENSACAO, 'DD/mm/YYYY'),'NÃO INFORMADO') AS DATA_COMPENSACAO,
                 IFNULL(TO_VARCHAR(tbv.DTHORAFECHAMENTO, 'DD/MM/YYYY'), 'NÃO INFORMADO') AS DATAVENDA,
                 tbvp.NUAUTORIZACAO
             FROM 

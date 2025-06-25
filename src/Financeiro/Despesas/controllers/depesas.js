@@ -47,9 +47,13 @@ class DespesasControllers {
   }
   async putStatusDespesasLoja(req, res) {
     try {
-      const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
+      let  {STCANCELADO, IDDESPESASLOJA} = req.body; 
       // const response = await  updateStatusDespesasLoja(despesas);
-      const response = await axios.put(`${url}/api/despesa-loja/atualizacao-status.xsjs`, despesas);
+      if(!IDDESPESASLOJA) {
+        return res.status(400).json({ error: "IDDESPESASLOJA is required" });
+      }
+      const response = await axios.put(`${url}/api/despesa-loja/atualizacao-status.xsjs`, {STCANCELADO, IDDESPESASLOJA});
+
       return res.json(response.data);
     } catch (error) {
       console.error("Unable to connect to the database:", error);

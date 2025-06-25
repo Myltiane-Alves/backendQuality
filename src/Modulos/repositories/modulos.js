@@ -32,75 +32,75 @@ export const getMenuPai = async (idModulo) => {
     return data;
 }
 
-// export const getMenuFilho = async (idMenuPai, idMenuFilho) => {
+export const getMenuFilho = async (idMenuPai, idMenuFilho) => {
 
-//     let query = `
-//        SELECT 
-//             ID, 
-//             DSNOME, 
-//             IDMENUPAI, 
-//             URL, 
-//             ALTERAR, 
-//             CRIAR, 
-//             VISUALIZAR, 
-//             N1,
-//             N2,
-//             N3,
-//             N4,
-//             ADMINISTRADOR
-//         FROM ${databaseSchema}.MENUFILHO
-//         WHERE 1 = 1
-//     `;
+    let query = `
+       SELECT 
+            ID, 
+            DSNOME, 
+            IDMENUPAI, 
+            URL, 
+            ALTERAR, 
+            CRIAR, 
+            VISUALIZAR, 
+            N1,
+            N2,
+            N3,
+            N4,
+            ADMINISTRADOR
+        FROM ${databaseSchema}.MENUFILHO
+        WHERE 1 = 1
+    `;
 
 
-//     const params = [];
+    const params = [];
 
-//     if(idMenuPai) {
-//         query += ` AND IDMENUPAI = ?`;
-//         params.push(idMenuPai);
-//     }
+    if(idMenuPai) {
+        query += ` AND IDMENUPAI = ?`;
+        params.push(idMenuPai);
+    }
 
-//     if (idMenuFilho) {
-//         query += ` AND ID IN (?)`;
-//         params.push(idMenuFilho);
-//     }
+    if (idMenuFilho) {
+        query += ` AND ID IN (?)`;
+        params.push(idMenuFilho);
+    }
 
-//     query += ` ORDER BY ID ASC`;
-//     query += ` LIMIT ? OFFSET ?`;
-//     params.push(1000, 0);
+    query += ` ORDER BY ID ASC`;
+    query += ` LIMIT ? OFFSET ?`;
+    params.push(1000, 0);
   
-//     const statement = await conn.prepare(query);
-//     const result = await statement.exec(params);
+    const statement = await conn.prepare(query);
+    const result = await statement.exec(params);
     
-//     if (!Array.isArray(result) || result.length === 0) return [];
+    if (!Array.isArray(result) || result.length === 0) return [];
 
-//     const data = result.map((item, index) => ({
-//         ID: item.ID,
-//         DSNOME: item.DSNOME,
-//         IDMENUPAI: item.IDMENUPAI,
-//         URL: item.URL,
-//         ALTERAR: item.ALTERAR,
-//         CRIAR: item.CRIAR,
-//         VISUALIZAR: item.VISUALIZAR,
-//         N1: item.N1,
-//         N2: item.N2,
-//         N3: item.N3,
-//         N4: item.N4,
-//         ADMINISTRADOR: item.ADMINISTRADOR
-//     }))
+    const data = result.map((item, index) => ({
+        ID: item.ID,
+        DSNOME: item.DSNOME,
+        IDMENUPAI: item.IDMENUPAI,
+        URL: item.URL,
+        ALTERAR: item.ALTERAR,
+        CRIAR: item.CRIAR,
+        VISUALIZAR: item.VISUALIZAR,
+        N1: item.N1,
+        N2: item.N2,
+        N3: item.N3,
+        N4: item.N4,
+        ADMINISTRADOR: item.ADMINISTRADOR
+    }))
 
-//     return data;
-// }
+    return data;
+}
 
-// export const getModuloPrincipal = async (idModulo) => {
-//     const query = `SELECT * FROM ${databaseSchema}.MODULOPRINCIPAL WHERE ID = ?`;
-//     const params = [idModulo];
-//     const statement = await conn.prepare(query);
+export const getModuloPrincipal = async (idModulo) => {
+    const query = `SELECT * FROM ${databaseSchema}.MODULOPRINCIPAL WHERE ID = ?`;
+    const params = [idModulo];
+    const statement = await conn.prepare(query);
     
-//     const result = await statement.exec(params);
+    const result = await statement.exec(params);
 
-//     return Array.isArray(result) ? result : [];
-// };
+    return Array.isArray(result) ? result : [];
+};
 
 export const getPerfilUsuarioMenu = async (idUsuario, idModulo, page, pageSize) => {
     try {
@@ -268,76 +268,6 @@ export const getPerfilUsuarioMenu = async (idUsuario, idModulo, page, pageSize) 
     }
 };
 
-export const getMenuFilho = async (idMenuPai, idMenuFilho) => {
-
-    let query = `
-       SELECT 
-            ID, 
-            DSNOME, 
-            IDMENUPAI, 
-            URL, 
-            ALTERAR, 
-            CRIAR, 
-            VISUALIZAR, 
-            N1,
-            N2,
-            N3,
-            N4,
-            ADMINISTRADOR
-        FROM ${databaseSchema}.MENUFILHO
-        WHERE 1 = 1
-    `;
-
-
-    const params = [];
-
-    if(idMenuPai) {
-        query += ` AND IDMENUPAI = ?`;
-        params.push(idMenuPai);
-    }
-
-    if (idMenuFilho) {
-        query += ` AND ID IN (?)`;
-        params.push(idMenuFilho);
-    }
-
-    query += ` ORDER BY ID ASC`;
-    query += ` LIMIT ? OFFSET ?`;
-    params.push(1000, 0);
-  
-    const statement = await conn.prepare(query);
-    const result = await statement.exec(params);
-    
-    if (!Array.isArray(result) || result.length === 0) return [];
-
-    const data = result.map((item, index) => ({
-        ID: item.ID,
-        DSNOME: item.DSNOME,
-        IDMENUPAI: item.IDMENUPAI,
-        URL: item.URL,
-        ALTERAR: item.ALTERAR,
-        CRIAR: item.CRIAR,
-        VISUALIZAR: item.VISUALIZAR,
-        N1: item.N1,
-        N2: item.N2,
-        N3: item.N3,
-        N4: item.N4,
-        ADMINISTRADOR: item.ADMINISTRADOR
-    }))
-
-    return data;
-}
-
-
-export const getModuloPrincipal = async (idModulo) => {
-    const query = `SELECT * FROM ${databaseSchema}.MODULOPRINCIPAL WHERE ID = ?`;
-    const params = [idModulo];
-    const statement = await conn.prepare(query);
-    
-    const result = await statement.exec(params);
-
-    return Array.isArray(result) ? result : [];
-};
 
 export const getMenuFilhos = async (idMenuPai, idMenuFilho) => {
     let query = `

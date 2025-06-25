@@ -14,10 +14,10 @@ class ModulosControllers  {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {
-            // const response = await getPerfilUsuarioMenu(idUsuario, idModulo)
+            // const response = await getPerfilUsuarioMenu(idUsuario)
             const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl);
-            //  console.log(response.data); // Retorna
+
             return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
