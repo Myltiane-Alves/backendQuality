@@ -58,7 +58,7 @@ class MovimentoCaixaControllers {
 
         try {
             // http://164.152.245.77:8000/quality/concentrador_homologacao/api/movimento-caixa/gerencia.xsjs?idEmpresa=1&dataPesquisaInic=2023-12-09&dataPesquisaFim=2024-12-09
-            const apiUrl = `${url}/api/movimento-caixa/gerencia.xsjs?idEmpresa=${idEmpresa}&idMovimentoCaixa=${idMovimentoCaixa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`
+            const apiUrl = `${url}/api/movimento-caixa/gerencia.xsjs?idEmpresa=${idEmpresa}&idMovimentoCaixa=${idMovimentoCaixa}&dataPesquisaInic=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
             const response = await axios.get(apiUrl)
             // const response = await getMovimentoCaixaGerencia(idEmpresa, idMovimentoCaixa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             return res.json(response.data);
@@ -86,8 +86,9 @@ class MovimentoCaixaControllers {
     
           return res.json(response.data);
         } catch (error) {
-          console.error("Unable to connect to the database:", error);
-          throw error;
+          console.error("Error no MovimentoCaixaControllers.getListaFechamentoCaixa:", error);
+          return res.status(500).json({ error: error.message });
+         
         }
       
       }
@@ -105,10 +106,31 @@ class MovimentoCaixaControllers {
     }
     async putListaAjusteRecebimento(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await axios.put(`${url}/api/movimento-caixa/ajuste-recebimento.xsjs`, dados)
+            let {ID, VRAJUSTDINHEIRO, VRAJUSTTEF, VRAJUSTPOS, VRAJUSTFATURA, VRAJUSTVOUCHER, VRAJUSTCONVENIO, VRAJUSTPIX, VRAJUSTPL, TXT_OBS, VRQUEBRACAIXA} = req.body; 
+
+            if(!ID) {
+                return res.status(400).json({ error: "ID is required" });
+            }
+
+            if(!TXT_OBS) {
+                return res.status(400).json({ error: "TXT_OBS is required" });
+            }
+
+            const response = await axios.put(`${url}/api/movimento-caixa/ajuste-recebimento.xsjs`, {
+                ID,
+                VRAJUSTDINHEIRO,
+                VRAJUSTTEF,
+                VRAJUSTPOS,
+                VRAJUSTFATURA,
+                VRAJUSTVOUCHER,
+                VRAJUSTCONVENIO,
+                VRAJUSTPIX,
+                VRAJUSTPL,
+                TXT_OBS,
+                VRQUEBRACAIXA
+            })
             // const response = await putAjusteRecebimento(dados);
-            return res.json(response.data);
+            return res.status(200).json({message: "Ajuste de recebimento atualizado com sucesso!"});
         } catch (error) {
             console.error("Erro no MovimentoCaixaControllers.putListaAjusteRecebimento:", error);
             return res.status(500).json({ error: error.message });
