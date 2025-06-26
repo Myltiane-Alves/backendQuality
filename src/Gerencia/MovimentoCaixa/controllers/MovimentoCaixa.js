@@ -63,8 +63,9 @@ class MovimentoCaixaControllers {
             // const response = await getMovimentoCaixaGerencia(idEmpresa, idMovimentoCaixa, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Error no MovimentoCaixaControllers.listaCaixasMovimentoGerencia:", error);
+            return res.status(500).json({ error: error.message });
+            
         }
 
     }
