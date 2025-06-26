@@ -2,7 +2,8 @@ import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { createDepositoLoja, updateDepositoLoja } from "../repositories/depositoLoja.js";
 import { getDepositosEmpresa } from "../repositories/empresa.js";
-let url = `http://164.152.245.77:8000/quality/concentrador`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class DepositosLojaControllers  {
 
@@ -99,6 +100,41 @@ class DepositosLojaControllers  {
         } = req.body;
 
         try {
+            if(!IDEMPRESA) {
+                return res.status(400).json({ error: "IDEMPRESA is required." });
+            }
+
+            if(!IDUSR) {
+                return res.status(400).json({ error: "IDUSUARIO is required." });
+            }
+            if(!IDCONTABANCO) {
+                return res.status(400).json({ error: "IDCONTABANCO is required." });
+            }
+
+            if(!DTDEPOSITO) {
+                return res.status(400).json({ error: "DTDEPOSITO is required." });
+            }
+
+            if(!DTMOVIMENTOCAIXA) {
+                return res.status(400).json({ error: "DTMOVIMENTOCAIXA is required." });
+            }
+            if(!DSHISTORIO) {
+                return res.status(400).json({ error: "DSHISTORIO is required." });
+            }
+            if(!NUDOCDEPOSITO) {
+                return res.status(400).json({ error: "NUDOCDEPOSITO is required." });
+            }
+            if(!VRDEPOSITO) {
+                return res.status(400).json({ error: "VRDEPOSITO is required." });
+            }
+
+            if(STATIVO === undefined) {
+                return res.status(400).json({ error: "STATIVO is required." }); 
+            }
+            if(STCANCELADO === undefined) {
+                return res.status(400).json({ error: "STCANCELADO is required." }); 
+            }
+
             const response = await axios.post(`${url}/api/deposito-loja/todos.xsjs`, {
                 IDEMPRESA,
                 IDUSR,
@@ -115,7 +151,8 @@ class DepositosLojaControllers  {
             return res.status(200).json({message: 'Depósito cadastrado com sucesso!'})
         } catch (error) {
             console.error("Erro Verifique os campos do formulário:", error);
-            throw error;
+            return res.status(500).json({ error: "Erro ao cadastrar depósito. Verifique os campos do formulário." });
+            
         }
     }
  
