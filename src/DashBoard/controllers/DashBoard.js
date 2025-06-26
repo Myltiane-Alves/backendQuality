@@ -145,7 +145,8 @@ class DashBoardControllers {
                 return res.json(response.data); // Retorna
             } catch (error) {
                 console.error("Error no DashBoardControllers.getRetornoTableImprimeQuebra:", error);
-                throw error;
+                return res.status(500).json({ error: error.message });
+    
             }
         }
 

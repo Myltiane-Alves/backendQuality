@@ -81,10 +81,58 @@ class DetalheFaturasControllers {
 
   async postDetalheFaturaLoja(req, res) {
     try {
-      const detalhes = Array.isArray(req.body) ? req.body : [req.body];
+      let {
+        IDEMPRESA,
+        IDFUNCIONARIO,
+        IDDETALHEFATURALOCAL,
+        IDCAIXAWEB,
+        IDCAIXALOCAL,
+        NUESTABELECIMENTO,
+        NUCARTAO,
+        DTPROCESSAMENTO,
+        HRPROCESSAMENTO,
+        NUNSU,
+        NUNSUHOST,
+        IDMOVIMENTOCAIXAWEB,
+        NUCODAUTORIZACAO,
+        VRRECEBIDO,
+        DTHRMIGRACAO,
+        STCANCELADO,
+        IDUSRCACELAMENTO
+      } = req.body;
+
+      if(!IDEMPRESA) {
+        return res.status(400).json({ error: "IDEMPRESA is required" });
+      }
+
+      if(!IDFUNCIONARIO) {
+        return res.status(400).json({ error: "IDFUNCIONARIO is required" });
+      }
+
+      if(!NUCODAUTORIZACAO) {
+        return res.status(400).json({ error: "NUCODAUTORIZACAO is required" });
+      }
       // const response = await createDetalheFatura(detalhes);
-      const response = await axios.post(`${url}/api/detalhe-fatura.xsjs`, detalhes);
-      return res.json(response.data);
+      const response = await axios.post(`${url}/api/detalhe-fatura.xsjs`, {
+        IDEMPRESA,
+        IDFUNCIONARIO,
+        IDDETALHEFATURALOCAL,
+        IDCAIXAWEB,
+        IDCAIXALOCAL,
+        NUESTABELECIMENTO,
+        NUCARTAO,
+        DTPROCESSAMENTO,
+        HRPROCESSAMENTO,
+        NUNSU,
+        NUNSUHOST,
+        IDMOVIMENTOCAIXAWEB,
+        NUCODAUTORIZACAO,
+        VRRECEBIDO,
+        DTHRMIGRACAO,
+        STCANCELADO,
+        IDUSRCACELAMENTO
+      });
+      return res.status(201).json({ message: "Detalhe Fatura created successfully" });
     } catch (error) {
       console.error("Erro no DetalheFaturasControllers.postDetalheFatura:", error);
       return res.status(500).json({ error: error.message });
