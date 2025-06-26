@@ -49,7 +49,7 @@ class DashBoardAdiantamentoSalarialControllers {
 
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error in DashBoardAdiantamentoSalarialControllers.getListaAdiantamentosFuncionarios:", error);
             throw error;
         }
 
@@ -113,13 +113,49 @@ class DashBoardAdiantamentoSalarialControllers {
  
     async postAdiantamentoSalarial(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];   
+            let { IDEMPRESA, IDFUNCIONARIO, DTLANCAMENTO, TXTMOTIVO, VRVALORDESCONTO, STATIVO, IDUSR } = req.body;   
             // const response = await createAdiantamentoSalarial(dados)
-            const response = await axios.post(`${url}/api/dashboard/adiantamento-salarial.xsjs`, dados);
+            if(!IDEMPRESA) {
+                return res.status(400).json({ error: "IDEMPRESA is required." });
+            }
+
+            if(!IDFUNCIONARIO) {
+                return res.status(400).json({ error: "IDFUNCIONARIO is required."});
+            }
+
+            if(!DTLANCAMENTO) {
+                return res.status(400).json({ error: "DTLANCAMENTO is required."});
+            }
+
+            if(!TXTMOTIVO) {
+                return res.status(400).json({ error: "TXTMOTIVO is required."});
+            }
+
+            if(!VRVALORDESCONTO) {
+                return res.status(400).json({ error: "VRVALORDESCONTO is required."});
+            }
+
+            if(!STATIVO) {
+                return res.status(400).json({ error: "STATIVO is required."});
+            }
+
+            if(!IDUSR) {
+                return res.status(400).json({ error: "IDUSR is required."});
+            }
+
+            const response = await axios.post(`${url}/api/dashboard/adiantamento-salarial.xsjs`, {
+                IDEMPRESA,
+                IDFUNCIONARIO,
+                DTLANCAMENTO,
+                TXTMOTIVO,
+                VRVALORDESCONTO,
+                STATIVO,
+                IDUSR
+            });
         
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error in DashBoardAdiantamentoSalarialControllers.postAdiantamentoSalarial:", error);
             throw error;
         }
     }

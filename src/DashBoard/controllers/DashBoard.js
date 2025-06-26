@@ -413,7 +413,7 @@ class DashBoardControllers {
 
             return res.json(response.data); // Retorna os dados da resposta
         } catch (error) {
-            console.error("Não foi possível conectar ao banco de dados:", error);
+            console.error("Erro no DashBoardControllers.getAdiantamentoSalarialFuncionario:", error);
             throw error; // Lança o erro para tratamento posterior, se necessário
         }
 
