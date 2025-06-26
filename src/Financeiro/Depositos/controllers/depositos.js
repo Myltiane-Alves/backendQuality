@@ -59,15 +59,18 @@ class DepositosControllers {
   async updateDepositoLoja(req, res) {
     let { IDDEPOSITOLOJA } = req.body;
 
+    if(!IDDEPOSITOLOJA) {
+      return res.status(400).json({ error: "IDDEPOSITOLOJA is required" });
+    }
 
     try {
-      // const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/financeiro/atualizar-deposito-loja.xsjs`
       // const response = await putDepositoLoja(IDDEPOSITOLOJA)
-      const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
-      const response = await axios.put(`${url}/api/financeiro/atualizar-deposito-loja.xsjs`, despesas);
+      // const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
+      const response = await axios.put(`${url}/api/financeiro/atualizar-deposito-loja.xsjs`, {IDDEPOSITOLOJA: IDDEPOSITOLOJA});
       return res.json(response.data);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Erro no DepositosControllers:", error);
+      res.status(500).json({ error: "Erro ao atualizar depósito loja" });
       throw error;
     }
   }
