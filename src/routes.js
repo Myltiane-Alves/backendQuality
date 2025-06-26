@@ -324,7 +324,7 @@ routes.put('/editar-status-despesa/:id', DespesasControllers.putStatusDespesasLo
 // Desconto
 routes.get('/desconto-vendas', DescontoControllers.getListaDescontoVendas)
 routes.get('/desconto-vendas-simplificado', DescontoControllers.getListaDescontoVendasSimplificada)
-routes.get('/descontoMotivoVendas', DescontoControllers.getListaDescontoMotivoVendas)
+routes.get('/desconto-motivo-vendas', DescontoControllers.getListaDescontoMotivoVendas)
 
 //  Adiantamentos 
 routes.get('/adiantamento-salarial', AdiantamentosControllers.getListaAdiantamentoSalarialFinanceiro)
