@@ -59,7 +59,7 @@ class DespesasLojaControllers  {
             // const response = await getDespesasTodos(idDespesas, pageSize, page)
             return res.json(response.data);
         } catch(error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no DespesasLojaControllers.getListaTodasDespesasLojas:", error);    
                 throw error;
         }
         
