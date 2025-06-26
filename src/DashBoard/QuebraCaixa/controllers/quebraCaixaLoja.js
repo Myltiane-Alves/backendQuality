@@ -105,10 +105,38 @@ class QuebraCaixaControllers {
     }
 
     async postQuebraCaixa(req, res) {
+
         try {
-            const quebras = Array.isArray(req.body) ? req.body : [req.body]; 
+            let {IDCAIXAWEB, IDMOVIMENTOCAIXA, IDGERENTE, IDFUNCIONARIO, DTLANCAMENTO, VRQUEBRASISTEMA, VRQUEBRAEFETIVADO, TXTHISTORICO, STATIVO} = req.body; 
             // const response = await createQuebraCaixa(quebras);
-            const response = await axios.post(`${url}/api/dashboard/quebra-caixa/todos.xsjs`, quebras);
+
+            if(!IDCAIXAWEB) {
+                return res.status(400).json({ error: "IDCAIXAWEB is required." });
+            }
+
+            if(!IDMOVIMENTOCAIXA) {
+                return res.status(400).json({ error: "IDMOVIMENTOCAIXA is required." });
+            }
+
+            if(!IDGERENTE) {
+                return res.status(400).json({ error: "IDGERENTE is required." });
+            }
+
+            if(!IDFUNCIONARIO) {
+                return res.status(400).json({ error: "IDFUNCIONARIO is required."});
+            }
+            
+            const response = await axios.post(`${url}/api/dashboard/quebra-caixa/todos.xsjs`, {
+                IDCAIXAWEB,
+                IDMOVIMENTOCAIXA,
+                IDGERENTE,
+                IDFUNCIONARIO,
+                DTLANCAMENTO,
+                VRQUEBRASISTEMA,
+                VRQUEBRAEFETIVADO,
+                TXTHISTORICO,
+                STATIVO
+            });
             return res.json(response.data);
         } catch (error) {
             console.error("Erro no QuebraCaixaControllers.postQuebraCaixa:", error);
