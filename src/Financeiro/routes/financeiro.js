@@ -26,7 +26,7 @@ routes.get('/faturaPixConsolidadoLoja', FinanceiroControllers.getListaFaturaPixC
 // routes.get('/vendaConciliar', FinanceiroControllers.getListaVendasConciliar)
 routes.get('/vendaDetalheRecebimentoEletronico', FinanceiroControllers.getListaDetalheRecebimentosEletronico)
 // routes.get('/deposito-loja', FinanceiroControllers.getListaConciliarBanco)
-routes.get('/depositoLojaConsolidado', FinanceiroControllers.getListaConciliarBancoConsolidado)
+routes.get('/deposito-loja-consolidado', FinanceiroControllers.getListaConciliarBancoConsolidado)
 // routes.get('/saldoLojaPorGrupo', FinanceiroControllers.getListaSaldoExtratoLoja)
 routes.post('/motivoDevolucao', FinanceiroControllers.createMotivoDevolucao)
 // routes.get('/detalheFaturaFinanceiro', FinanceiroControllers.getListaDetalheFaturaFinanceiro)
