@@ -144,10 +144,16 @@ class FaturasControllers {
 
   async putListaAtualizarRecompra(req, res) {
     try {
-        const detalhes = Array.isArray(req.body) ? req.body : [req.body]; 
+      let {IDDETALHEFATURA, STRECOMPRA} = req.body; 
         // const response = await putAtualizarRecompra(detalhes);
-        const response = await axios.put(`${url}/api/fatura-loja/atualizar-recompra.xsjs`, detalhes);
-        return res.json(response.data);
+        if(!IDDETALHEFATURA) {
+          return res.status(400).json({ error: "IDDETALHEFATURA is required" });
+        }
+        const response = await axios.put(`${url}/api/fatura-loja/atualizar-recompra.xsjs`, {
+          IDDETALHEFATURA,
+          STRECOMPRA
+        });
+        return res.status(200).json({ message: "Recompra atualizada com sucesso", data: response.data });
     } catch (error) {
         console.error("Erro no FaturasControllers.putListaAtualizarRecompra:", error);
         return res.status(500).json({ error: error.message });
