@@ -162,10 +162,14 @@ class FaturasControllers {
 
   async putListaAtualizarFatura(req, res) {
     try {
-        const detalhes = Array.isArray(req.body) ? req.body : [req.body]; 
+        let { IDDETALHEFATURA, NUCODAUTORIZACAO, VRRECEBIDO } = req.body; 
         // const response = await putAtualizarFatura(detalhes);
-        const response = await axios.put(`${url}/api/fatura-loja/atualizar.xsjs`, detalhes);
-        return res.json(response.data);
+        const response = await axios.put(`${url}/api/fatura-loja/atualizar.xsjs`, {
+          IDDETALHEFATURA,
+          NUCODAUTORIZACAO,
+          VRRECEBIDO
+        });
+        return res.status(200).json({ message: "Fatura atualizada com sucesso"});
     } catch (error) {
         console.error("Erro no FaturasControllers.putListaAtualizarFatura:", error);
         return res.status(500).json({ error: error.message });
