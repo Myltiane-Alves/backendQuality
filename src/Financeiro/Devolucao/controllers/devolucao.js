@@ -29,14 +29,23 @@ class DevolucaoControllers {
 
   async updateMotivoDevolucao(req, res) {
     try {
-      const dados = Array.isArray(req.body) ? req.body : [req.body];
+      let {IDUSUARIO, IDMOTIVODEVOLUCAO, DSMOTIVO, STATIVO} = req.body;
       // const response = await putMotivoDevolucao(devolucoes)
-      const response = await axios.post(`${url}/api/financeiro/motivo-devolucao.xsjs`, dados);
+      if (!IDUSUARIO || !IDMOTIVODEVOLUCAO || !DSMOTIVO || STATIVO === undefined) {
+        return res.status(400).json({ error: "IDUSUARIO, IDMOTIVODEVOLUCAO, DSMOTIVO and STATIVO are required." });
+      }
+      const response = await axios.post(`${url}/api/financeiro/motivo-devolucao.xsjs`, {
+        IDUSUARIO,
+        IDMOTIVODEVOLUCAO,
+        DSMOTIVO,
+        STATIVO
+      });
 
       return res.json(response.data);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
-      throw error;
+      console.error("Erro no DevolucaoControllers.updateMotivoDevolucao", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+      
     }
   }
 
