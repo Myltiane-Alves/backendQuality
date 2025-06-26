@@ -24,7 +24,7 @@ class DespesasLojaControllers  {
             // const response = await getDespesasEmpresa(idEmpresa, dataPesquisaInicio, dataPesquisaFim, pageSize, page);
             return res.json(response.data); // Retorna
         } catch(error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no DespesasLojaControllers.getListaDespesasLojaEmpresa:", error);
             throw error;
         }
         
@@ -99,55 +99,77 @@ class DespesasLojaControllers  {
         }
        
     }
-    async postCadastrarDespesasLoja(req, res) {
-        try {
-            const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
-            // const response = await  createDespesaTodos(despesas);
-            const response = await axios.post(`${url}/api/despesa-loja/todos.xsjs`, despesas)
-            return res.json(response.data);
-        } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            return res.status(500).json({ error: error.message });
-        }
-       
-    }
     // async postCadastrarDespesasLoja(req, res) {
-    //     let {
-    //         IDEMPRESA,
-    //         IDUSR,
-    //         DTDESPESA,
-    //         IDCATEGORIARECEITADESPESA,
-    //         DSHISTORIO,
-    //         DSPAGOA,
-    //         TPNOTA,
-    //         NUNOTAFISCAL,
-    //         VRDESPESA,
-    //         STATIVO,
-    //         STCANCELADO,
-            
-    //     } = req.body;
-
     //     try {
-    //         const response = await axios.post(`${url}/api/despesa-loja/todos.xsjs`, {
-    //             IDEMPRESA,
-    //             IDUSR,
-    //             DTDESPESA,
-    //             IDCATEGORIARECEITADESPESA,
-    //             DSHISTORIO,
-    //             DSPAGOA,
-    //             TPNOTA,
-    //             NUNOTAFISCAL,
-    //             VRDESPESA,
-    //             STATIVO,
-    //             STCANCELADO   
-    //         })
-
-    //         return res.status(200).json({message: 'Despesa cadastrada com sucesso!'})
+    //         const despesas = Array.isArray(req.body) ? req.body : [req.body]; 
+    //         // const response = await  createDespesaTodos(despesas);
+    //         const response = await axios.post(`${url}/api/despesa-loja/todos.xsjs`, despesas)
+    //         return res.json(response.data);
     //     } catch (error) {
-    //         console.error("Erro Verifique os campos do formulário:", error);
-    //         throw error;
+    //         console.error("Unable to connect to the database:", error);
+    //         return res.status(500).json({ error: error.message });
     //     }
+       
     // }
+    async postCadastrarDespesasLoja(req, res) {
+        let {
+            IDEMPRESA,
+            IDUSR,
+            DTDESPESA,
+            IDCATEGORIARECEITADESPESA,
+            DSHISTORIO,
+            DSPAGOA,
+            TPNOTA,
+            NUNOTAFISCAL,
+            VRDESPESA,
+            STATIVO,
+            STCANCELADO,
+            
+        } = req.body;
+
+        
+
+        try {
+
+            if(!IDEMPRESA) {
+                return res.status(400).json({message: 'IDEMPRESA é obrigatório!'});
+            }
+
+            if(!IDUSR) {
+                return res.status(400).json({message: 'IDUSR é obrigatório!'});
+            }
+
+            if(!DTDESPESA) {
+                return res.status(400).json({message: 'DTDESPESA é obrigatório!'});
+            }
+
+            if(!IDCATEGORIARECEITADESPESA) {
+                return res.status(400).json({message: 'IDCATEGORIARECEITADESPESA é obrigatório!'});
+            }
+
+            if(!DSHISTORIO) {
+                return res.status(400).json({message: 'DSHISTORIO é obrigatório!'});
+            }   
+            const response = await axios.post(`${url}/api/despesa-loja/todos.xsjs`, {
+                IDEMPRESA,
+                IDUSR,
+                DTDESPESA,
+                IDCATEGORIARECEITADESPESA,
+                DSHISTORIO,
+                DSPAGOA,
+                TPNOTA,
+                NUNOTAFISCAL,
+                VRDESPESA,
+                STATIVO,
+                STCANCELADO   
+            })
+
+            return res.status(200).json({message: 'Despesa cadastrada com sucesso!'})
+        } catch (error) {
+            console.error("Erro Verifique os campos do formulário:", error);
+            throw error;
+        }
+    }
 }
 
 export default new DespesasLojaControllers();

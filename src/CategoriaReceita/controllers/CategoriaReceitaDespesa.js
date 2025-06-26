@@ -1,7 +1,8 @@
 import axios from "axios";
 import { dataFormatada } from "../../utils/dataFormatada.js";
 import { getCategoriaReceitaDespesa } from "../repositories/categoriaReceitaDespesa.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_react_node`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class CategoriaReceitaDespesasControllers  {
 
@@ -13,12 +14,12 @@ class CategoriaReceitaDespesasControllers  {
             tipoCategoria = tipoCategoria ? tipoCategoria : '';
             pageSize = pageSize ? pageSize : '';
             page = page ? page : '';
-            // const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/categoria-receita-despesa.xsjs`;
-            // const response = await axios.get(apiUrl)
-            const response = await getCategoriaReceitaDespesa(idCategoria, tipoCategoria, pageSize, page)
-            return res.json(response); // Retorna
+            const apiUrl = `${url}/api/categoria-receita-despesa.xsjs`;
+            const response = await axios.get(apiUrl)
+            // const response = await getCategoriaReceitaDespesa(idCategoria, tipoCategoria, pageSize, page)
+            return res.json(response.data); 
         } catch(error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no CategoriaReceitaDespesasControllers.getListaCategoriaDespesas:", error);
             throw error;
         }
         
