@@ -44,13 +44,17 @@ class DevolucaoControllers {
   async createMotivoDevolucao(req, res) {
     
     try {
-      const dados  = Array.isArray(req.body) ? req.body : [req.body];
+      let {IDUSUARIO, DSMOTIVO} = req.body;
       // const response = await postMotivoDevolucao(devolucao)
-      const response = await axios.post(`${url}/api/financeiro/motivo-devolucao.xsjs`, dados);
+
+      if (!IDUSUARIO || !DSMOTIVO) {
+        return res.status(400).json({ error: "IDUSUARIO and DSMOTIVO are required." });
+      }
+      const response = await axios.post(`${url}/api/financeiro/motivo-devolucao.xsjs`, {IDUSUARIO, DSMOTIVO});
 
       return res.json(response.data);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Erro no DevolucaoControllers.createMotivoDevolucao", error);
       throw error;
     }
   }
