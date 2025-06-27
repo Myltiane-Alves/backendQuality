@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createModulo, getModulos, getPerfilMenuFilho, updateModulo } from "../repositories/modulos.js";
+import { createModulo, getModulos, getPerfilMenuFilho, updateMenuFilho, updateModulo } from "../repositories/modulos.js";
 import { getMenuUsuario } from "../Menus/repositories/menu.js";
 import {  getSubMenuUsuario } from "../Menus/repositories/subMenu.js";
 import 'dotenv/config';
@@ -90,6 +90,34 @@ class ModulosControllers  {
             console.error("Unable to connect to the database:", error);
             throw error;
         } 
+    }
+
+    async putPerfilUsuarioMenu(req, res) {
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
+         
+            // const response = await updateMenuFilho(dados)
+             const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}`;
+            const response = await axios.get(apiUrl);
+
+            return res.json(response.data);
+        } catch (error) {
+            console.error("Erro no ModulosControllers.putPerfilUsuarioMenu: ", error);
+            throw error;
+        }
+    }
+
+    async putPerfilPermissoes(req, res) {
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
+            // console.log("dados", dados)
+            const response = await updatePerfil(dados)
+            // console.log("response", response)
+            return res.json(response);
+        } catch (error) {
+            console.error("Erro no ModulosControllers. putPerfilPermissoesu: ", error);
+            throw error;
+        }
     }
 
     async putModulo(req, res) {
