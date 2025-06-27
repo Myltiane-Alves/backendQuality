@@ -15,7 +15,7 @@ class ModulosControllers  {
             pageSize = pageSize ? pageSize : '';
         try {
             // const response = await getPerfilUsuarioMenu(idUsuario)
-            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}`;
             const response = await axios.get(apiUrl);
 
             return res.json(response.data); // Retorna
