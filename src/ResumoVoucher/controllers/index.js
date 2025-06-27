@@ -164,6 +164,31 @@ class ResumoVoucherControllers {
     
     }
 
+      async getListaTodosClientes(req, res) {
+        let { idCliente, numeroCpfCnpj, pageSize, page } = req.query;
+
+        idCliente = idCliente ? idCliente : '';
+        numeroCpfCnpj = numeroCpfCnpj ? numeroCpfCnpj : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
+
+        try {
+
+            const response = await getTodosClientes(
+                idCliente,
+                numeroCpfCnpj,
+                page,
+                pageSize
+            );
+
+
+            return res.json(response);
+        } catch (error) {
+            console.error("erro no ResumoVoucherControllers getListaTodosClientes:", error);
+            throw error;
+        }
+    }
+
     async autorizacaoEditarStatusVoucher(req, res) {
         let {
             MATRICULA,
@@ -238,6 +263,83 @@ class ResumoVoucherControllers {
         } catch (error) {
             console.error("Error no ResumoVoucherControllers.postAuthFuncionarioUpdateVoucher:", error);
             throw error;
+        }
+    }
+
+    async putCliente(req, res) {
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body];
+            // const { MATRICULA, SENHA, IDGRUPOEMPRESARIAL, IDEMPRESALOGADA, IDVOUCHER, DTINVOUCHER } = dados[0] || {};
+   
+            const response = await updateCliente(dados);
+    
+            return res.json(response);
+        } catch (error) {
+            console.error("Erro no ResumoVoucherControllers.putCliente:", error);
+            return res.status(400).json({ error: error.message });
+        }
+    }
+    async postCliente(req, res) {
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body];
+            // const { MATRICULA, SENHA, IDGRUPOEMPRESARIAL, IDEMPRESALOGADA, IDVOUCHER, DTINVOUCHER } = dados[0] || {};
+   
+            const response = await createCliente(dados);
+    
+            return res.json(response);
+        } catch (error) {
+            console.error("Erro no ResumoVoucherControllers.postCliente:", error);
+            return res.status(400).json({ error: error.message });
+        }
+    }
+    async postResumoVoucher(req, res) {
+        try {
+            const dados = Array.isArray(req.body) ? req.body : [req.body];
+            // const { MATRICULA, SENHA, IDGRUPOEMPRESARIAL, IDEMPRESALOGADA, IDVOUCHER, DTINVOUCHER } = dados[0] || {};
+   
+            const response = await createResumoVoucher(dados);
+    
+            return res.json(response);
+        } catch (error) {
+            console.error("Erro no ResumoVoucherControllers.postResumoVoucher:", error);
+            return res.status(400).json({ error: error.message });
+        }
+    }
+    async putResumoVoucher(req, res) {
+        try {
+          
+            let { STATIVO, STCANCELADO, DSMOTIVOTROCASTATUS, IDFUNCIONARIO, STSTATUS, STTIPOTROCA, IDVOUCHER, IDEMPRESALOGADA, IDGRUPOEMPRESARIAL } = req.body;
+   
+            // const response = await updateResumoVoucher(dados);
+
+            if(!IDVOUCHER) {
+                return res.status(400).json({ error: 'IDVOUCHER é obrigatório.' });
+            }
+
+            if(!IDEMPRESALOGADA) {
+                return res.status(400).json({ error: 'IDEMPRESALOGADA é obrigatório.' });
+            }
+
+            if(!IDFUNCIONARIO) {
+                return res.status(400).json({ error: 'IDFUNCIONARIO é obrigatório.' });
+            }
+
+            const response = await axios.post(`${url}/api/resumo-voucher/todos-web.xsjs`, {
+                STATIVO,
+                STCANCELADO,
+                DSMOTIVOTROCASTATUS,
+                IDFUNCIONARIO,
+                STSTATUS,
+                STTIPOTROCA,
+                IDVOUCHER,
+                IDEMPRESALOGADA,
+                IDGRUPOEMPRESARIAL
+            })
+    
+            return res.stStatusus(200).json({ message: 'Voucher atualizado com sucesso!' });
+        } catch (error) {
+            console.error("Erro no ResumoVoucherControllers.putResumoVoucher:", error);
+            return res.status(400).json({ error: error.message });
         }
     }
 }
