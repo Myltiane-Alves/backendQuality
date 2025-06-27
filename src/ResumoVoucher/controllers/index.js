@@ -197,13 +197,23 @@ class ResumoVoucherControllers {
 
     async postAuthFuncionarioPrintVoucher(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];   
+            let {MATRICULA, SENHA, IDEMPRESALOGADA, IDGRUPOEMPRESARIAL, IDVOUCHER} = req.body;  
+            // const response = await createAuthFuncionarioUpdateVoucher(dados)
+            if (!MATRICULA || !SENHA || !IDEMPRESALOGADA || !IDGRUPOEMPRESARIAL || !IDVOUCHER) {
+                return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+            }
             // const response = await createAuthFuncionarioPrintVoucher(dados)
-            const response = await axios.post(`${url}/api/resumo-voucher/auth-funcionario-print-voucher.xsjs`, dados)
+            const response = await axios.post(`${url}/api/resumo-voucher/auth-funcionario-print-voucher.xsjs`, {
+                MATRICULA, 
+                SENHA, 
+                IDEMPRESALOGADA, 
+                IDGRUPOEMPRESARIAL, 
+                IDVOUCHER
+            })
             
             return res.json(response);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error no ResumoVoucherControllers.postAuthFuncionarioPrintVoucher:", error);
             throw error;
         }
     }
