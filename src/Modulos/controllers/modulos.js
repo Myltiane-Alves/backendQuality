@@ -94,11 +94,81 @@ class ModulosControllers  {
 
     async putPerfilUsuarioMenu(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body]; 
+            let {
+                IDUSUARIO,
+                CRIAR,
+                ALTERAR,
+                STATIVO,
+                DATAULTIMAALTERACAO,
+                DATA_CRIACAO,
+                IDMODULO,
+                IDMODULOADMINISTRATIVO,
+                IDMODULOCOMERCIAL,
+                IDMODULOCONTABILIDADE,
+                IDMODULOFINANCEIRO,
+                IDMODULOGERENCIA,
+                IDMODULOINFORMATICA,
+                IDMODULOMARKETING,
+                IDMODULOCOMPRAS,
+                IDMODULOCADASTRO,
+                IDMODULOEXPEDICAO,
+                IDMODULOCOMPRASADM,
+                IDMODULOETIQUETAGEM,
+                IDMODULOCONFERENCIACEGA,
+                IDMODULOVOUCHER,
+                IDMODULOMALOTE,
+                IDMODULORH,
+                IDUSERULTIMAALTERACAO,
+                IDPERMISSAO,
+                IDMODULORESUMOVENDAS,
+                IDMODULOPROMOCAO,
+                ADMINISTRADOR,
+                N4,
+                N3,
+                N2,
+                N1,
+                IDMENU,
+                IDMENUFILHO,
+            } = req.body 
          
             // const response = await updateMenuFilho(dados)
-             const apiUrl = `${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs?idUsuario=${idUsuario}`;
-            const response = await axios.get(apiUrl);
+         
+            const response = await axios.put(`${url}/api/perfilUsuario/perfilUsuarioMenu.xsjs`, {
+                IDUSUARIO,
+                CRIAR,
+                ALTERAR,
+                STATIVO,
+                DATAULTIMAALTERACAO,
+                DATA_CRIACAO,
+                IDMODULO,
+                IDMODULOADMINISTRATIVO,
+                IDMODULOCOMERCIAL,
+                IDMODULOCONTABILIDADE,
+                IDMODULOFINANCEIRO,
+                IDMODULOGERENCIA,
+                IDMODULOINFORMATICA,
+                IDMODULOMARKETING,
+                IDMODULOCOMPRAS,
+                IDMODULOCADASTRO,
+                IDMODULOEXPEDICAO,
+                IDMODULOCOMPRASADM,
+                IDMODULOETIQUETAGEM,
+                IDMODULOCONFERENCIACEGA,
+                IDMODULOVOUCHER,
+                IDMODULOMALOTE,
+                IDMODULORH,
+                IDUSERULTIMAALTERACAO,
+                IDPERMISSAO,
+                IDMODULORESUMOVENDAS,
+                IDMODULOPROMOCAO,
+                ADMINISTRADOR,
+                N4,
+                N3,
+                N2,
+                N1,
+                IDMENU,
+                IDMENUFILHO,
+            });
 
             return res.json(response.data);
         } catch (error) {
