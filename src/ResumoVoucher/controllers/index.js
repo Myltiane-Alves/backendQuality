@@ -268,25 +268,148 @@ class ResumoVoucherControllers {
 
     async putCliente(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];
-            // const { MATRICULA, SENHA, IDGRUPOEMPRESARIAL, IDEMPRESALOGADA, IDVOUCHER, DTINVOUCHER } = dados[0] || {};
+            let { 
+                IDCLIENTE,
+                IDEMPRESA,
+                DSNOMERAZAOSOCIAL,
+                DSAPELIDONOMEFANTASIA,
+                TPCLIENTE,
+                NUCPFCNPJ,
+                NURGINSCESTADUAL,
+                NUINSCMUNICIPAL,
+                NUCEP,
+                NUIBGE,
+                EENDERECO,
+                NUENDERECO,
+                ECOMPLEMENTO,
+                EBAIRRO,
+                ECIDADE,
+                SGUF,
+                EEMAIL,
+                NUTELCOMERCIAL,
+                NUTELCELULAR,
+                DTNASCFUNDACAO,
+                IDINDICACAOIE,
+                DSINDICACAOIE,
+                IDFUNCIONARIO 
+            } = req.body
    
-            const response = await updateCliente(dados);
+               if(!IDCLIENTE) {
+                return res.status(400).json({ error: 'IDCLIENTE é obrigatório.' });
+            }   
+
+            if(!IDFUNCIONARIO) {
+                return res.status(400).json({ error: 'IDFUNCIONARIO é obrigatório.' });
+            }
+
+            if(!NUCPFCNPJ) {
+                return res.status(400).json({ error: 'NUCPFCNPJ é obrigatório.' });
+            }
+
+            const response = await axios.put(`${url}/api/gerencia/cliente.xsjs`, {
+                IDCLIENTE,
+                IDEMPRESA,
+                DSNOMERAZAOSOCIAL,
+                DSAPELIDONOMEFANTASIA,
+                TPCLIENTE,
+                NUCPFCNPJ,
+                NURGINSCESTADUAL,
+                NUINSCMUNICIPAL,
+                NUCEP,
+                NUIBGE,
+                EENDERECO,
+                NUENDERECO,
+                ECOMPLEMENTO,
+                EBAIRRO,
+                ECIDADE,
+                SGUF,
+                EEMAIL,
+                NUTELCOMERCIAL,
+                NUTELCELULAR,
+                DTNASCFUNDACAO,
+                IDINDICACAOIE,
+                DSINDICACAOIE,
+                IDFUNCIONARIO 
+            });
     
-            return res.json(response);
+            return res.status(200).json({ message: 'Cliente atualizado com sucesso!' });
+    
         } catch (error) {
             console.error("Erro no ResumoVoucherControllers.putCliente:", error);
             return res.status(400).json({ error: error.message });
         }
     }
+    
     async postCliente(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];
-            // const { MATRICULA, SENHA, IDGRUPOEMPRESARIAL, IDEMPRESALOGADA, IDVOUCHER, DTINVOUCHER } = dados[0] || {};
+           
+            let { 
+                IDCLIENTE,
+                IDEMPRESA,
+                DSNOMERAZAOSOCIAL,
+                DSAPELIDONOMEFANTASIA,
+                TPCLIENTE,
+                NUCPFCNPJ,
+                NURGINSCESTADUAL,
+                NUINSCMUNICIPAL,
+                NUCEP,
+                NUIBGE,
+                EENDERECO,
+                NUENDERECO,
+                ECOMPLEMENTO,
+                EBAIRRO,
+                ECIDADE,
+                SGUF,
+                EEMAIL,
+                NUTELCOMERCIAL,
+                NUTELCELULAR,
+                DTNASCFUNDACAO,
+                IDINDICACAOIE,
+                DSINDICACAOIE,
+                IDFUNCIONARIO 
+            } = req.body
    
-            const response = await createCliente(dados);
+            // const response = await createCliente(dados);
+
+            if(!IDCLIENTE) {
+                return res.status(400).json({ error: 'IDCLIENTE é obrigatório.' });
+            }   
+
+            if(!IDFUNCIONARIO) {
+                return res.status(400).json({ error: 'IDFUNCIONARIO é obrigatório.' });
+            }
+
+            if(!NUCPFCNPJ) {
+                return res.status(400).json({ error: 'NUCPFCNPJ é obrigatório.' });
+            }
+
+            const response = await axios.post(`${url}/api/gerencia/cliente.xsjs`, {
+                IDCLIENTE,
+                IDEMPRESA,
+                DSNOMERAZAOSOCIAL,
+                DSAPELIDONOMEFANTASIA,
+                TPCLIENTE,
+                NUCPFCNPJ,
+                NURGINSCESTADUAL,
+                NUINSCMUNICIPAL,
+                NUCEP,
+                NUIBGE,
+                EENDERECO,
+                NUENDERECO,
+                ECOMPLEMENTO,
+                EBAIRRO,
+                ECIDADE,
+                SGUF,
+                EEMAIL,
+                NUTELCOMERCIAL,
+                NUTELCELULAR,
+                DTNASCFUNDACAO,
+                IDINDICACAOIE,
+                DSINDICACAOIE,
+                IDFUNCIONARIO 
+            });
     
-            return res.json(response);
+            return res.status(200).json({ message: 'Cliente atualizado com sucesso!' });
         } catch (error) {
             console.error("Erro no ResumoVoucherControllers.postCliente:", error);
             return res.status(400).json({ error: error.message });

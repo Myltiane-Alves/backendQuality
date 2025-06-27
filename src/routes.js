@@ -481,6 +481,9 @@ routes.get('/empresasVoucher', ResumoVoucherControllers.getListaEmpresasVoucher)
 routes.get('/cliente-todos', ResumoVoucherControllers.getListaTodosClientes)
 routes.put('/todos-web', ResumoVoucherControllers.putResumoVoucher)
 
+routes.put('/todos-cliente/:id', ResumoVoucherControllers.putCliente)
+routes.post('/criar-cliente', ResumoVoucherControllers.postCliente)
+
 routes.post('/auth-funcionario-status', ResumoVoucherControllers.autorizacaoEditarStatusVoucher)
 routes.post('/auth-funcionario-create-voucher', ResumoVoucherControllers.postAuthFuncionarioCreateVoucher)
 routes.post('/auth-funcionario-print-voucher', ResumoVoucherControllers.postAuthFuncionarioPrintVoucher)

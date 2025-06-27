@@ -70,12 +70,15 @@ class GerenciaControllers {
         pageSize = pageSize ? pageSize : ''
     
         try {
-            const response = await getCliente(idCliente, cpfoucnpj,  page, pageSize)
+            // const response = await getCliente(idCliente, cpfoucnpj,  page, pageSize)
+            const apiUrl = `${url}/api/cliente/todos.xsjs?byId=${idCliente}&numeroCpfCnpj=${cpfoucnpj}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl);
     
-            return res.json(response); 
+            return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no GerenciaControllers.getListaCliente verifique se os parâmetros estão sendo preenchidos:", error);
+            return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
+           
         }
     }
 
