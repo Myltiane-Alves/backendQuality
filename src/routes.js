@@ -464,6 +464,7 @@ routes.put('/inserirSD', ExpedicaoControllers.storeInserirSD)
 
 routes.get('/resumo-ordem-transferencia', ExpedicaoControllers.getListaOrdemTransferencia)
 routes.get('/resumo-ordem-transferencia/:id', ExpedicaoControllers.putResumoOrdemTransferencia)
+routes.post('/resumo-ordem-transferencia', ExpedicaoControllers.putResumoOrdemTransferencia)
 
 // Vendas
 // routes.get('/listaVendas', FinanceiroVendasControllers.getListaVendas)

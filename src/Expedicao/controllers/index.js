@@ -418,6 +418,98 @@ class ExpedicaoControllers {
             
         }
     }
+
+    async postResumoOrdemTransferencia(req, res) {
+        let {
+            IDEMPRESAORIGEM,
+            IDEMPRESADESTINO,
+            DATAEXPEDICAO,
+            IDOPERADOREXPEDICAO,
+            NUTOTALITENS,
+            QTDTOTALITENS,
+            QTDTOTALITENSRECEPCIONADO,
+            QTDTOTALITENSDIVERGENCIA,
+            NUTOTALVOLUMES,
+            TPVOLUME,
+            VRTOTALCUSTO,
+            VRTOTALVENDA,
+            DTRECEPCAO,
+            IDOPERADORRECEPTOR,
+            DSOBSERVACAO,
+            IDUSRCANCELAMENTO,
+            DTULTALTERACAO,
+            IDSTDIVERGENCIA,
+            OBSDIVERGENCIA,
+            STEMISSAONFE,
+            NUMERONFE,
+            STENTRADAINVENTARIO,
+            QTDCONFERENCIA,
+            dadosdetalheot,
+            IDRESUMOOT,
+            IDSTATUSOT,
+            IDUSRAJUSTE,
+            DTAJUSTE,
+            QTDTOTALITENSAJUSTE,
+            CONFEREITENS,
+            IDROTINA,
+            DATAENTREGA
+        } = req.body;
+
+        if(!IDRESUMOOT) {
+            return res.status(400).json({message: 'IDRESUMOOT é obrigatório.'});
+        }
+
+        if(!IDEMPRESADESTINO) {
+            return res.status(400).json({message: 'IDEMPRESADESTINO é obrigatório.'});
+        }
+
+        if(!IDEMPRESAORIGEM) {
+            return res.status(400).json({message: 'IDEMPRESAORIGEM é obrigatório.'});
+        }
+
+        try {
+            const response = await axios.post(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs`, {
+                IDEMPRESAORIGEM,
+                IDEMPRESADESTINO,
+                DATAEXPEDICAO,
+                IDOPERADOREXPEDICAO,
+                NUTOTALITENS,
+                QTDTOTALITENS,
+                QTDTOTALITENSRECEPCIONADO,
+                QTDTOTALITENSDIVERGENCIA,
+                NUTOTALVOLUMES,
+                TPVOLUME,
+                VRTOTALCUSTO,
+                VRTOTALVENDA,
+                DTRECEPCAO,
+                IDOPERADORRECEPTOR,
+                DSOBSERVACAO,
+                IDUSRCANCELAMENTO,
+                DTULTALTERACAO,
+                IDSTDIVERGENCIA,
+                OBSDIVERGENCIA,
+                STEMISSAONFE,
+                NUMERONFE,
+                STENTRADAINVENTARIO,
+                QTDCONFERENCIA,
+                dadosdetalheot,
+                IDRESUMOOT,
+                IDSTATUSOT,
+                IDUSRAJUSTE,
+                DTAJUSTE,
+                QTDTOTALITENSAJUSTE,
+                CONFEREITENS,
+                IDROTINA,
+                DATAENTREGA
+            })
+
+            return res.status(200).json({message: 'Ordem de transferência atualizada com sucesso!'});
+        } catch(error) {
+            console.log('Erro ao atualizar ordem de transferência:', error);
+            return res.status(500).json({message: 'Erro ao atualizar ordem de transferência.'});
+            
+        }
+    }
 }
 
 export default new ExpedicaoControllers();
