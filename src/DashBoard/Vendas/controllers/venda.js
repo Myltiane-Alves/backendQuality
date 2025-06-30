@@ -70,7 +70,7 @@ class DashBoardVendasControllers {
 
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no DashBoardVendasControllers.getVendasConvenioDescontoFuncionario:", error);
             throw error;
         }
     }
