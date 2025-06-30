@@ -21,7 +21,6 @@ class MovimentoCaixaControllers {
                 const apiUrl = `${url}/api/movimento-caixa/ajuste-fisicodinheiro.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
                 const response = await axios.get(apiUrl)
 
-                // return console.log(response.data);
                 return res.json(response.data);
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
@@ -39,7 +38,7 @@ class MovimentoCaixaControllers {
                 const apiUrl = `${url}/api/movimento-caixa/gerencia.xsjs?idMovimentoCaixa=${idMovimentoCaixa}`
                 const response = await axios.get(apiUrl)
 
-                // return console.log(response.data);
+           
                 return res.json(response.data);
             } catch (error) {
                 console.error("Unable to connect to the database:", error);

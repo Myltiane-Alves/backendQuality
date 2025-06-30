@@ -356,8 +356,8 @@ class AdministrativoControllers {
                 const apiUrl = `${url}/api/administrativo/venda-ativa.xsjs?pagesize=${pageSize}&idMarca=${idGrupo}&idEmpresa=${idEmpresa}&dataFechamento=${datapesq}&dataFechamentoFim=${datapesq}&status=True`
                 const response = await axios.get(apiUrl)
 
-                return console.log(response.data);
-                // return res.json(response.data); // Retorna
+              
+                return res.json(response.data); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
                 throw error;
@@ -422,7 +422,7 @@ class AdministrativoControllers {
             try {
                 const apiUrl = `${url}/api/administrativo/resumo-venda.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
                 const response = await axios.get(apiUrl)
-                // return console.log(response.data);
+               
                 return res.json(response.data);
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
@@ -443,7 +443,6 @@ class AdministrativoControllers {
                 const apiUrl = `${url}/api/movimento-caixa/ajuste-fisicodinheiro.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
                 const response = await axios.get(apiUrl)
 
-                // return console.log(response.data);
                 return res.json(response.data);
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
@@ -544,7 +543,7 @@ class AdministrativoControllers {
                 const apiUrl = `${url}/api/dashboard/venda/resumo-venda-convenio.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&offset=${offset}`
                 const response = await axios.get(apiUrl)
 
-                // return console.log(response.data);
+             
                 return res.json(response.data); // Retorna
             } catch (error) {
                 console.error("Unable to connect to the database:", error);
@@ -931,7 +930,7 @@ class AdministrativoControllers {
     
                 })
 
-                console.log(response.data);
+         
                 return res.json(response.data); // Retorna
             }
           

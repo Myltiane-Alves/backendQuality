@@ -6,7 +6,8 @@ import { getProdutos } from "../repositories/produto.js";
 import { getRotinaMovimentacao } from "../repositories/rotinaMovimentacao.js";
 import { getImpressaoEtiquetaOT } from "../repositories/impressaoEtiquetaOT.js";
 import { getNFESaidaTransferencia } from "../../ServiceLayer/repositories/NotasTransferencia/consultaNFESaidaTransferencia.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL|| 'localhost:6001'
 
 class ExpedicaoControllers {
 
@@ -33,25 +34,25 @@ class ExpedicaoControllers {
     async getListaOrdemTransferencia(req, res,) {
         let {idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page} = req.query;
        
-        
-        idEmpresaDestino = idEmpresaDestino ? idEmpresaDestino : '';
-        idEmpresaOrigem = idEmpresaOrigem ? idEmpresaOrigem : '';
-        idTipoFiltro = idTipoFiltro ? idTipoFiltro : '';
+        idEmpresaDestino = Number(idEmpresaDestino) ? Number(idEmpresaDestino) : Number(idEmpresaDestino);
+        idEmpresaOrigem = Number(idEmpresaOrigem) ? Number(idEmpresaOrigem) : Number(idEmpresaOrigem);
+        idTipoFiltro = Number(idTipoFiltro) ? Number(idTipoFiltro) : Number(idTipoFiltro)
         dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
         dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';    
         pageSize = pageSize ? pageSize : '';
         page = page ? page : '';
 
         try {
-            // http://164.152.245.77:8000/quality/concentrador_homologacao/api/conferencia-cega/resumo-ordem-transferencia.xsjs?page=1&idtipofiltro=2&idEmpresaOrigem=1&idEmpresaDestino=101&datapesqinicio=2024-12-09&datapesqfim=2024-12-09
-            
-            const apiUrl = await axios.get(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=${idTipoFiltro}&idEmpresaOrigem=${idEmpresaOrigem}&idEmpresaDestino=${idEmpresaDestino}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}&pageSize=${pageSize}&page=${page}`)
+           
+            const apiUrl = `${url}/api/expedicao/resumo-ordem-transferencia.xsjs?idtipofiltro=${Number(idTipoFiltro)}&idEmpresaOrigem=${Number(idEmpresaOrigem)}&idEmpresaDestino=${Number(idEmpresaDestino)}&datapesqinicio=${dataPesquisaInicio}&datapesqfim=${dataPesquisaFim}`
             const response = await axios.get(apiUrl)
             // const response = await  getResumoOrdemTransferencia(idEmpresaDestino, idEmpresaOrigem, idTipoFiltro, dataPesquisaInicio, dataPesquisaFim,  pageSize, page)
+
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error; 
+            console.error("Erro no ExpedicaoControllers getListaOrdemTransferencia:", error);
+            return res.status(500).json({ error: 'Erro ao buscar lista de ordens de transferência.' });
+       
         }
         
     }
@@ -323,6 +324,98 @@ class ExpedicaoControllers {
         } catch (error) {
             console.error("Unable to connect to the database:", error);
             throw error; 
+        }
+    }
+
+    async putResumoOrdemTransferencia(req, res) {
+        let {
+            IDEMPRESAORIGEM,
+            IDEMPRESADESTINO,
+            DATAEXPEDICAO,
+            IDOPERADOREXPEDICAO,
+            NUTOTALITENS,
+            QTDTOTALITENS,
+            QTDTOTALITENSRECEPCIONADO,
+            QTDTOTALITENSDIVERGENCIA,
+            NUTOTALVOLUMES,
+            TPVOLUME,
+            VRTOTALCUSTO,
+            VRTOTALVENDA,
+            DTRECEPCAO,
+            IDOPERADORRECEPTOR,
+            DSOBSERVACAO,
+            IDUSRCANCELAMENTO,
+            DTULTALTERACAO,
+            IDSTDIVERGENCIA,
+            OBSDIVERGENCIA,
+            STEMISSAONFE,
+            NUMERONFE,
+            STENTRADAINVENTARIO,
+            QTDCONFERENCIA,
+            dadosdetalheot,
+            IDRESUMOOT,
+            IDSTATUSOT,
+            IDUSRAJUSTE,
+            DTAJUSTE,
+            QTDTOTALITENSAJUSTE,
+            CONFEREITENS,
+            IDROTINA,
+            DATAENTREGA
+        } = req.body;
+
+        if(!IDRESUMOOT) {
+            return res.status(400).json({message: 'IDRESUMOOT é obrigatório.'});
+        }
+
+        if(!IDEMPRESADESTINO) {
+            return res.status(400).json({message: 'IDEMPRESADESTINO é obrigatório.'});
+        }
+
+        if(!IDEMPRESAORIGEM) {
+            return res.status(400).json({message: 'IDEMPRESAORIGEM é obrigatório.'});
+        }
+
+        try {
+            const response = await axios.put(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs`, {
+                IDEMPRESAORIGEM,
+                IDEMPRESADESTINO,
+                DATAEXPEDICAO,
+                IDOPERADOREXPEDICAO,
+                NUTOTALITENS,
+                QTDTOTALITENS,
+                QTDTOTALITENSRECEPCIONADO,
+                QTDTOTALITENSDIVERGENCIA,
+                NUTOTALVOLUMES,
+                TPVOLUME,
+                VRTOTALCUSTO,
+                VRTOTALVENDA,
+                DTRECEPCAO,
+                IDOPERADORRECEPTOR,
+                DSOBSERVACAO,
+                IDUSRCANCELAMENTO,
+                DTULTALTERACAO,
+                IDSTDIVERGENCIA,
+                OBSDIVERGENCIA,
+                STEMISSAONFE,
+                NUMERONFE,
+                STENTRADAINVENTARIO,
+                QTDCONFERENCIA,
+                dadosdetalheot,
+                IDRESUMOOT,
+                IDSTATUSOT,
+                IDUSRAJUSTE,
+                DTAJUSTE,
+                QTDTOTALITENSAJUSTE,
+                CONFEREITENS,
+                IDROTINA,
+                DATAENTREGA
+            })
+
+            return res.status(200).json({message: 'Ordem de transferência atualizada com sucesso!'});
+        } catch(error) {
+            console.log('Erro ao atualizar ordem de transferência:', error);
+            return res.status(500).json({message: 'Erro ao atualizar ordem de transferência.'});
+            
         }
     }
 }

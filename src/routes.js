@@ -447,7 +447,6 @@ routes.put('/funcionarios-desconto/:id', InformaticaControllers.putFuncionarioDe
 
 // Expedição
 routes.get('/listaProdutos', ExpedicaoControllers.getListaProdutos)
-routes.get('/resumo-ordem-transferencia', ExpedicaoControllers.getListaOrdemTransferencia)
 routes.get('/resumoOrdemTransferenciaExpedicao', ExpedicaoControllers.getListaOrdemTransferenciaExpedicao)
 routes.get('/detalhe-ordem-transferencia', ExpedicaoControllers.getListaDetalheOT)
 
@@ -462,6 +461,9 @@ routes.put('/updateOrdemTransferencia', ExpedicaoControllers.updateOrdemTransfer
 routes.put('/updateStatusDivergencia', ExpedicaoControllers.updateAlterarSD)
 
 routes.put('/inserirSD', ExpedicaoControllers.storeInserirSD)
+
+routes.get('/resumo-ordem-transferencia', ExpedicaoControllers.getListaOrdemTransferencia)
+routes.get('/resumo-ordem-transferencia/:id', ExpedicaoControllers.putResumoOrdemTransferencia)
 
 // Vendas
 // routes.get('/listaVendas', FinanceiroVendasControllers.getListaVendas)
