@@ -135,8 +135,9 @@ class FinanceiroControllers {
 
       return res.json(response.data); // Retorna
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
-      throw error;
+      console.error("Erro no FinanceiroControllers.getListaExtratoDaLojaPeriodoFinan verifique se os parâmetros estão sendo preenchidos:", error);
+      return res.status(500).json({ error: "Erro ao buscar extrato da loja por período." });
+      
     }
 
   }
