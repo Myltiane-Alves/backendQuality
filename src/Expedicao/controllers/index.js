@@ -367,13 +367,7 @@ class ExpedicaoControllers {
             return res.status(400).json({message: 'IDRESUMOOT é obrigatório.'});
         }
 
-        if(!IDEMPRESADESTINO) {
-            return res.status(400).json({message: 'IDEMPRESADESTINO é obrigatório.'});
-        }
 
-        if(!IDEMPRESAORIGEM) {
-            return res.status(400).json({message: 'IDEMPRESAORIGEM é obrigatório.'});
-        }
 
         try {
             const response = await axios.put(`${url}/api/expedicao/resumo-ordem-transferencia.xsjs`, {
