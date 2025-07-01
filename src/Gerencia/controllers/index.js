@@ -16,17 +16,17 @@ class GerenciaControllers {
 
    
         
-        // if (!idMalote) {
-        //     return res.status(400).json({
-        //         error: "Parâmetros inválidos. É necessário informar 'idMalote' ou 'dataPesquisaInicio' e 'dataPesquisaFim'."
-        //     });
-        // }
+        if (!idMalote) {
+            return res.status(400).json({
+                error: "Parâmetros inválidos. É necessário informar 'idMalote' ."
+            });
+        }
 
         try {
-            // const apiUrl = `${url}/api/gerencia/detalhe-malotes-por-loja.xsjs?idMalote=${idMalote}`;
-            const response = await getDetalhesMalortesPorLoja(idMalote, page, pageSize)
-            // const response = await axios.get(apiUrl);
-            return res.json(response); 
+            const apiUrl = `${url}/api/gerencia/detalhe-malotes-por-loja.xsjs?idMalote=${idMalote}`;
+            // const response = await getDetalhesMalortesPorLoja(idMalote, page, pageSize)
+            const response = await axios.get(apiUrl);
+            return res.json(response.data); 
         } catch (error) {
             console.error("Erro no GerenciaControllers.getDetalhesMalortesPorLoja verifique se os parâmetros estão sendo preenchidos:", error);
             return res.status(500).json({ error: "Erro ao conectar ao banco de dados." });
