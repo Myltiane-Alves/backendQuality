@@ -79,13 +79,88 @@ class EmpresaControllers {
 
     async putListaEmpresas(req, res) {
         try {
-            const empresas = Array.isArray(req.body) ? req.body : [req.body];   
+            let {
+                STGRUPOEMPRESARIAL,
+                IDGRUPOEMPRESARIAL,
+                IDSUBGRUPOEMPRESARIAL,
+                NORAZAOSOCIAL,
+                NOFANTASIA,
+                NUCNPJ,
+                NUINSCESTADUAL,
+                NUINSCMUNICIPAL,
+                CNAE,
+                EENDERECO,
+                ECOMPLEMENTO,
+                EBAIRRO,
+                ECIDADE,
+                SGUF,
+                NUUF,
+                NUCEP,
+                NUIBGE,
+                EEMAILPRINCIPAL,
+                EEMAILCOMERCIAL,
+                EEMAILFINANCEIRO,
+                EEMAILCONTABILIDADE,
+                NUTELPUBLICO,
+                NUTELCOMERCIAL,
+                NUTELFINANCEIRO,
+                NUTELGERENCIA,
+                EURL,
+                PATHIMG,
+                NUCNAE,
+                STECOMMERCE,
+                DTULTATUALIZACAO,
+                STATIVO,
+                ALIQPIS,
+                ALIQCOFINS,
+                IDEMPRESA,
+            } = req.body;   
+
+            if(!IDEMPRESA) {
+                return res.status(400).json({ error: "IDEMPRESA is required" });
+            }
             // const response = await updateEmpresa(empresas)
-            const response = await axios.put(`${url}/api/empresa.xsjs`, empresas);
+            const response = await axios.put(`${url}/api/empresa.xsjs`, {
+                STGRUPOEMPRESARIAL,
+                IDGRUPOEMPRESARIAL,
+                IDSUBGRUPOEMPRESARIAL,
+                NORAZAOSOCIAL,
+                NOFANTASIA,
+                NUCNPJ,
+                NUINSCESTADUAL,
+                NUINSCMUNICIPAL,
+                CNAE,
+                EENDERECO,
+                ECOMPLEMENTO,
+                EBAIRRO,
+                ECIDADE,
+                SGUF,
+                NUUF,
+                NUCEP,
+                NUIBGE,
+                EEMAILPRINCIPAL,
+                EEMAILCOMERCIAL,
+                EEMAILFINANCEIRO,
+                EEMAILCONTABILIDADE,
+                NUTELPUBLICO,
+                NUTELCOMERCIAL,
+                NUTELFINANCEIRO,
+                NUTELGERENCIA,
+                EURL,
+                PATHIMG,
+                NUCNAE,
+                STECOMMERCE,
+                DTULTATUALIZACAO,
+                STATIVO,
+                ALIQPIS,
+                ALIQCOFINS,
+                IDEMPRESA,
+            });
         
-            return res.json(response.data);
+            return res.status(200).json({message: "Empresa atualizada com sucesso"});
         } catch (error) {
             console.error("Erro no EmpresaControllers.putListaEmpresas:", error);
+            res.status(500).json({ error: "Erro ao atualizar empresa" });
             throw error;
         }
     }
