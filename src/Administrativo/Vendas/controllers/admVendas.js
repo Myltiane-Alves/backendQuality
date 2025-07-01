@@ -69,11 +69,11 @@ class AdmVendasControllers {
 
         idEmpresa = idEmpresa ? Number(idEmpresa) : '';
         idGrupo = idGrupo ? Number(idGrupo) : '';
-        page = page ? page : '';
-        pageSize = pageSize ? pageSize : '';
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
         byId = byId ? byId : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
 
         try {
             const apiUrl = `${url}/api/administrativo/venda-vendedor.xsjs?idGrupo=${idGrupo}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}`
