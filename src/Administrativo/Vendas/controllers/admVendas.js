@@ -24,7 +24,7 @@ class AdmVendasControllers {
         idGrupo = idGrupo ? idGrupo : '';
 
         try {
-            //                    /api/administrativo/venda-total-forma-pag.xsjs?pageSize=1000&page=1&idEmpresa=1&dataPesquisaInicio=2024-12-07&dataPesquisaFim=2024-12-07&idFunc=&dSFormaPag=&dSParc=&idEmpGrupo=1
+           
             const apiUrl = `${url}/api/administrativo/venda-total-forma-pag.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${dsFormaPagamento}&dSParc=${dsParcela}&idEmpGrupo=${idMarca}`;
             const response = await axios.get(apiUrl)
             // const response = await getVendaTotalFormaPagamento(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize);
@@ -32,7 +32,8 @@ class AdmVendasControllers {
             return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
-            throw error;
+            return res.status(500).json({ error: error.message });
+     
         }  
     }
 
@@ -45,17 +46,18 @@ class AdmVendasControllers {
         dsFormaPagamento = dsFormaPagamento ? dsFormaPagamento : '';
         dsParcela = dsParcela ? dsParcela : '';
         idGrupo = idGrupo ? idGrupo : '';
-
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
         try {
 
-            const apiUrl = `${url}/api/administrativo/venda-total-recebido-periodo.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${formaPagamento}&dSParc=${parcela}&idEmpGrupo=${idMarca}`;
+            const apiUrl = `${url}/api/administrativo/venda-total-recebido-periodo.xsjs?pageSize=${pageSize}&page=${page}&idEmpresa=${idEmpresa}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idFunc=${idFuncionario}&dSFormaPag=${dsFormaPagamento}&dSParc=${dsParcela}&idEmpGrupo=${idMarca}`;
             const response = await axios.get(apiUrl)
             // const response = await getVendaTotalRecebidoPeriodo(idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize)
         
             return res.json(response.data); // Retorna
         } catch (error) {
             console.error("Unable to connect to the database:", error);
-            throw error;
+            return res.status(500).json({ error: error.message });
         }  
     }
 
