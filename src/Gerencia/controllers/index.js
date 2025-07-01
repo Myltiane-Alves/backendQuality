@@ -143,11 +143,13 @@ class GerenciaControllers {
         try {
             const { IDEMPRESA, DATAMOVIMENTOCAIXA } = req.body;
             const dataFormatada = formatarDataMalote(req.body.DATAMOVIMENTOCAIXA)
-
+            if (!IDEMPRESA || !dataFormatada) {
+                return res.status(400).json({error: "Parâmetros inválidos. É necessário informar 'IDEMPRESA'."    });
+            }  
             const payload = [{
                 ...req.body,
-                DATAMOVIMENTOCAIXA: dataFormatada,
                 IDEMPRESA: req.body.IDEMPRESA,
+                DATAMOVIMENTOCAIXA: dataFormatada,
                 VRDINHEIRO: req.body.VRDINHEIRO,
                 VRCARTAO: req.body.VRCARTAO,
                 VRPOS: req.body.VRPOS,
@@ -159,8 +161,8 @@ class GerenciaControllers {
                 VRDESPESA: req.body.VRDESPESA,
                 VRTOTALRECEBIDO: req.body.VRTOTALRECEBIDO,
                 VRDISPONIVEL: req.body.VRDISPONIVEL,
-                IDUSERCRIACAO: req.body.IDUSERCRIACAO,
                 OBSERVACAOLOJA: req.body.OBSERVACAOLOJA,
+                IDUSERCRIACAO: req.body.IDUSERCRIACAO,
                 IDUSERULTIMAALTERACAO: req.body.IDUSERULTIMAALTERACAO,
                 IDUSERENVIO: req.body.IDUSERENVIO,
             }];
