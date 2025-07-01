@@ -91,7 +91,7 @@ class FinanceiroVendasControllers {
 
       return res.json(response.data);
     } catch (error) {
-      console.error("Unable to connect to the database:", error);
+      console.error("Erro no FinanceiroVendasControllers.getListaVendasDigitalMarca:", error);
       throw error;
     }
 

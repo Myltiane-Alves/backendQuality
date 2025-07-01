@@ -14,14 +14,16 @@ const url = process.env.API_URL;
 
 class AdmVendasControllers {
     async getRecebimentosFormaPagamento(req, res) {
-        let { idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize } = req.query; 
+        let { idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize } = req.query; 
         idEmpresa = idEmpresa ? idEmpresa : '';
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
         idFuncionario = idFuncionario ? idFuncionario : '';
         dsFormaPagamento = dsFormaPagamento ? dsFormaPagamento : '';
         dsParcela = dsParcela ? dsParcela : '';
-        idGrupo = idGrupo ? idGrupo : '';
+        idMarca = idMarca ? idMarca : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
 
         try {
            
@@ -38,14 +40,14 @@ class AdmVendasControllers {
     }
 
     async getListaVendaTotalRecebido(req, res) {
-        let { idGrupo, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize} = req.query; 
+        let { idMarca, idEmpresa, dataPesquisaInicio, dataPesquisaFim, idFuncionario, dsFormaPagamento, dsParcela, page, pageSize} = req.query; 
         idEmpresa = idEmpresa ? idEmpresa : '';
         dataPesquisaInicio = dataFormatada(dataPesquisaInicio) ? dataPesquisaInicio : '';
         dataPesquisaFim = dataFormatada(dataPesquisaFim) ? dataPesquisaFim : '';
         idFuncionario = idFuncionario ? idFuncionario : '';
         dsFormaPagamento = dsFormaPagamento ? dsFormaPagamento : '';
         dsParcela = dsParcela ? dsParcela : '';
-        idGrupo = idGrupo ? idGrupo : '';
+        idMarca = idMarca ? idMarca : '';
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
