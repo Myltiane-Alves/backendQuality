@@ -236,6 +236,8 @@ class ProdutoControllers  {
         idProduto = idProduto ? idProduto : '';
         descricao = descricao ? descricao : '';
         codBarras = codBarras ? codBarras : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
         
         try {
 
