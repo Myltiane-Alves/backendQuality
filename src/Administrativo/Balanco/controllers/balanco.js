@@ -85,12 +85,12 @@ class AdmBalancoControllers {
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            const apiUrl = `${url}/api/administrativo/preparar-primeiro-balanco-loja.xsjs?idEmpresa=${idEmpresa}&page=${page}&pageSize=${pageSize}`
+            const apiUrl = `${url}/api/administrativo/prepara-primeiro-balanco-loja.xsjs`
             const response = await axios.get(apiUrl)
             // const response = await getPrepararPrimeiroBalancoLoja(idEmpresa, page, pageSize)
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no ADM Balanco Controllers getListaPrepararPrimeiroBalancoLoja:", error);
             throw error;
         }
         
@@ -201,13 +201,24 @@ class AdmBalancoControllers {
 
     async putListaPrepararPrimeiroBalancoLoja(req, res) {
         try {
-            const balancos = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updatePrepararPrimeiroBalancoLoja(balancos)
+            let { IDEMPRESA } = req.body;   
+            // const response = await updatePrepararPrimeiroBalancoLoja(balancos)
 
-            return res.json(response);
+            if (!IDEMPRESA) {
+                return res.status(400).json({ error: "IDEMPRESA is required." });
+            }
+
+            const apiUrl = `${url}/api/administrativo/preparar-primeiro-balanco-loja.xsjs`
+            
+            const response = await axios.put(apiUrl, {
+                IDEMPRESA
+            })
+
+            return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no ADM Balanco Controllers putListaPrepararPrimeiroBalancoLoja:", error);
+            return res.status(500).json({ error: error.message });
+            
         }
     }
 
