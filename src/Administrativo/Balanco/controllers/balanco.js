@@ -33,8 +33,9 @@ class AdmBalancoControllers {
         
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no ADM Balanco Controllers getListaBalancoLoja:", error);
+            return res.status(500).json({ error: "Erro ao buscar lista de balanços por loja." });
+         
         }
     }
 
