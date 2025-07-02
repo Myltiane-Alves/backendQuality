@@ -258,13 +258,17 @@ class AdmBalancoControllers {
 
     async postDetalheBalancoAvulso(req, res) {
         try {
-            const detalhes = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await createDetalheBalancoAvulso(detalhes)
+            let {} =  req.body;   
+            // const response = await createDetalheBalancoAvulso(detalhes)
+
+            const apiUrl = `${url}/api/administrativo/detalhe-balanco-avulso.xsjs`;
+            const response = await axios.post(apiUrl, req.body);
         
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no ADM Balanco Controllers postDetalheBalancoAvulso:", error);
+            return res.status(500).json({ error: error.message });
+            
         }
     }
  
