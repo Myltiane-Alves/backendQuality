@@ -51,7 +51,7 @@ class QuebraCaixaControllers {
             
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no QuebraCaixaControllers.getListaQuebraCaixa:", error);
             throw error;
         }
         

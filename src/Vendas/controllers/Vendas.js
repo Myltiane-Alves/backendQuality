@@ -2,7 +2,8 @@ import { dataFormatada } from "../../utils/dataFormatada.js";
 import axios from 'axios';
 import { getVendaXML } from "../repositories/vendaXML.js";
 import { getVendaCliente } from "../repositories/listaVendaCliente.js";
-let url = `http://164.152.245.77:8000/quality/concentrador_homologacao`;
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class VendasControllers {
 
@@ -137,14 +138,14 @@ class VendasControllers {
         pageSize = pageSize ? pageSize : '';
         try {
      
-            const apiUrl = `${url}/api/venda/venda-xml.xsjs?id=${idVenda}&idGrupoEmpresarial=${idMarca}&idEmpresa=${idEmpresa}&${statusVenda}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
+            const apiUrl = `${url}/api/venda/venda-xml.xsjs?id=${idVenda}&idGrupoEmpresarial=${idMarca}&idEmpresa=${idEmpresa}&stContigencia=${stContigencia}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}`
 
             const response = await axios.get(apiUrl)
             // const response = await getVendaXML(idVenda, idMarca,idEmpresa, stCancelado, stContigencia, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-    
+         
             return res.json(response.data); // Retorna
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no VendasControllers.getListaVendaXML:", error);
             throw error;
         }
         
