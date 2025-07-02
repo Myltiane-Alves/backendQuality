@@ -22,7 +22,7 @@ class AdmDescontoControllers {
             const response = await axios.get(apiUrl)
             // const response = await getDescontoMotivoVendas(idEmpresa, idGrupo, dataPesquisaInicio, dataPesquisaFim, dsMotivoDesc, page, pageSize)
 
-
+            console.log("Response from Desconto Motivo Vendas:", response.data);
             return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
