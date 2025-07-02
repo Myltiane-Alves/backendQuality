@@ -258,6 +258,25 @@ class AdmBalancoControllers {
         }
     }
  
+    async putColetorBalanco(req, res) {
+        try {
+            let { IDRESUMOBALANCO,  NUMEROCOLETOR} = req.body;
+            if (!IDRESUMOBALANCO || !NUMEROCOLETOR) {
+                return res.status(400).json({ error: "idResumo, e numeroColetor are required." });
+            }
+
+            const apiUrl = `${url}/api/administrativo/coletor-balanco.xsjs`;
+            const response = await axios.put(apiUrl, {
+                IDRESUMOBALANCO,
+                NUMEROCOLETOR
+            });
+
+            return res.json(response.data);
+        } catch (error) {
+            console.error("Erro no ADM Balanco Controllers putColetorBalanco:", error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default new AdmBalancoControllers();
