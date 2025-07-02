@@ -190,13 +190,23 @@ class AdmBalancoControllers {
   
     async putConsolidarBalanco(req, res) {
         try {
-            const balancos = Array.isArray(req.body) ? req.body : [req.body];            
-            const response = await updateConsolidarBalanco(balancos)
+            let {IDRESUMOBALANCO, IDEMPRESA} =  req.body;            
+            // const response = await updateConsolidarBalanco(balancos)
+            if (!IDRESUMOBALANCO || !IDEMPRESA) {
+                return res.status(400).json({ error: "IDRESUMOBALANCO and IDEMPRESA are required." });
+            }
 
-            return res.json(response);
+            const apiUrl = `${url}/api/administrativo/consolidar-balanco.xsjs`;
+            const response = await axios.put(apiUrl, {
+                IDRESUMOBALANCO,
+                IDEMPRESA
+            });
+
+            return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no ADM Balanco Controllers putConsolidarBalanco:", error);
+            return res.status(500).json({ error: error.message });
+            
         }
     }
 
