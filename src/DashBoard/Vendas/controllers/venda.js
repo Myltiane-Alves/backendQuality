@@ -26,7 +26,7 @@ class DashBoardVendasControllers {
 
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error no DashBoardVendasControllers.getRetornoVendasAtivasDetalheProduto:", error);
             throw error;
         }
     }
@@ -46,7 +46,7 @@ class DashBoardVendasControllers {
 
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no DashBoardVendasControllers.getListaVendaDetalhe:", error);
             throw error;
         }
     }
