@@ -12,15 +12,16 @@ const url = process.env.API_URL|| 'localhost:6001'
 class ExpedicaoControllers {
 
     async getListaProdutos(req, res,) {
-        let {idEmpresa, codBarras, dsProduto, page, pageSize, } = req.query;
+        let {idEmpresa, codBarras, dsProduto, idProduto, page, pageSize, } = req.query;
 
         idEmpresa = idEmpresa ? idEmpresa : '';
         codBarras = codBarras ? codBarras : '';
         dsProduto = dsProduto ? dsProduto : '';
+        idProduto = idProduto ? idProduto : '';
         page = page ? page : '';
         pageSize = pageSize ? pageSize : '';
         try {
-            const apiUrl = `${url}/api/expedicao/produto.xsjs?idEmpresa=${idEmpresa}&descProduto=${dsProduto}&page=${page}&pageSize=${pageSize}`
+            const apiUrl = `${url}/api/expedicao/produto.xsjs?idEmpresa=${idEmpresa}&id=${idProduto}&descProduto=${dsProduto}&page=${page}&pageSize=${pageSize}`
             const response = await axios.get(apiUrl)
             // const response = await getProdutos(idEmpresa, codBarras, dsProduto, page, pageSize)
             return res.json(response.data); 

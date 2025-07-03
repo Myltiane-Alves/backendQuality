@@ -181,8 +181,9 @@ class AdmBalancoControllers {
             // const response = await getDetalheBalancoAvulso(idFilial, coletor, page, pageSize)
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("erro no ADM Balanco Controllers getListaDetalheBalancoAvulso:", error);
+            return res.status(500).json({ error: "Erro ao buscar lista de balanços avulso." });
+        
         }
         
     }
