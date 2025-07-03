@@ -48,6 +48,9 @@ class ResumoVoucherControllers {
                 const response = await axios.get(apiUrl)
                 // const response = await getDetalheVoucher(idVoucher)
         
+                if (response.data && response.data.error) {
+                    return res.status(400).json({ error: response.data.error });
+                }
                 return res.json(response.data);
             } catch (error) {
                 console.error("Erro no ResumoVoucherControllers.getListaVoucherGerencia:", error);
@@ -270,26 +273,26 @@ class ResumoVoucherControllers {
         }
     }
 
-
     async postAuthFuncionarioUpdateVoucher(req, res) {
         try {
-            let {MATRICULA, SENHA, IDEMPRESALOGADA, IDGRUPOEMPRESARIAL, IDVOUCHER} = req.body;  
-            // const response = await createAuthFuncionarioUpdateVoucher(dados)
+            let { MATRICULA, SENHA, IDEMPRESALOGADA, IDGRUPOEMPRESARIAL, IDVOUCHER } = req.body;
             if (!MATRICULA || !SENHA || !IDEMPRESALOGADA || !IDGRUPOEMPRESARIAL || !IDVOUCHER) {
                 return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
             }
             const response = await axios.post(`${url}/api/resumo-voucher/auth-funcionario-update-voucher.xsjs`, {
-                MATRICULA, 
-                SENHA, 
-                IDEMPRESALOGADA, 
-                IDGRUPOEMPRESARIAL, 
+                MATRICULA,
+                SENHA,
+                IDEMPRESALOGADA,
+                IDGRUPOEMPRESARIAL,
                 IDVOUCHER
-            })
-            
+            });
             return res.json(response.data);
         } catch (error) {
             console.error("Error no ResumoVoucherControllers.postAuthFuncionarioUpdateVoucher:", error);
-            throw error;
+            // Retorna mensagem de erro mas não lança exceção, permitindo que a API continue rodando normalmente
+            return res.status(500).json({ 
+                error: error.response?.data || null
+            });
         }
     }
 
