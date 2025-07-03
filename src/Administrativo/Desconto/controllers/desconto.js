@@ -1,7 +1,8 @@
 import axios from "axios";
 import { dataFormatada } from "../../../utils/dataFormatada.js";
 import { getDescontoMotivoVendas } from "../repositories/descontoMotivoVendas.js";
-let url = 'http://164.152.245.77:8000/quality/concentrador';
+import 'dotenv/config';
+const url = process.env.API_URL;
 
 class AdmDescontoControllers {
     async getListaDescontoMotivoVendas(req, res) {

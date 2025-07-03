@@ -397,14 +397,14 @@ class AdministrativoControllers {
                 idEmpresa = idEmpresa ? idEmpresa : '';
                 page = page ? page : '';
                 pageSize = pageSize ? pageSize : '';
-                // const apiUrl = `${url}/api/administrativo/detalhe-venda.xsjs?idEmpresa=${idEmpresa}&idVenda=${idVenda}`
+                const apiUrl = `${url}/api/administrativo/detalhe-venda.xsjs?idEmpresa=${idEmpresa}&idVenda=${idVenda}`
                 
-                // const response = await axios.get(apiUrl)
-                const response = await getDetalheVendas(idVenda, idEmpresa, page, pageSize)
+                const response = await axios.get(apiUrl)
+                // const response = await getDetalheVendas(idVenda, idEmpresa, page, pageSize)
 
-                return res.json(response); // Retorna
+                return res.json(response.data); // Retorna
             } catch (error) {
-                console.error("Unable to connect to the database:", error);
+                console.error("Erro no AdministrativoControllers.getListaVendasDetalheAlterar:", error);
                 return res.status(500).json({ error: "Erro ao conectar ao servidor" });
             }
         
