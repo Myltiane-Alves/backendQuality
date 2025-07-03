@@ -37,13 +37,15 @@ class GERAlteracaoPrecoControllers {
         
 
         try {
-            const apiUrl = `${url}/api/administrativo/alteracao-preco.xsjs?idEmpresa=${idEmpresa}&grupo=${grupo}&subgrupo=${subGrupo}&produto=${descProduto}&codigobarras=${codBarras}&estoque=${estoque}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
+            
+            const apiUrl = `http://164.152.245.77:8000/quality/concentrador/api/administrativo/alteracao-preco.xsjs?idEmpresa=${idEmpresa}&grupo=${grupo}&subgrupo=${subGrupo}&descProduto=${descProduto}&codBarras=${codBarras}&estoque=${estoque}&dataInicio=${dataPesquisaInicio}&dataFim=${dataPesquisaFim}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl);
             // const response = await getAlteracaoPreco(idMarca, idEmpresa, grupo, subGrupo, descProduto, codBarras, estoque, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
-          
+
             return res.json(response.data); // Retorna
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no GeRAlteracaoPrecoControllers:", error);
+            res.status(500).json({ error: "Erro ao buscar dados de alteração de preço" });
             throw error;
         }
         
