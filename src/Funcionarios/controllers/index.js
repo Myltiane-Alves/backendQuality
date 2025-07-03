@@ -71,8 +71,9 @@ class FuncionariosControllers {
 
             return res.json(response.data); 
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error; // Lança o erro para tratamento posterior, se necessário
+            console.error("Erro no FuncionariosControllers getListaFuncionariosAtivos:", error);
+            return res.status(500).json({ error: 'Erro ao buscar funcionários ativos' });
+            
         }
     }
 

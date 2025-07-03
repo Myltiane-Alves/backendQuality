@@ -199,10 +199,11 @@ class AdmVendasControllers {
     async putVendaVendedor(req, res) {
         try {
             const vendas = Array.isArray(req.body) ? req.body : [req.body]; 
-            const response = await  updateVendaVendedor(vendas);
-            return res.json(response);
+            // const response = await  updateVendaVendedor(vendas);
+            const response = await  axios.put(`${url}/api/administrativo/venda-vendedor.xsjs`, vendas);
+            return res.status(200).json({message: "Venda atualizada com sucesso", });
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Error no AdmVendasControllers.putVendaVendedor:", error);
             return res.status(500).json({ error: error.message });
         }
     }

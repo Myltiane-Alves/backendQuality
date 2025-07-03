@@ -89,7 +89,7 @@ routes.post('/login2', AuthentiCationController.login);
 
 routes.get('/autorizarVoucher', FuncionariosControllers.getAutorizacaoVoucherFuncionarios)
 // routes.get('/listaFuncionariosEmpresa', FuncionariosControllers.getListaFuncionariosEmpresa)
-routes.get('/funcionarioAtivoPorEmpresa', FuncionariosControllers. getListaFuncionariosAtivos)
+routes.get('/funcionario-ativo-por-empresa', FuncionariosControllers. getListaFuncionariosAtivos)
 routes.get('/todos-funcionario', FuncionariosControllers.getListaTodosFuncionarios)
 
 routes.get('/empresas', EmpresaControllers.getAllEmpresas);
