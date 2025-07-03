@@ -481,6 +481,7 @@ routes.get('/venda-cliente', VendasControllers.getListaVendaClienteGerencia)
 
 // Vouchers
 routes.get('/detalheVoucherDados', ResumoVoucherControllers.getListaDetalheVoucherDados)
+routes.get('/voucher-completo', ResumoVoucherControllers.getListaVoucherCompleto)
 routes.get('/detalheNumeroVoucherDados', ResumoVoucherControllers.getDetalheNumeroVoucherDados)
 routes.get('/detalhesVouchersId', ResumoVoucherControllers.getDetalheIDVoucherDadosModal)
 routes.get('/detalheIDVoucherDados', ResumoVoucherControllers.getDetalheIDVoucherDados)

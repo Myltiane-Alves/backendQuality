@@ -82,6 +82,33 @@ class ResumoVoucherControllers {
             throw error;
         }
     }
+
+      async getListaVoucherCompleto(req, res) {
+        let { idVoucher, numeroVoucher, idSubGrupoEmpresa, idEmpresa, dataPesquisaInicio, dataPesquisaFim, dadosVoucher, stStatus, page, pageSize} = req.query;
+        
+        idVoucher = idVoucher ? idVoucher : ''
+        numeroVoucher = numeroVoucher ? numeroVoucher : ''
+        idSubGrupoEmpresa = idSubGrupoEmpresa ? idSubGrupoEmpresa : ''
+        idEmpresa = idEmpresa ? idEmpresa : ''
+        dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : ''
+        dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : ''
+        dadosVoucher = dadosVoucher ? dadosVoucher : ''
+        stStatus = stStatus ? stStatus : ''
+        page = page ? page : ''
+        pageSize = pageSize ? pageSize : ''
+        try {
+            // ${url}/api/resumo-voucher/detalhe-voucher-dados.xsjs?page=1&dataPesquisaInicio=2024-01-03&dataPesquisaFim=2024-01-03&subgrupoEmpresa=1&idEmpresa=1
+            const apiUrl = `${url}/api/administrativo/voucher-completo.xsjs?id=${idVoucher}&dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&dadosVoucher=${dadosVoucher}&subgrupoEmpresa=${idSubGrupoEmpresa}&idEmpresa=${idEmpresa}&stStatus=${stStatus}&page=${page}&pageSize=${pageSize}`
+            const response = await axios.get(apiUrl)
+            // const response = await getVoucherCompleto(idVoucher, numeroVoucher, idSubGrupoEmpresa, idEmpresa, dataPesquisaInicio, dataPesquisaFim, dadosVoucher, stStatus, page, pageSize)
+           
+            return res.json(response.data); 
+        } catch (error) {
+            console.error("erro no ResumoVoucherControllers getListaVouchercOMPLETO:", error);
+            throw error;
+        }
+    }
+
     async getListaEmpresasVoucher(req, res) {
         let { idEmpresa, idSubGrupoEmpresa, page, pageSize } = req.query;
 
