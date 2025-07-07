@@ -501,6 +501,8 @@ class AdministrativoControllers {
             idEmpresa = Number(idEmpresa) ? Number(idEmpresa) : '';
            
             datapesq = dataFormatada(datapesq) ? datapesq : '';
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
             // ajaxGet('api/administrativo/detalhe-voucher.xsjs?idEmpresa=' + idemp + '&dataPesquisa=' + datapesq)
             try {
                 const apiUrl = `${url}/api/administrativo/detalhe-voucher.xsjs?pagesize=${pageSize}&idEmpresa=${idEmpresa}&dataPesquisa=${datapesq}`
