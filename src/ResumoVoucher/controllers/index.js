@@ -266,7 +266,7 @@ class ResumoVoucherControllers {
                 IDVOUCHER
             })
             
-            return res.json(response);
+            return res.json(response.data);
         } catch (error) {
             console.error("Error no ResumoVoucherControllers.postAuthFuncionarioPrintVoucher:", error);
             throw error;
