@@ -4,6 +4,25 @@ import axios from "axios";
 class PromocaoControllers  {
 
 
+   async getListaMecanicaAtivas(req, res) {
+        let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query; 
+            idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
+            dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
+            dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';     
+            page = page ? page : '';
+            pageSize = pageSize ? pageSize : '';
+        try {   
+            const apiUrl = `${url}/api/select-mecanica.xsjs`
+            const response = await axios.get(apiUrl)
+            return res.json(response.data);
+        } catch(error) {
+            console.error("erro no PromocaoControllers  getListaMecanicaAtivas:", error);
+            throw error;
+        } 
+    }
+
+   
+    
    async getListaPromocoesAtivas(req, res) {
         let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query; 
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
@@ -64,6 +83,24 @@ class PromocaoControllers  {
             console.error("Unable to connect to the database:", error);
             throw error;
         }
+    }
+
+     async postMecanicaAtivas(req, res) {
+        let { DESCRICAO, APLICACAODESTINO, MECANICA, TIPODESCONTO } = req.query; 
+       
+        try {   
+            const apiUrl = `${url}/api/select-mecanica.xsjs`
+            const response = await axios.post(apiUrl, {
+                DESCRICAO: DESCRICAO,
+                APLICACAODESTINO: APLICACAODESTINO,
+                MECANICA: MECANICA,
+                TIPODESCONTO: TIPODESCONTO
+            })
+            return res.json(response.data);
+        } catch(error) {
+            console.error("erro no PromocaoControllers  getListaMecanicaAtivas:", error);
+            throw error;
+        } 
     }
 
     // async postPromocao(req, res) {
