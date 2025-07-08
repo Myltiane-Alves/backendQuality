@@ -247,13 +247,16 @@ class AdmBalancoControllers {
     }
     async putListaDetalheBalancoAvulso(req, res) {
         try {
-            const detalhes = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await putDetalheBalancoAvulso(detalhes)
-        
-            return res.json(response);
+            let { TOTALCONTAGEMGERAL, IDEMPRESA, NUMEROCOLETOR, IDPRODUTO, DSCOLETOR, CODIGODEBARRAS, DSPRODUTO, PRECOCUSTO, PRECOVENDA, STCANCELADO, INSBALANCO } = req.body;
+            // const detalhes = Array.isArray(req.body) ? req.body : [req.body];   
+            // const response = await putDetalheBalancoAvulso(detalhes)
+            const apiUrl = `${url}/api/administrativo/detalhe-balanco-avulso.xsjs`;
+            const response = await axios.put(apiUrl, req.body);
+
+            return res.json(response.data);
         } catch (error) {
             console.error("Unable to connect to the database:", error);
-            throw error;
+            return res.status(500).json({ error: error.message });
         }
     }
 
