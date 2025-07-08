@@ -11,7 +11,7 @@ const url = process.env.API_URL|| 'localhost:6001'
 
 class ExpedicaoControllers {
 
-    async getListaProdutos(req, res,) {
+    async getListaProdutosExpedicao(req, res,) {
         let {idEmpresa, codBarras, dsProduto, idProduto, page, pageSize, } = req.query;
 
         idEmpresa = idEmpresa ? idEmpresa : '';

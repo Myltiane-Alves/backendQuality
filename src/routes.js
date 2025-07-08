@@ -449,7 +449,7 @@ routes.put('/funcionarios-desconto/:id', InformaticaControllers.putFuncionarioDe
 
 
 // Expedição
-routes.get('/listaProdutos', ExpedicaoControllers.getListaProdutos)
+routes.get('/listaProdutos', ExpedicaoControllers.getListaProdutosExpedicao)
 routes.get('/resumoOrdemTransferenciaExpedicao', ExpedicaoControllers.getListaOrdemTransferenciaExpedicao)
 routes.get('/detalhe-ordem-transferencia', ExpedicaoControllers.getListaDetalheOT)
 
@@ -621,7 +621,7 @@ routes.get('/produtoSap', ProdutoControllers.getListaProdutosLojaSap)
 routes.get('/produto-preco', ProdutoControllers.getListaProdutosPrecoInformatica)
 routes.get('/grupoProdutoSap', ProdutoControllers.getListaGrupoProdutoSap)
 routes.get('/produtoInformatica', ProdutoControllers.getListaProdutosInformaticaQuality)
-routes.get('/listaProdutos', ProdutoControllers.getListaProdutos)
+routes.get('/lista-produtos', ProdutoControllers.getListaProdutos)
 routes.get('/listaGrade', ProdutoControllers.getListaGrade)
 routes.get('/listas-de-precos-sap', ProdutoControllers.ListaProdutosEtiqueta)
 routes.get('/responsaveisAlteracaoPrecos', ProdutoControllers.getListaResponsavelAlteracaoPreco)
