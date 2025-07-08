@@ -255,7 +255,7 @@ class AdmBalancoControllers {
 
             return res.json(response.data);
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
+            console.error("Erro no ADM Balanco Controllers putListaDetalheBalancoAvulso:", error);
             return res.status(500).json({ error: error.message });
         }
     }
