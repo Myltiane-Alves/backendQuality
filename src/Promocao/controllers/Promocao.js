@@ -23,15 +23,16 @@ class PromocaoControllers  {
 
    
     
-   async getListaPromocoesAtivas(req, res) {
-        let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize } = req.query; 
+    async getListaPromocoesAtivas(req, res) {
+        let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, status, page, pageSize } = req.query; 
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
             dataPesquisaInicio = dataPesquisaInicio ? dataPesquisaInicio : '';
             dataPesquisaFim = dataPesquisaFim ? dataPesquisaFim : '';     
+            status = status ? status : '';
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&status${status}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             return res.json(response.data);

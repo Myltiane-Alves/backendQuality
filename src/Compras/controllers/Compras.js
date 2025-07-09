@@ -73,7 +73,7 @@ class ComprasControllers {
         let { idResumoPromocoes } = req.query;
         idResumoPromocoes = idResumoPromocoes ? idResumoPromocoes : '';
         try {
-            const apiUrl = `${url}/api/compras/lista_empresapromocoes.xsjs?idResPromo=${idResumoPromocoes}`;
+            const apiUrl = `http://164.152.245.77:8000/quality/concentrador_homologacao/api/compras/lista_empresapromocoes.xsjs?idResPromo=${idResumoPromocoes}`;
             const response = await axios.get(apiUrl)
             return res.json(response.data); // Retorna
         } catch (error) {
