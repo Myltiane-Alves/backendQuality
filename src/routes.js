@@ -706,9 +706,10 @@ routes.get('/listaPreco', ListaPrecoControllers.getListaPrecoPorMarca)
 
 routes.get('/promocoes-ativas', PromocaoControllers.getListaPromocoesAtivas)
 routes.get('/mecanicas-ativas', PromocaoControllers.getListaMecanicaAtivas)
-routes.post('/criar-mecanica', PromocaoControllers.getListaMecanicaAtivas)
 routes.get('/detalhe-promocoes-ativas', PromocaoControllers.getListaDetalhesPromocoesAtivas)
 routes.post('/criar-promocoes-ativas', PromocaoControllers.postPromocao)
+routes.post('/criar-mecanica', PromocaoControllers.postMecanicaAtivas)
+// routes.post('/criar-mecanica', PromocaoControllers.postMecanicaAtivas)
 
 // // Logs
 // routes.get('/log-web', LogsControllers.getListaLogsUsuario)

@@ -85,20 +85,26 @@ class PromocaoControllers  {
         }
     }
 
-     async postMecanicaAtivas(req, res) {
-        let { DESCRICAO, APLICACAODESTINO, MECANICA, TIPODESCONTO } = req.query; 
-       
+    async postMecanicaAtivas(req, res) {
+        // console.log("postMecanicaAtivas - req.query:", req.query);
         try {   
-            const apiUrl = `${url}/api/select-mecanica.xsjs`
-            const response = await axios.post(apiUrl, {
-                DESCRICAO: DESCRICAO,
-                APLICACAODESTINO: APLICACAODESTINO,
-                MECANICA: MECANICA,
-                TIPODESCONTO: TIPODESCONTO
-            })
+            let { DESCRICAO, APLICACAODESTINO, MECANICA, TIPODESCONTO } = req.body; 
+            // if(!MECANICA || !APLICACAODESTINO || !TIPODESCONTO) {
+            //     return res.status(400).json({ error: "Todos os parâmetros (DESCRICAO, APLICACAODESTINO, MECANICA, TIPODESCONTO) são obrigatórios." });
+            // }
+
+            // const response = `${url}/api/select-mecanica.xsjs`
+            const response = await axios.post(`${url}/api/select-mecanica.xsjs`, {
+                    DESCRICAO,
+                    APLICACAODESTINO,
+                    MECANICA,
+                    TIPODESCONTO
+                },
+            )
+            
             return res.json(response.data);
         } catch(error) {
-            console.error("erro no PromocaoControllers  getListaMecanicaAtivas:", error);
+            console.error("erro no PromocaoControllers  postMecanicaAtivas:", error);
             throw error;
         } 
     }
