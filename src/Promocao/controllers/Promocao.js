@@ -32,9 +32,10 @@ class PromocaoControllers  {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&status${status}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&status=${status}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
+
             return res.json(response.data);
         } catch(error) {
             console.error("erro no PromocaoControllers  getListaPromocoesAtivas:", error);
