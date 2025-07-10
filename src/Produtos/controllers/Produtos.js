@@ -111,20 +111,21 @@ class ProdutoControllers  {
     }
 
     async getListaProdutos(req, res) {
-        let { idEmpresa  } = req.query; 
+        let { idEmpresa, idProduto, dsProduto, codBarras, page, pageSize  } = req.query; 
         idEmpresa = idEmpresa ? idEmpresa : '';        
-        pageNumber = pageNumber ? pageNumber : 1; 
-  
-        const pageSize = 100;
-        const offset = (pageNumber - 1) * pageSize;
+        idProduto = idProduto ? idProduto : '';
+        dsProduto = dsProduto ? dsProduto : '';
+        codBarras = codBarras ? codBarras : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
     
         try {   
-            const apiUrl = `${url}/api/produto.xsjs?idEmpresa=${idEmpresa}`;
+            const apiUrl = `${url}/api/produto.xsjs?idEmpresa=${idEmpresa}&byId=${idProduto}&dsProduto=${dsProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             return res.json(response.data); // Retorna
         } catch(error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro no ProdutoControllers getListaProdutos:", error);
+            return res.status(500).json({ error: "Erro no servidor ao buscar produtos." });
         } 
     }
 
