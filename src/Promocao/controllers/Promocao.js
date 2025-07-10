@@ -58,6 +58,25 @@ class PromocaoControllers  {
         } 
     }
 
+     async getListaProdutosPromocoesAtiva(req, res) {
+        let { idEmpresa, idProduto, dsProduto, codBarras, page, pageSize  } = req.query; 
+        idEmpresa = idEmpresa ? idEmpresa : '';        
+        idProduto = idProduto ? idProduto : '';
+        dsProduto = dsProduto ? dsProduto : '';
+        codBarras = codBarras ? codBarras : '';
+        page = page ? page : '';
+        pageSize = pageSize ? pageSize : '';
+    
+        try {   
+            const apiUrl = `${url}/api/produto-promocao-ativa.xsjs?byId=${idProduto}&dsProduto=${dsProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
+            const response = await axios.get(apiUrl)
+            return res.json(response.data); // Retorna
+        } catch(error) {
+            console.error("Erro no PromoçãoControllers getListaProdutosPromocoesAtiva:", error);
+            return res.status(500).json({ error: "Erro no servidor ao buscar produtos." });
+        } 
+    }
+
     async putPromocao(req, res) {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];   

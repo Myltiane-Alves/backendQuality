@@ -705,6 +705,7 @@ routes.get('/listaPreco', ListaPrecoControllers.getListaPrecoPorMarca)
 
 
 routes.get('/promocoes-ativas', PromocaoControllers.getListaPromocoesAtivas)
+routes.get('/produto-promocao-ativa', PromocaoControllers.getListaProdutosPromocoesAtiva)
 routes.get('/mecanicas-ativas', PromocaoControllers.getListaMecanicaAtivas)
 routes.get('/detalhe-promocoes-ativas', PromocaoControllers.getListaDetalhesPromocoesAtivas)
 routes.post('/criar-promocoes-ativas', PromocaoControllers.postPromocao)
