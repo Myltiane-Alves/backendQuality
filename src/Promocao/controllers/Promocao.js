@@ -81,6 +81,7 @@ class PromocaoControllers  {
         try {
             let {
                 IDRESUMOPROMOCAOMARKETING,
+                IDMECANICARESUMOPROMOCAOMARKETING,
                 TPAPARTIRDE,
                 TPAPLICADOA,
                 TPFATORPROMO,
