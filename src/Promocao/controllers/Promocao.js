@@ -114,11 +114,42 @@ class PromocaoControllers  {
             if(!IDRESUMOPROMOCAOMARKETING) {
                 return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
             }
-
-            const response = await axios.put(`${url}/api/promocao-ativa.xsjs`, {
-                IDRESUMOPROMOCAOMARKETING
-            });
-        
+            
+            const response = await axios.put(`${url}/api/promocao-ativa.xsjs`, [{
+                DSPROMOCAOMARKETING,
+                DTHORAINICIO,
+                DTHORAFIM,
+                TPAPLICADOA,
+                APARTIRDEQTD,
+                APARTIRDOVLR,
+                TPFATORPROMO,
+                FATORPROMOVLR,
+                FATORPROMOPERC,
+                TPAPARTIRDE,
+                VLPRECOPRODUTO,
+                STEMPRESAPROMO,
+                STDETPROMOORIGEM,
+                STDETPROMODESTINO,
+                IDMECANICARESUMOPROMOCAOMARKETING,
+                STATIVO,
+                IDRESUMOPROMOCAOMARKETING,
+                IDPRODUTO,
+                IDEMPRESA,
+                IDGRUPOEMDESTINO,
+                IDSUBGRUPOEMDESTINO,
+                IDMARCAEMDESTINO,
+                IDFORNECEDOREMDESTINO,
+                IDPRODUTODESTINO,
+                IDGRUPOEMORIGEM,
+                IDSUBGRUPOEMORIGEM,
+                IDMARCAEMORIGEM,
+                IDFORNECEDOREMORIGEM,
+                IDPRODUTOORIGEM
+                
+                
+            }]);
+            
+         
             return res.status(200).json({
                 message: "Promoção atualizada com sucesso",
                 data: response.data
