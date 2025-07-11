@@ -79,13 +79,52 @@ class PromocaoControllers  {
 
     async putPromocao(req, res) {
         try {
-            const dados = Array.isArray(req.body) ? req.body : [req.body];   
-            const response = await updatePromocao(dados)
+            let {
+                IDRESUMOPROMOCAOMARKETING,
+                TPAPARTIRDE,
+                TPAPLICADOA,
+                TPFATORPROMO,
+                APARTIRDEQTD,
+                APARTIRDOVLR,
+                FATORPROMOVLR,
+                FATORPROMOPERC,
+                VLPRECOPRODUTO,
+                DTHORAINICIO,
+                DTHORAFIM,
+                DSPROMOCAOMARKETING,
+                IDPRODUTO,
+                STATIVO,
+                STEMPRESAPROMO,
+                STDETPROMOORIGEM,
+                STDETPROMODESTINO,
+                IDEMPRESA,
+                IDGRUPOEMDESTINO,
+                IDSUBGRUPOEMDESTINO,
+                IDMARCAEMDESTINO,
+                IDFORNECEDOREMDESTINO,
+                IDPRODUTODESTINO,
+                IDGRUPOEMORIGEM,
+                IDSUBGRUPOEMORIGEM,
+                IDMARCAEMORIGEM,
+                IDFORNECEDOREMORIGEM,
+                IDPRODUTOORIGEM
+            } = req.body;   
+
+            if(!IDRESUMOPROMOCAOMARKETING) {
+                return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
+            }
+
+            const response = await axios.put(`${url}/api/promocao-ativa.xsjs`, {
+                IDRESUMOPROMOCAOMARKETING
+            });
         
-            return res.json(response);
+            return res.status(200).json({
+                message: "Promoção atualizada com sucesso",
+                data: response.data
+            });
         } catch (error) {
-            console.error("Unable to connect to the database:", error);
-            throw error;
+            console.error("Erro ao atualizar promoção:", error);
+            return res.status(500).json({ error: "Erro ao atualizar promoção." });
         }
     }
 
