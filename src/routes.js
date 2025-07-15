@@ -711,6 +711,7 @@ routes.get('/detalhe-promocoes-ativas', PromocaoControllers.getListaDetalhesProm
 routes.post('/criar-promocoes-ativas', PromocaoControllers.postPromocao)
 routes.put('/promocoes-ativas/:id', PromocaoControllers.putPromocao)
 routes.post('/criar-mecanica', PromocaoControllers.postMecanicaAtivas)
+routes.post('/criar-mecanica', PromocaoControllers.putProdutoDestinoPromocao)
 // routes.post('/criar-mecanica', PromocaoControllers.postMecanicaAtivas)
 
 // // Logs
