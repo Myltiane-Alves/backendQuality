@@ -159,6 +159,64 @@ class PromocaoControllers  {
             return res.status(500).json({ error: "Erro ao atualizar promoção." });
         }
     }
+    async putProdutoDestinoPromocao(req, res) {
+        try {
+            let {
+                IDRESUMOPROMOCAOMARKETING,
+                STATIVO,
+                IDPRODUTODESTINO,
+            } = req.body;   
+
+            if(!IDRESUMOPROMOCAOMARKETING) {
+                return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
+            }
+            
+            const response = await axios.put(`${url}/api/desativar-produto-promocao-destino.xsjs`, [{
+                STATIVO,
+                IDRESUMOPROMOCAOMARKETING,
+                IDPRODUTODESTINO
+                
+            }]);
+            
+      
+            return res.status(200).json({
+                message: "Produto Destino da Promoção atualizada com sucesso",
+                data: response.data
+            });
+        } catch (error) {
+            console.error("Erro ao atualizar Produto Destino da Promoção:", error);
+            return res.status(500).json({ error: "Erro ao atualizar Produto Destino da Promoção." });
+        }
+    }
+    
+    async putProdutoOrigemPromocao(req, res) {
+        try {
+            let {
+                IDRESUMOPROMOCAOMARKETING,
+                STATIVO,
+                IDPRODUTOORIGEM,
+            } = req.body;
+
+            if(!IDRESUMOPROMOCAOMARKETING) {
+                return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
+            }
+            const response = await axios.put(`${url}/api/desativar-produto-promocao-origem.xsjs`, [{
+                STATIVO,
+                IDRESUMOPROMOCAOMARKETING,
+                IDPRODUTOORIGEM
+            }]);
+
+            return res.status(200).json({
+                message: "Produto Origem da Promoção atualizada com sucesso",
+                data: response.data
+            });
+
+        } catch (error) {
+            console.error("Erro ao atualizar Produto Origem da Promoção:", error);
+            return res.status(500).json({ error: "Erro ao atualizar Produto Origem da Promoção." });
+        }
+    }
+
 
     
     async postPromocao(req, res) {
