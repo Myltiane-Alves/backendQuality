@@ -171,14 +171,14 @@ class PromocaoControllers  {
                 return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
             }
             
-            const response = await axios.put(`${url}/api/desativar-produto-promocao-destino.xsjs`, [{
+                                                        
+            const response = await axios.put(`${url}/api/desativar-pruduto-promocao-destino.xsjs`, [{
                 STATIVO,
                 IDRESUMOPROMOCAOMARKETING,
                 IDPRODUTODESTINO
                 
             }]);
             
-      
             return res.status(200).json({
                 message: "Produto Destino da Promoção atualizada com sucesso",
                 data: response.data
@@ -200,7 +200,7 @@ class PromocaoControllers  {
             if(!IDRESUMOPROMOCAOMARKETING) {
                 return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
             }
-            const response = await axios.put(`${url}/api/desativar-produto-promocao-origem.xsjs`, [{
+            const response = await axios.put(`${url}/api/desativar-pruduto-promocao-origem.xsjs`, [{
                 STATIVO,
                 IDRESUMOPROMOCAOMARKETING,
                 IDPRODUTOORIGEM
