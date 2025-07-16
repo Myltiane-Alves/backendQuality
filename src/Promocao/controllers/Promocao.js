@@ -221,7 +221,7 @@ class PromocaoControllers  {
         try {
             const dados = Array.isArray(req.body) ? req.body : [req.body];
                   
-            const response = await axios.post(`${url}/api/promocao-ativa.xsjs`, dados);
+            const response = await axios.post(`${url}/api/promocoes-ativas/promocao-ativa.xsjs`, dados);
 
             return res.status(200).json({
                 message: "Promoção(s) criada(s) com sucesso",
