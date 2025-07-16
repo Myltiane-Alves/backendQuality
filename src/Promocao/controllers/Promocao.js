@@ -242,7 +242,7 @@ class PromocaoControllers  {
             // }
 
             // const response = `${url}/api/select-mecanica.xsjs`
-            const response = await axios.post(`${url}/api/select-mecanica.xsjs`, {
+            const response = await axios.post(`${url}/api/promocoes-ativas/select-mecanica.xsjs`, {
                     DESCRICAO,
                     APLICACAODESTINO,
                     MECANICA,
