@@ -198,7 +198,7 @@ class PromocaoControllers  {
             if(!IDRESUMOPROMOCAOMARKETING) {
                 return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
             }
-            const response = await axios.put(`${url}/api/desativar-pruduto-promocao-origem.xsjs`, [{
+            const response = await axios.put(`${url}/api/promocoes-ativas/desativar-pruduto-promocao-origem.xsjs`, [{
                 STATIVO,
                 IDRESUMOPROMOCAOMARKETING,
                 IDPRODUTOORIGEM
