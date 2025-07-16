@@ -12,7 +12,7 @@ class PromocaoControllers  {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/select-mecanica.xsjs`
+            const apiUrl = `${url}/api/promocoes-ativas/select-mecanica.xsjs`
             const response = await axios.get(apiUrl)
             return res.json(response.data);
         } catch(error) {
@@ -21,8 +21,6 @@ class PromocaoControllers  {
         } 
     }
 
-   
-    
     async getListaPromocoesAtivas(req, res) {
         let { idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, status, page, pageSize } = req.query; 
             idResumoPromocao = idResumoPromocao ? idResumoPromocao : '';
@@ -32,7 +30,7 @@ class PromocaoControllers  {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&status=${status}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/promocoes-ativas/promocao-ativa.xsjs?dataPesquisaInicio=${dataPesquisaInicio}&dataPesquisaFim=${dataPesquisaFim}&idResumoPromocao=${idResumoPromocao}&status=${status}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
 
@@ -48,7 +46,7 @@ class PromocaoControllers  {
             page = page ? page : '';
             pageSize = pageSize ? pageSize : '';
         try {   
-            const apiUrl = `${url}/api/detalhe-promocao-ativa.xsjs?idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/promocoes-ativas/detalhe-promocao-ativa.xsjs?idResumoPromocao=${idResumoPromocao}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             // const response = await getPromocaoAtiva(idResumoPromocao, dataPesquisaInicio, dataPesquisaFim, page, pageSize)
             return res.json(response.data);
@@ -68,7 +66,7 @@ class PromocaoControllers  {
         pageSize = pageSize ? pageSize : '';
     
         try {   
-            const apiUrl = `${url}/api/produto-promocao-ativa.xsjs?idProduto=${idProduto}&dsProduto=${dsProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
+            const apiUrl = `${url}/api/promocoes-ativas/produto-promocao-ativa.xsjs?idProduto=${idProduto}&dsProduto=${dsProduto}&codeBars=${codBarras}&page=${page}&pageSize=${pageSize}`;
             const response = await axios.get(apiUrl)
             return res.json(response.data); // Retorna
         } catch(error) {
@@ -115,7 +113,7 @@ class PromocaoControllers  {
                 return res.status(400).json({ error: "IDRESUMOPROMOCAOMARKETING é obrigatório." });
             }
             
-            const response = await axios.put(`${url}/api/promocao-ativa.xsjs`, [{
+            const response = await axios.put(`${url}/api/promocoes-ativas/promocao-ativa.xsjs`, [{
                 DSPROMOCAOMARKETING,
                 DTHORAINICIO,
                 DTHORAFIM,
@@ -172,7 +170,7 @@ class PromocaoControllers  {
             }
             
                                                         
-            const response = await axios.put(`${url}/api/desativar-pruduto-promocao-destino.xsjs`, [{
+            const response = await axios.put(`${url}/api/promocoes-ativas/desativar-pruduto-promocao-destino.xsjs`, [{
                 STATIVO,
                 IDRESUMOPROMOCAOMARKETING,
                 IDPRODUTODESTINO
