@@ -420,7 +420,7 @@ class DashBoardControllers {
 
     }
 
-    async getListaExtratoDaLojaPeriodoADM(req, res) {
+    async getListaExtratoDaLojaPeriodo(req, res) {
         let { idEmpresa, page, pageSize, dataPesquisaInicio, dataPesquisaFim } = req.query;
 
         if (!isNaN(idEmpresa)) {
@@ -441,7 +441,7 @@ class DashBoardControllers {
             }
         }
     }
-    async getListaExtratoDaLojaPeriodo(req, res) {
+    async getListaExtratoDaLojaPeriodoADM(req, res) {
         let { idEmpresa, pageNumber, dataPesquisaInicio, dataPesquisaFim } = req.query;
 
         if (!isNaN(idEmpresa)) {
