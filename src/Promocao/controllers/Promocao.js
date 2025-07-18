@@ -221,6 +221,7 @@ class PromocaoControllers  {
                 IDRESUMOPROMOCAOMARKETING,
                 STATIVO,
                 IDEMPRESA,
+                IDEMPRESAPROMOCAOMARKETING
             } = req.body;
 
             if(!IDRESUMOPROMOCAOMARKETING) {
@@ -229,7 +230,8 @@ class PromocaoControllers  {
             const response = await axios.put(`${url}/api/promocoes-ativas/desativar-empresa-promocao.xsjs`, [{
                 STATIVO,
                 IDRESUMOPROMOCAOMARKETING,
-                IDEMPRESA
+                IDEMPRESA,
+                IDEMPRESAPROMOCAOMARKETING
             }]);
 
             return res.status(200).json({
